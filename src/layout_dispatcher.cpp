@@ -1,7 +1,7 @@
 #include "../headers/layout_dispatcher.hpp"
 
 
-bool LayoutDispatcher::add_layout(const std::string& id, const std::shared_ptr<DRAWABLE>& object)
+bool LayoutDispatcher::add_layout(const std::string& id, const std::shared_ptr<ILayout>& object)
 {
     std::map<std::string, std::shared_ptr<DRAWABLE>> data{};
     auto insert_result = this->_layout.emplace(id, std::make_pair(object, data));
@@ -39,11 +39,10 @@ bool LayoutDispatcher::insert_layout_child(const std::string& parent_id, const s
     }
 }
 
-std::pair<std::shared_ptr<DRAWABLE>, std::vector<std::shared_ptr<DRAWABLE>>>
+std::pair<std::shared_ptr<ILayout>, std::vector<std::shared_ptr<DRAWABLE>>>
 	LayoutDispatcher::get_layout() const
 {
-	//std::map<std::string, std::pair<std::shared_ptr<DRAWABLE>, std::map<std::string, std::shared_ptr<DRAWABLE>>>> _layout;
-	std::pair <std::shared_ptr<DRAWABLE>, std::vector<std::shared_ptr<DRAWABLE>>> result;
+	std::pair <std::shared_ptr<ILayout>, std::vector<std::shared_ptr<DRAWABLE>>> result;
 
 	auto searchValue = this->_layout.find(this->_currentLayout);
 	if(searchValue != this->_layout.end())
@@ -73,4 +72,9 @@ std::vector<std::shared_ptr<DRAWABLE>> LayoutDispatcher::get_object() const
 void LayoutDispatcher::change_layout(const std::string& layoutName)
 {
 	this->_currentLayout = layoutName;
+}
+
+std::string LayoutDispatcher::get_current_layout_id()
+{
+	return this->_currentLayout;
 }

@@ -12,6 +12,7 @@ class Text : public IOBJECT, public DRAWABLE, public SCALABLE
         std::shared_ptr<sf::Text> _text;
         std::string _id;
         bool _isVisible;
+		sf::Font _font;
 
 	public:
 

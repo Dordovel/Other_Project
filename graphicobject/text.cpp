@@ -5,11 +5,10 @@
 #include "../struct/rectobject.hpp"
 
 Text::Text(const std::string& pathToFontFile):_text(std::make_shared<sf::Text>()),
-                            _isVisible(false)
+                            _isVisible(true)
 {
-	sf::Font font;
-	font.loadFromFile(pathToFontFile);
-	this->_text->setFont(font);
+	this->_font.loadFromFile(pathToFontFile);
+	this->_text->setFont(this->_font);
 }
 
 DrawableObject Text::draw() const

@@ -1,5 +1,8 @@
 #pragma once 
 #include <SFML/Graphics/Color.hpp>
 
-struct Color : public sf::Color
-{};
+class Color : public sf::Color 
+{
+    public:
+        Color(int red, int green, int blue):sf::Color(red, green, blue){};
+};

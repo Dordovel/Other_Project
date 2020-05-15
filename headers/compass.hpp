@@ -1,8 +1,21 @@
 #pragma once
 
-#include "../Interface/icompass.hpp"
+enum CompassSide
+{
+    North,
+    North_West,
+    North_East,
+    East,
+    South_East,
+    South,
+    South_West,
+    West,
+	Stand
+};
 
-class Compass : public ICompass
+class Vector2UI;
+
+class Compass
 {
     unsigned int _lastPositionX;
     unsigned int _lastPositionY;
@@ -12,8 +25,8 @@ class Compass : public ICompass
 
     public:
 
-        Compass(unsigned int mapSizeX, unsigned int mapSizeY);
-        CompassSide get_compass_side(unsigned int x, unsigned int y) noexcept override;
+        Compass(const Vector2UI& size);
+        CompassSide get_compass_side(unsigned int x, unsigned int y) noexcept;
 
         ~Compass() = default;
 };

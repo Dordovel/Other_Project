@@ -1,6 +1,6 @@
 #pragma once 
 #include "../Game_Resources/map_loader/include/tmx/MapLoader.hpp"
-#include "../Interface/igamemap.hpp"
+#include "../Interface/ilayout.hpp"
 #include <cstring>
 #include <memory>
 
@@ -10,7 +10,7 @@ enum class CollectionObject
     TREE
 };
 
-class GameMapDesert : public IMap
+class Layout : public ILayout
 {   
     private:
         std::shared_ptr<tmx::MapLoader> _mapLoader;
@@ -25,8 +25,7 @@ class GameMapDesert : public IMap
         void load_map_from_file(const std::string& pathToMap);
 
     public:
-
-        GameMapDesert(const std::string& pathToMap , const std::string& mapFileName);
+        Layout(const std::string& pathToMap , const std::string& mapFileName);
 
         std::map<CollectionObject, std::vector<RectangleF>> get_objects(const RectangleF &rectangleF) const override;
 
@@ -40,9 +39,7 @@ class GameMapDesert : public IMap
 
         DrawableObject draw() const override;
 
-        unsigned int get_map_size_x() const override;
+        Vector2UI get_size() const override;
 
-        unsigned int get_map_size_y() const override;
-
-		~GameMapDesert() = default;
+		~Layout();
 };

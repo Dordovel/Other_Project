@@ -1,30 +1,35 @@
-#include "../headers/gamemapdesert.hpp"
+#include "../headers/layout.hpp"
 
 #include <utility>
 #include "../struct/rectobject.hpp"
 #include "../struct/vectorobject.hpp"
 #include "../struct/drawableobject.hpp"
 
-GameMapDesert::GameMapDesert(const std::string& pathToMap , const std::string& mapFileName):_mapLoader(std::make_shared<tmx::MapLoader>(pathToMap)),
+Layout::Layout(const std::string& pathToMap , const std::string& mapFileName):_mapLoader(std::make_shared<tmx::MapLoader>(pathToMap)),
                                                                                 _isVisible(true)
 {
 	std::cout<<pathToMap + mapFileName<<std::endl;
     this->load_map_from_file(mapFileName);
 }
 
-void GameMapDesert::load_map_from_file(const std::string& pathToFile)
+Layout::~Layout()
+{
+	std::cout<<this->get_id()<<"	Deleted"<<std::endl;
+}
+
+void Layout::load_map_from_file(const std::string& pathToFile)
 {
     bool load_map_status = this->_mapLoader->load(pathToFile);
 
 	if(!load_map_status)
 	{
-		std::cout<<"Map not load"<<std::endl;
+		std::cout<<"Layout not load"<<std::endl;
 
 		//assert(load_map_status);
 	}
 }
 
-bool GameMapDesert::check_map_static_object_with_string(CollectionObject object, const std::string& objectName)
+bool Layout::check_map_static_object_with_string(CollectionObject object, const std::string& objectName)
 {
     auto temp = this->_mapStaticObjectInString.find(object);
     if(temp != this->_mapStaticObjectInString.end())
@@ -35,42 +40,36 @@ bool GameMapDesert::check_map_static_object_with_string(CollectionObject object,
     return false;
 }
 
-unsigned int GameMapDesert::get_map_size_x() const
+Vector2UI Layout::get_size() const
 {
-    return this->_mapLoader->getMapSize().x;
+    return this->_mapLoader->getMapSize();
 }
-
-unsigned int GameMapDesert::get_map_size_y() const
-{
-    return this->_mapLoader->getMapSize().y;
-}
-
-DrawableObject GameMapDesert::draw() const
+DrawableObject Layout::draw() const
 {
     return DrawableObject{this->_mapLoader};
 }
 
-void GameMapDesert::set_id(const std::string& id)
+void Layout::set_id(const std::string& id)
 {
     this->_id = id;
 }
 
-std::string GameMapDesert::get_id() const
+std::string Layout::get_id() const
 {
     return this->_id;
 }
 
-void GameMapDesert::visible(bool flag)
+void Layout::visible(bool flag)
 {
     this->_isVisible = flag;
 }
 
-bool GameMapDesert::is_visible()
+bool Layout::is_visible()
 {
     return this->_isVisible;
 }
 
-std::map<CollectionObject, std::vector<RectangleF>> GameMapDesert::get_objects(const RectangleF &rectangleF) const
+std::map<CollectionObject, std::vector<RectangleF>> Layout::get_objects(const RectangleF &rectangleF) const
 {
     std::map<CollectionObject, std::vector<RectangleF>> result{};
 

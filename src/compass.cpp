@@ -1,9 +1,10 @@
 #include "../headers/compass.hpp"
+#include "../struct/vectorobject.hpp"
 
-Compass::Compass(unsigned int mapSizeX, unsigned int mapSizeY):_mapSizeX(mapSizeX),
-                                                                _mapSizeY(mapSizeY),
-                                                                _lastPositionX(mapSizeX / 2),
-                                                                _lastPositionY(mapSizeY / 2)
+Compass::Compass(const Vector2UI& size):_mapSizeX(size.x),
+                                                                _mapSizeY(size.y),
+                                                                _lastPositionX(size.x / 2),
+                                                                _lastPositionY(size.y / 2)
 {}
 
 

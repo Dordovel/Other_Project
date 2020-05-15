@@ -29,5 +29,11 @@ class View: public IView, public sf::View
 
         RectangleF get_global_bounds() const override;
 
+		Vector2F get_size() const override;
+
+		void set_size(const Vector2F& size) override;
+
+		void set_size(float x, float y) override;
+
 		~View() = default;
 };

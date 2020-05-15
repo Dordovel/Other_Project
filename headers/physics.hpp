@@ -1,6 +1,5 @@
 #pragma once
 #include "../Interface/iphysics.hpp"
-#include "../Interface/igamemap.hpp"
 #include "../object/interaction.hpp"
 
 class Physics: public IPhysics

@@ -64,3 +64,18 @@ void View::set_position(float X, float Y)
 {
     sf::View::setCenter(X, Y);
 }
+
+Vector2F View::get_size() const
+{
+	return sf::View::getSize();
+}
+
+void View::set_size(const Vector2F& size)
+{
+	sf::View::setSize(size);
+}
+
+void View::set_size(float x, float y)
+{
+	sf::View::setSize(x, y);
+}
