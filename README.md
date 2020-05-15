@@ -1,1 +1,1 @@
-# Other_Project
+# SFML Project
