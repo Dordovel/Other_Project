@@ -5,6 +5,12 @@
 
 class View: public IView, public sf::View
 {
+	private:
+		bool _up;
+		bool _down;
+		bool _left;
+		bool _right;
+
     public:
 
         View(float X, float Y, float Width, float Height);
@@ -34,6 +40,8 @@ class View: public IView, public sf::View
 		void set_size(const Vector2F& size) override;
 
 		void set_size(float x, float y) override;
-
+	
+		void block_side(SIDE side, bool status) override;
+	
 		~View() = default;
 };

@@ -2,6 +2,7 @@
 #include "../headers/physics.hpp"
 #include "../struct/rectobject.hpp"
 #include "../struct/vectorobject.hpp"
+#include "../struct/colllectionobject.hpp"
 
 bool Physics::check_intersection(const std::shared_ptr<INTERACTION>& lv, const std::shared_ptr<INTERACTION>& rv)
 {
@@ -9,9 +10,8 @@ bool Physics::check_intersection(const std::shared_ptr<INTERACTION>& lv, const s
     return lv->collision(rv);
 }
 
-bool Physics::check_collision(const std::shared_ptr<ICollection>& lv,
-								const std::shared_ptr<INTERACTION>& rv,
-								std::initializer_list<CollectionObject> object)
+CollectionObject Physics::check_collision(const std::shared_ptr<ICollection>& lv,
+								const std::shared_ptr<INTERACTION>& rv)
 {
     RectangleF bounds = rv->get_global_bounds();
 
@@ -19,20 +19,14 @@ bool Physics::check_collision(const std::shared_ptr<ICollection>& lv,
 
     for(auto&& [key, points] : collisionPoint)
     {
-		for(const auto& var : object)
-		{	
-			if(key == var)
+		for(auto var : points)
+		{
+			if (var.intersects(bounds))
 			{
-				for(auto var : points)
-				{
-					if (var.intersects(bounds))
-					{
-						return true;
-					}
-				}	
+				return key;
 			}
-		}
+		}	
     }
 
-    return false;
+    return CollectionObject::NONE;
 }

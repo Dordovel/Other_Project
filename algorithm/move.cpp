@@ -3,6 +3,7 @@
 #include <chrono>
 #include "../headers/clock.hpp"
 #include "../headers/physics.hpp"
+#include "../struct/side.hpp"
 
 using namespace std::chrono_literals;
 
@@ -73,7 +74,7 @@ void* Move::work(void* params)
     pthread_exit(nullptr);
 }
 
-void Move::move(std::shared_ptr<IOBJECT> object,
+void Move::move(std::shared_ptr<OBJECT> object,
         std::shared_ptr<IClock> clock,
         std::shared_ptr<IPhysics> physics,
         std::shared_ptr<ICollection> checker,
@@ -144,47 +145,47 @@ void Move::moveRight(const std::shared_ptr<MOVABLE>& object, float clock, float 
 	game_object_move(object, posX, posY);
 }
 
-void Move::move(MoveSide side, const std::shared_ptr<MOVABLE>& object, float clock, float speed)
+void Move::move(SIDE side, const std::shared_ptr<MOVABLE>& object, float clock, float speed)
 {
-	if(side == MoveSide::UP && !this->_up)
+	if(side == SIDE::UP && !this->_up)
 	{
 		Move::moveUp(object, clock, speed);
 	}
 
-	if(side == MoveSide::DOWN && !this->_down)
+	if(side == SIDE::DOWN && !this->_down)
 	{
 		Move::moveDown(object, clock, speed);
 	}
 
-	if(side == MoveSide::LEFT && !this->_left)
+	if(side == SIDE::LEFT && !this->_left)
 	{
 		Move::moveLeft(object, clock, speed);
 	}
 
-	if(side == MoveSide::RIGHT && !this->_right)
+	if(side == SIDE::RIGHT && !this->_right)
 	{
 		Move::moveRight(object, clock, speed);
 	}
 }
 
-void Move::block_side(MoveSide side, bool status)
+void Move::block_side(SIDE side, bool status)
 {
-	if(side == MoveSide::UP)
+	if(side == SIDE::UP)
 	{
 		this->_up = status;
 	}
 
-	if(side == MoveSide::DOWN)
+	if(side == SIDE::DOWN)
 	{
 		this->_down = status;
 	}
 
-	if(side == MoveSide::LEFT)
+	if(side == SIDE::LEFT)
 	{
 		this->_left = status;
 	}
 
-	if(side == MoveSide::RIGHT)
+	if(side == SIDE::RIGHT)
 	{
 		this->_right = status;
 	}

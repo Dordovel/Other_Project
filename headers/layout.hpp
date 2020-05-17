@@ -3,12 +3,8 @@
 #include "../Interface/ilayout.hpp"
 #include <cstring>
 #include <memory>
+#include "../struct/colllectionobject.hpp"
 
-enum class CollectionObject
-{
-    BORDER,
-    TREE
-};
 
 class Layout : public ILayout
 {   

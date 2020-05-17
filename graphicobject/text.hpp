@@ -1,18 +1,23 @@
 #pragma once
 
-#include "../object/drawable.hpp"
-#include "../Interface/iobject.hpp"
+#include "../object/object.hpp"
 #include <SFML/Graphics/Text.hpp>
 #include "../struct/colorobject.hpp"
 #include "../object/scalable.hpp"
 
-class Text : public IOBJECT, public DRAWABLE, public SCALABLE
+class Text : public OBJECT, public SCALABLE
+
 {
 	private:
         std::shared_ptr<sf::Text> _text;
         std::string _id;
         bool _isVisible;
 		sf::Font _font;
+
+		bool _up;
+		bool _down;
+		bool _left;
+		bool _right;
 
 	public:
 
@@ -53,4 +58,6 @@ class Text : public IOBJECT, public DRAWABLE, public SCALABLE
 		void set_scale(Vector2F scale) override;
 
 		Vector2F get_scale() override;
+
+		void block_side(SIDE side, bool status) override;
 };

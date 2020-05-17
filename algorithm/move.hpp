@@ -14,7 +14,7 @@ class Move : public IMove
             pthread_t pthread;
             std::shared_ptr<IPhysics> physics;
             std::shared_ptr<ICollection> checker;
-            std::shared_ptr<IOBJECT> object;
+            std::shared_ptr<OBJECT> object;
             Vector2F end;
             std::shared_ptr<IClock> clock;
             float speed;
@@ -42,15 +42,15 @@ class Move : public IMove
 
     public:
 
-        void move(std::shared_ptr<IOBJECT> object,
+        void move(std::shared_ptr<OBJECT> object,
                 std::shared_ptr<IClock> clock,
                 std::shared_ptr<IPhysics> physics,
                 std::shared_ptr<ICollection> checker,
                 Vector2F end, float speed) override;
 
-		 void move(MoveSide side, const std::shared_ptr<MOVABLE>& object, float clock, float speed) override;
+		void move(SIDE side, const std::shared_ptr<MOVABLE>& object, float clock, float speed) override;
 
-		 void block_side(MoveSide side, bool status) override;
+		void block_side(SIDE side, bool status) override;
 
 		~Move();
 };

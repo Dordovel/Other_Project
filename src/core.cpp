@@ -34,7 +34,7 @@ void Core::run() noexcept
 				this->_window->draw(layout.first);
 			}
 
-			for(const auto& child : layout.second)
+			for(auto&& [id, child] : layout.second)
 			{
 				if(child->is_visible())
 				{
@@ -43,7 +43,7 @@ void Core::run() noexcept
 			}
 		}
 
-        for(const auto& value: object)
+        for(auto&& [id, value] : object)
         {
             if (value->is_visible())
             {

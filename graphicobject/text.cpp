@@ -3,9 +3,14 @@
 #include "../struct/vectorobject.hpp"
 #include "./circle.hpp"
 #include "../struct/rectobject.hpp"
+#include "../struct/side.hpp"
 
 Text::Text(const std::string& pathToFontFile):_text(std::make_shared<sf::Text>()),
-                            _isVisible(true)
+                            _isVisible(true),
+							_up(false),
+							_down(false),
+							_left(false),
+							_right(false)
 {
 	this->_font.loadFromFile(pathToFontFile);
 	this->_text->setFont(this->_font);
@@ -28,11 +33,25 @@ std::string Text::get_id() const
 
 void Text::set_position(const Vector2F& position)
 {
-    this->_text->setPosition(position);
+    this->set_position(position.x, position.y);
 }
 
 void Text::set_position(float X, float Y)
 {
+	Vector2F current_position = this->get_position();
+
+	if(this->_up)
+		if(Y < current_position.y) Y = current_position.y;
+
+	if(this->_down)
+		if(Y > current_position.y) Y = current_position.y;
+
+	if(this->_left)
+		if(X < current_position.y) X = current_position.x;
+
+	if(this->_right)
+		if(X > current_position.y) X = current_position.x;
+
     this->_text->setPosition(X, Y);
 }
 
@@ -48,11 +67,23 @@ bool Text::collision(const std::shared_ptr<INTERACTION>& object)
 
 void Text::move(const Vector2F& step)
 {
-    this->_text->move(step);
+    this->move(step.x, step.y);
 }
 
 void Text::move(float X, float Y)
 {
+	if(this->_up)
+		if(Y < 0) Y = 0;
+
+	if(this->_down)
+		if(Y > 0) Y = 0;
+
+	if(this->_left)
+		if(X < 0) X = 0;
+
+	if(this->_right)
+		if(X > 0) X = 0;
+
     this->_text->move(X, Y);
 }
 
@@ -101,3 +132,25 @@ void Text::set_color(const Color& color)
 	this->_text->setFillColor(color);
 }
 
+void Text::block_side(SIDE side, bool status)
+{
+	if(side == SIDE::UP)
+	{
+		this->_up = status;
+	}
+
+	if(side == SIDE::DOWN)
+	{
+		this->_down = status;
+	}
+
+	if(side == SIDE::LEFT)
+	{
+		this->_left = status;
+	}
+
+	if(side == SIDE::RIGHT)
+	{
+		this->_right = status;
+	}
+}

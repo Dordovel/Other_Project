@@ -1,16 +1,20 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <memory>
 
-#include "../object/drawable.hpp"
-#include "../Interface/iobject.hpp"
+#include "../object/object.hpp"
 #include "../object/scalable.hpp"
 
-class Circle : public IOBJECT, public DRAWABLE, public SCALABLE
+class Circle : public OBJECT, public SCALABLE
 {
     private:
         std::shared_ptr<sf::CircleShape> _circleShape;
         std::string _id;
         bool _isVisible;
+		
+		bool _up;
+		bool _down;
+		bool _left;
+		bool _right;
 
     public:
         DrawableObject draw() const override;
@@ -44,6 +48,8 @@ class Circle : public IOBJECT, public DRAWABLE, public SCALABLE
 		void set_scale(Vector2F scale) override;
 
 		Vector2F get_scale() override;
+
+		void block_side(SIDE side, bool status) override;
 
         ~Circle() = default;
 };

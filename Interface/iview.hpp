@@ -4,8 +4,9 @@
 #include "../object/dynamic.hpp"
 #include "../object/static.hpp"
 #include "../object/interaction.hpp"
+#include "../object/modifiable.hpp"
 
-class IView: public MOVABLE, public DYNAMIC, public INTERACTION
+class IView: public MOVABLE, public DYNAMIC, public INTERACTION, public MODIFIABLE
 {
     public:
         virtual void zoom(float zoom) = 0;

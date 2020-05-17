@@ -4,28 +4,22 @@
 #include "../Interface/iclock.hpp"
 #include "../Interface/iphysics.hpp"
 #include "../Interface/icollection.hpp"
-#include "../Interface/iobject.hpp"
+#include "../object/object.hpp"
 
-enum class MoveSide
-{
-	UP,
-	DOWN,
-	LEFT,
-	RIGHT
-};
+enum class SIDE;
 
 class IMove
 {
     public:
-        virtual void move(std::shared_ptr<IOBJECT> object,
+        virtual void move(std::shared_ptr<OBJECT> object,
                     std::shared_ptr<IClock> clock,
                     std::shared_ptr<IPhysics> physics,
                     std::shared_ptr<ICollection> checker,
                     Vector2F end, float speed) = 0;
 
-		virtual void move(MoveSide side, const std::shared_ptr<MOVABLE>& object, float clock, float speed) = 0;
+		virtual void move(SIDE side, const std::shared_ptr<MOVABLE>& object, float clock, float speed) = 0;
 
-		virtual void block_side(MoveSide side, bool status) = 0;
-
-        virtual ~IMove() = default;
+		virtual void block_side(SIDE side, bool status) = 0;
+        
+		virtual ~IMove() = default;
 };

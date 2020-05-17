@@ -1,9 +1,8 @@
 #pragma once
 
-#include "./iobject.hpp"
-#include "../object/drawable.hpp"
+#include "../object/object.hpp"
 
-class INoname : public IOBJECT, public DRAWABLE
+class INoname : public OBJECT
 {
 	public:
 		virtual int get_health() const = 0;

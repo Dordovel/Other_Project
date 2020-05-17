@@ -15,6 +15,7 @@
 #include "./headers/event_dispatcher.hpp"
 #include "./headers/layout_dispatcher.hpp"
 #include "./graphicobject/text.hpp"
+#include "./struct/side.hpp"
 
 constexpr int SPEED = 2;
 const static std::string RESOURCES_PATH = "./Game_Resources/Image/";
@@ -81,45 +82,96 @@ int main()
 
     mainEvents->add_user_event([&clock](){clock->restart();});
 
-    mainEvents->add_user_event([&physics, &person, &layoutDispatcher, &mover]()
+    mainEvents->add_user_event([&physics, &layoutDispatcher, &view]()
     {
-		auto current_layout = layoutDispatcher->get_layout().first;
+		auto current_layout = layoutDispatcher->get_layout();
 
-		Compass compass(current_layout->get_size());
-        CompassSide side = compass.get_compass_side(person->get_position().x,
-                                            person->get_position().y);
-
-        if(physics->check_collision(current_layout, person, {CollectionObject::BORDER}))
-        {
-			if(side != CompassSide::Stand)
+		for(auto&& [id, object] : current_layout.second)
+		{
+			if(physics->check_collision(current_layout.first, object) != CollectionObject::NONE)
 			{
-				if(side == CompassSide::North)
+				object->block_side(SIDE::LEFT, true);
+				object->block_side(SIDE::UP, true);
+				object->block_side(SIDE::RIGHT, true);
+				object->block_side(SIDE::DOWN, true);
+
+				view->block_side(SIDE::LEFT, true);
+				view->block_side(SIDE::UP, true);
+				view->block_side(SIDE::RIGHT, true);
+				view->block_side(SIDE::DOWN, true);
+
+				Vector2F current_position = object->get_position();
+				int radius = 4;
+				int value = 20;
+
+				std::shared_ptr<Circle> right(new Circle(radius));
+				right->set_position(current_position.x + 30, current_position.y + value);
+
+				std::shared_ptr<Circle> left(new Circle(radius));
+				left->set_position(current_position.x - value, current_position.y + value);
+
+				std::shared_ptr<Circle> up(new Circle(radius));
+				up->set_position(current_position.x + 4, current_position.y - value);
+
+				std::shared_ptr<Circle> down(new Circle(radius));
+				down->set_position(current_position.x + 4, current_position.y + 50);
+
+				if(physics->check_collision(current_layout.first, right) != CollectionObject::NONE)
 				{
-					mover->block_side(MoveSide::UP, true);
+					object->block_side(SIDE::RIGHT, true);	
+					view->block_side(SIDE::RIGHT, true);	
+				}
+				else
+				{
+					object->block_side(SIDE::RIGHT, false);
+					view->block_side(SIDE::RIGHT, false);
+				}
+				
+				if(physics->check_collision(current_layout.first, left) != CollectionObject::NONE)
+				{
+					object->block_side(SIDE::LEFT, true);	
+					view->block_side(SIDE::LEFT, true);	
+				}
+				else
+				{
+					object->block_side(SIDE::LEFT, false);
+					view->block_side(SIDE::LEFT, false);
 				}
 
-				if(side == CompassSide::West)
+				if(physics->check_collision(current_layout.first, up) != CollectionObject::NONE)
 				{
-					mover->block_side(MoveSide::LEFT, true);
+					object->block_side(SIDE::UP, true);	
+					view->block_side(SIDE::UP, true);	
+				}
+				else
+				{
+					object->block_side(SIDE::UP, false);
+					view->block_side(SIDE::UP, false);
 				}
 
-				if(side == CompassSide::East)
+				if(physics->check_collision(current_layout.first, down) != CollectionObject::NONE)
 				{
-					mover->block_side(MoveSide::RIGHT, true);	
+					object->block_side(SIDE::DOWN, true);	
+					view->block_side(SIDE::DOWN, true);	
 				}
-
-				if(side == CompassSide::South)
+				else
 				{
-					mover->block_side(MoveSide::DOWN, true);
+					object->block_side(SIDE::DOWN, false);
+					view->block_side(SIDE::DOWN, false);
 				}
 			}
-		}
-		else
-		{
-			mover->block_side(MoveSide::LEFT, false);
-			mover->block_side(MoveSide::UP, false);
-			mover->block_side(MoveSide::RIGHT, false);
-			mover->block_side(MoveSide::DOWN, false);
+			else
+			{
+				object->block_side(SIDE::LEFT, false);
+				object->block_side(SIDE::UP, false);
+				object->block_side(SIDE::RIGHT, false);
+				object->block_side(SIDE::DOWN, false);
+
+				view->block_side(SIDE::LEFT, false);
+				view->block_side(SIDE::UP, false);
+				view->block_side(SIDE::RIGHT, false);
+				view->block_side(SIDE::DOWN, false);
+			}
 		}
     });
 
@@ -153,8 +205,8 @@ int main()
 
     mainEvents->add_key_event(Keyboard_Key::D, [&mover, &person, &clock, &view]()
     {
-        mover->move(MoveSide::RIGHT, person, clock->get_time(), SPEED);
-        mover->move(MoveSide::RIGHT, view, clock->get_time(), SPEED);
+        mover->move(SIDE::RIGHT, person, clock->get_time(), SPEED);
+        mover->move(SIDE::RIGHT, view, clock->get_time(), SPEED);
     }, EventHandlerType::NONE);
 
     mainEvents->add_key_event(Keyboard_Key::Escape, [&core]()
@@ -164,45 +216,45 @@ int main()
 
     mainEvents->add_key_event(Keyboard_Key::A, [&mover, &person, &clock, &view]()
     {
-        mover->move(MoveSide::LEFT, person, clock->get_time(), SPEED);
-        mover->move(MoveSide::LEFT, view, clock->get_time(), SPEED);
+        mover->move(SIDE::LEFT, person, clock->get_time(), SPEED);
+        mover->move(SIDE::LEFT, view, clock->get_time(), SPEED);
     }, EventHandlerType::NONE);
 
     mainEvents->add_key_event(Keyboard_Key::S, [&mover, &person, &clock, &view]()
     {
-        mover->move(MoveSide::DOWN, person, clock->get_time(), SPEED);
-        mover->move(MoveSide::DOWN, view, clock->get_time(), SPEED);
+        mover->move(SIDE::DOWN, person, clock->get_time(), SPEED);
+        mover->move(SIDE::DOWN, view, clock->get_time(), SPEED);
     }, EventHandlerType::NONE);
 
     mainEvents->add_key_event(Keyboard_Key::W, [&mover, &person, &clock, &view]()
     {
-        mover->move(MoveSide::UP, person, clock->get_time(), SPEED);
-        mover->move(MoveSide::UP, view, clock->get_time(), SPEED);
+        mover->move(SIDE::UP, person, clock->get_time(), SPEED);
+        mover->move(SIDE::UP, view, clock->get_time(), SPEED);
     }, EventHandlerType::NONE);
 
 
     mainEvents->add_key_event(Keyboard_Key::Right, [&mover, &person, &clock, &view]()
     {
-        mover->move(MoveSide::RIGHT, person, clock->get_time(), SPEED);
-        mover->move(MoveSide::RIGHT, view, clock->get_time(), SPEED);
+        mover->move(SIDE::RIGHT, person, clock->get_time(), SPEED);
+        mover->move(SIDE::RIGHT, view, clock->get_time(), SPEED);
     }, EventHandlerType::NONE);
 
     mainEvents->add_key_event(Keyboard_Key::Left, [&mover, &person, &clock, &view]()
     {
-        mover->move(MoveSide::LEFT, person, clock->get_time(), SPEED);
-        mover->move(MoveSide::LEFT, view, clock->get_time(), SPEED);
+        mover->move(SIDE::LEFT, person, clock->get_time(), SPEED);
+        mover->move(SIDE::LEFT, view, clock->get_time(), SPEED);
     }, EventHandlerType::NONE);
 
     mainEvents->add_key_event(Keyboard_Key::Down, [&mover, &person, &clock, &view]()
     {
-        mover->move(MoveSide::DOWN, person, clock->get_time(), SPEED);
-        mover->move(MoveSide::DOWN, view, clock->get_time(), SPEED);
+        mover->move(SIDE::DOWN, person, clock->get_time(), SPEED);
+        mover->move(SIDE::DOWN, view, clock->get_time(), SPEED);
     }, EventHandlerType::NONE);
 
     mainEvents->add_key_event(Keyboard_Key::Up, [&mover, &person, &clock, &view]()
     {
-        mover->move(MoveSide::UP, person, clock->get_time(), SPEED);
-        mover->move(MoveSide::UP, view, clock->get_time(), SPEED);
+        mover->move(SIDE::UP, person, clock->get_time(), SPEED);
+        mover->move(SIDE::UP, view, clock->get_time(), SPEED);
     }, EventHandlerType::NONE);
 
 
@@ -219,7 +271,7 @@ int main()
     layoutDispatcher->add_layout(map_desert->get_id(), map_desert);
     layoutDispatcher->insert_layout_child(map_desert->get_id(), person->get_id(), person);
     layoutDispatcher->add_object(circle->get_id(), circle);
-	layoutDispatcher->change_layout(map_desert->get_id());
+	layoutDispatcher->change_layout(map_forest->get_id());
 
 	eventsDispatcher->register_event_handler(mainEvents->get_id(), mainEvents);
 	eventsDispatcher->change_event_handler(mainEvents->get_id());
@@ -227,7 +279,7 @@ int main()
     core->register_app(std::move(window));
 	core->set_layout_dispatcher(layoutDispatcher);
     core->set_event_dispatcher(eventsDispatcher);
-    core->run();
+	core->run();
 
     return EXIT_SUCCESS;
 }

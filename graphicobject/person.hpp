@@ -15,6 +15,12 @@ class Person : public INoname, public SCALABLE
         std::string _id;
         bool _isVisible;
 		int _health;
+	
+		bool _up;
+		bool _down;
+		bool _left;
+		bool _right;
+
 
     public:
         explicit Person(const DataBaseResult& data);
@@ -54,4 +60,6 @@ class Person : public INoname, public SCALABLE
 		int get_health() const override;
 
 		void set_health(int health) override;
+
+		void block_side(SIDE side, bool status) override;
 };

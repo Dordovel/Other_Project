@@ -1,6 +1,7 @@
 #include "../headers/view.hpp"
 #include "../struct/vectorobject.hpp"
 #include "../struct/rectobject.hpp"
+#include "../struct/side.hpp"
 
 void View::zoom(float zoom)
 {
@@ -24,11 +25,23 @@ bool View::collision(const std::shared_ptr<INTERACTION>& object)
 
 void View::move(const Vector2F& step)
 {
-    sf::View::move(step);
+    this->move(step.x, step.y);
 }
 
 void View::move(float X, float Y)
 {
+	if(this->_up)
+		if(Y < 0) Y = 0;
+
+	if(this->_down)
+		if(Y > 0) Y = 0;
+
+	if(this->_left)
+		if(X < 0) X = 0;
+
+	if(this->_right)
+		if(X > 0) X = 0;
+
     sf::View::move(X, Y);
 }
 
@@ -48,21 +61,38 @@ RectangleF View::get_global_bounds() const
     return rt;
 }
 
-View::View(float X, float Y, float Width, float Height)
+View::View(float X, float Y, float Width, float Height):_up(false),
+														_down(false),
+														_left(false),
+														_right(false)
 {
     sf::View::setSize(Width, Height);
     sf::View::setCenter(X, Y);
 }
 
-View::View(const Vector2F& position, float Width, float Height)
-{
-    sf::View::setSize(Width, Height);
-    sf::View::setCenter(position);
-}
+View::View(const Vector2F& position, float Width, float Height):View(position.x,
+																	position.y,
+																	Width,
+																	Height)
+{}
 
 void View::set_position(float X, float Y)
 {
-    sf::View::setCenter(X, Y);
+	Vector2F current_position = this->get_position();
+
+	if(this->_up)
+		if(Y < current_position.y) Y = current_position.y;
+
+	if(this->_down)
+		if(Y > current_position.y) Y = current_position.y;
+
+	if(this->_left)
+		if(X < current_position.y) X = current_position.x;
+
+	if(this->_right)
+		if(X > current_position.y) X = current_position.x;
+    
+	sf::View::setCenter(X, Y);
 }
 
 Vector2F View::get_size() const
@@ -78,4 +108,27 @@ void View::set_size(const Vector2F& size)
 void View::set_size(float x, float y)
 {
 	sf::View::setSize(x, y);
+}
+
+void View::block_side(SIDE side, bool status)
+{
+	if(side == SIDE::UP)
+	{
+		this->_up = status;
+	}
+
+	if(side == SIDE::DOWN)
+	{
+		this->_down = status;
+	}
+
+	if(side == SIDE::LEFT)
+	{
+		this->_left = status;
+	}
+
+	if(side == SIDE::RIGHT)
+	{
+		this->_right = status;
+	}
 }
