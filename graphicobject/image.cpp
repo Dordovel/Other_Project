@@ -1,19 +1,19 @@
-#include "./person.hpp"
+#include "./image.hpp"
 #include "../struct/drawableobject.hpp"
 #include "../struct/vectorobject.hpp"
 #include "../struct/side.hpp"
 
-DrawableObject Person::draw() const
+DrawableObject Image::draw() const
 {
     return DrawableObject{this->_sprite};
 }
 
-void Person::move(const Vector2F& step)
+void Image::move(const Vector2F& step)
 {
 	this->move(step.x, step.y);
 }
 
-void Person::move(float X, float Y)
+void Image::move(float X, float Y)
 {
 	if(this->_up)
 		if(Y < 0) Y = 0;
@@ -30,37 +30,37 @@ void Person::move(float X, float Y)
 	this->_sprite->move(X, Y);
 }
 
-Vector2F Person::get_position() const
+Vector2F Image::get_position() const
 {
     return {this->_sprite->getPosition()};
 }
 
-void Person::rotate(float angle)
+void Image::rotate(float angle)
 {
 	this->_sprite->rotate(angle);
 }
 
-RectangleF Person::get_global_bounds() const
+RectangleF Image::get_global_bounds() const
 {
     return {this->_sprite->getGlobalBounds()};
 }
 
-bool Person::collision(const std::shared_ptr<INTERACTION>& object)
+bool Image::collision(const std::shared_ptr<INTERACTION>& object)
 {
     return this->_sprite->getGlobalBounds().contains(object->get_position());
 }
 
-void Person::set_id(const std::string& id)
+void Image::set_id(const std::string& id)
 {
     this->_id = id;
 }
 
-std::string Person::get_id() const
+std::string Image::get_id() const
 {
     return this->_id;
 }
 
-Person::Person(const DataBaseResult& data):_isVisible(true),
+Image::Image(const DataBaseResult& data):_isVisible(true),
 											_up(false),
 											_down(false),
 											_left(false),
@@ -71,12 +71,12 @@ Person::Person(const DataBaseResult& data):_isVisible(true),
     this->_sprite = std::make_shared<sf::Sprite>(*(_texture), data.lv);
 }
 
-void Person::set_position(const Vector2F& position)
+void Image::set_position(const Vector2F& position)
 {
     this->set_position(position.x, position.y);
 }
 
-void Person::set_position(float X, float Y)
+void Image::set_position(float X, float Y)
 {
 	Vector2F current_position = this->get_position();
 
@@ -95,37 +95,27 @@ void Person::set_position(float X, float Y)
 	this->_sprite->setPosition(X, Y);
 }
 
-void Person::visible(bool flag)
+void Image::visible(bool flag)
 {
     this->_isVisible = flag;
 }
 
-bool Person::is_visible()
+bool Image::is_visible()
 {
     return this->_isVisible;
 }
 
-void Person::set_scale(Vector2F scale)
+void Image::set_scale(Vector2F scale)
 {
 	this->_sprite->setScale(scale);
 }
 
-Vector2F Person::get_scale()
+Vector2F Image::get_scale()
 {
 	return this->_sprite->getScale();
 }
 
-int Person::get_health() const
-{
-	return this->_health;
-}
-
-void Person::set_health(int health)
-{
-	this->_health = health;
-}
-
-void Person::block_side(SIDE side, bool status)
+void Image::block_side(SIDE side, bool status)
 {
 	if(side == SIDE::UP)
 	{

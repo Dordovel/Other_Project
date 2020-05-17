@@ -4,17 +4,16 @@
 #include <SFML/Graphics/Texture.hpp>
 #include "../struct/databaseresult.hpp"
 #include <memory>
-#include "../Interface/inoname.hpp"
 #include "../object/scalable.hpp"
+#include "../object/object.hpp"
 
-class Person : public INoname, public SCALABLE
+class Image : public OBJECT, public SCALABLE
 {
     private:
         std::shared_ptr<sf::Sprite> _sprite;
         std::shared_ptr<sf::Texture> _texture;
         std::string _id;
         bool _isVisible;
-		int _health;
 	
 		bool _up;
 		bool _down;
@@ -23,11 +22,11 @@ class Person : public INoname, public SCALABLE
 
 
     public:
-        explicit Person(const DataBaseResult& data);
+        explicit Image(const DataBaseResult& data);
 
         DrawableObject draw() const override;
 
-        ~Person() override = default;
+        ~Image() override = default;
 
         void move(const Vector2F& step) override;
 
@@ -56,10 +55,6 @@ class Person : public INoname, public SCALABLE
 		Vector2F get_scale() override;
 
         std::string get_id() const override;
-
-		int get_health() const override;
-
-		void set_health(int health) override;
 
 		void block_side(SIDE side, bool status) override;
 };

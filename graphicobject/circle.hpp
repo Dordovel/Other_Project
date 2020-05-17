@@ -3,6 +3,7 @@
 
 #include "../object/object.hpp"
 #include "../object/scalable.hpp"
+#include "../struct/colorobject.hpp"
 
 class Circle : public OBJECT, public SCALABLE
 {
@@ -50,6 +51,8 @@ class Circle : public OBJECT, public SCALABLE
 		Vector2F get_scale() override;
 
 		void block_side(SIDE side, bool status) override;
+		
+		void set_color(const Color& color);
 
         ~Circle() = default;
 };

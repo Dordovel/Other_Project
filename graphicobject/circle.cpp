@@ -139,3 +139,8 @@ void Circle::block_side(SIDE side, bool status)
 		this->_right = status;
 	}
 }
+
+void Circle::set_color(const Color& color)
+{
+	this->_circleShape->setFillColor(color);
+}
