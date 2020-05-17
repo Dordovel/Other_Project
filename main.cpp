@@ -27,6 +27,7 @@ const static std::map<std::string, std::pair<std::string, std::string>> MAP_PATH
 									};
 
 const static std::string NPC_FILE_NAME = "hero.png";
+const static std::string MAIN_PERSON = "MAIN_PERSON";
 const static Vector2F OBJECT_SCALE = {0.2f, 0.3f}; 
 
 int main()
@@ -57,7 +58,7 @@ int main()
     std::shared_ptr<IClock> clock (new Clock(8000));
 
     std::shared_ptr<Person> person (new Person(dataBase->get_resources(PersonProfession::Magic, NPC_FILE_NAME)));
-    person->set_id("Main_Person");
+    person->set_id(MAIN_PERSON);
     person->set_position(1300, 1300);
 	person->set_scale(OBJECT_SCALE);
 
@@ -90,16 +91,6 @@ int main()
 		{
 			if(physics->check_collision(current_layout.first, object) != CollectionObject::NONE)
 			{
-				object->block_side(SIDE::LEFT, true);
-				object->block_side(SIDE::UP, true);
-				object->block_side(SIDE::RIGHT, true);
-				object->block_side(SIDE::DOWN, true);
-
-				view->block_side(SIDE::LEFT, true);
-				view->block_side(SIDE::UP, true);
-				view->block_side(SIDE::RIGHT, true);
-				view->block_side(SIDE::DOWN, true);
-
 				Vector2F current_position = object->get_position();
 				int radius = 4;
 				int value = 20;
@@ -118,46 +109,42 @@ int main()
 
 				if(physics->check_collision(current_layout.first, right) != CollectionObject::NONE)
 				{
-					object->block_side(SIDE::RIGHT, true);	
-					view->block_side(SIDE::RIGHT, true);	
-				}
-				else
-				{
-					object->block_side(SIDE::RIGHT, false);
-					view->block_side(SIDE::RIGHT, false);
+					object->block_side(SIDE::RIGHT, true);
+					
+					if(id == MAIN_PERSON)
+					{
+						view->block_side(SIDE::RIGHT, true);	
+					}
 				}
 				
 				if(physics->check_collision(current_layout.first, left) != CollectionObject::NONE)
 				{
 					object->block_side(SIDE::LEFT, true);	
-					view->block_side(SIDE::LEFT, true);	
-				}
-				else
-				{
-					object->block_side(SIDE::LEFT, false);
-					view->block_side(SIDE::LEFT, false);
+
+					if(id == MAIN_PERSON)
+					{
+						view->block_side(SIDE::LEFT, true);	
+					}
 				}
 
 				if(physics->check_collision(current_layout.first, up) != CollectionObject::NONE)
 				{
 					object->block_side(SIDE::UP, true);	
-					view->block_side(SIDE::UP, true);	
-				}
-				else
-				{
-					object->block_side(SIDE::UP, false);
-					view->block_side(SIDE::UP, false);
+
+					if(id == MAIN_PERSON)
+					{
+						view->block_side(SIDE::LEFT, true);	
+					}
 				}
 
 				if(physics->check_collision(current_layout.first, down) != CollectionObject::NONE)
 				{
 					object->block_side(SIDE::DOWN, true);	
-					view->block_side(SIDE::DOWN, true);	
-				}
-				else
-				{
-					object->block_side(SIDE::DOWN, false);
-					view->block_side(SIDE::DOWN, false);
+
+					if(id == MAIN_PERSON)
+					{
+						view->block_side(SIDE::LEFT, true);	
+					}
 				}
 			}
 			else
@@ -167,10 +154,13 @@ int main()
 				object->block_side(SIDE::RIGHT, false);
 				object->block_side(SIDE::DOWN, false);
 
-				view->block_side(SIDE::LEFT, false);
-				view->block_side(SIDE::UP, false);
-				view->block_side(SIDE::RIGHT, false);
-				view->block_side(SIDE::DOWN, false);
+				if(id == MAIN_PERSON)
+				{
+					view->block_side(SIDE::LEFT, false);
+					view->block_side(SIDE::UP, false);
+					view->block_side(SIDE::RIGHT, false);
+					view->block_side(SIDE::DOWN, false);
+				}
 			}
 		}
     });
