@@ -23,6 +23,11 @@ bool View::collision(const std::shared_ptr<INTERACTION>& object)
     return this->get_global_bounds().contains(object->get_position());
 }
 
+bool View::collision(const Vector2F& object)
+{
+    return this->get_global_bounds().contains(object);
+}
+
 void View::move(const Vector2F& step)
 {
     this->move(step.x, step.y);
@@ -74,6 +79,12 @@ View::View(const Vector2F& position, float Width, float Height):View(position.x,
 																	position.y,
 																	Width,
 																	Height)
+{}
+
+View::View(const Vector2F& position, const Vector2F& size):View(position.x,
+																	position.y,
+																	size.x,
+																	size.y)
 {}
 
 void View::set_position(float X, float Y)

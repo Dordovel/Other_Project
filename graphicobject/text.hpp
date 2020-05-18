@@ -35,6 +35,8 @@ class Text : public OBJECT, public SCALABLE
 
         bool collision(const std::shared_ptr<INTERACTION>& object) override;
 
+        bool collision(const Vector2F& object) override;
+
         void move(const Vector2F& step) override;
 
         void move(float X, float Y) override;

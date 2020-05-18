@@ -2,15 +2,15 @@
 
 #include "../Interface/imenu.hpp"
 #include <vector>
+#include <set>
 
 class Menu : public IMenu
 {
 	private:
-		std::vector<std::shared_ptr<OBJECT>> _item;
+		std::set<std::shared_ptr<OBJECT>> _item;
 		std::shared_ptr<ILayout> _layout;
 		std::shared_ptr<OBJECT> _pointer;
 		float item_step;
-
 
 	public:
 		bool menu_configure() override;
@@ -26,6 +26,8 @@ class Menu : public IMenu
 		void step_back() override;
 
 		std::string selected_item() override;
+
+		void reset() override;
 
 		~Menu() = default;
 };

@@ -1,7 +1,7 @@
 #include "../headers/menu.hpp"
 #include "../struct/rectobject.hpp"
+#include "../struct/vectorobject.hpp"
 #include "../id.hpp"
-#include <iostream>
 
 bool Menu::menu_configure()
 {
@@ -9,9 +9,9 @@ bool Menu::menu_configure()
 	
 	size_t size = 0;
 
-	for(const auto& var: this->_item)
+	for(const auto& object : this->_item)
 	{
-		size += var->get_global_bounds().height;
+		size += object->get_global_bounds().height;
 	}
 
 	if(size < layoutSize.y)
@@ -20,13 +20,18 @@ bool Menu::menu_configure()
 
 		Vector2UI layoutCenter = { (layoutSize.x / 2), (layoutSize.y / 2) };
 		float x_center = layoutCenter.x;
-		float y_pos = 0;
+		float y_pos = layoutCenter.y / 2;
+		Vector2F pos{x_center, y_pos};
 
-		for(const auto& var : this->_item)
+		for(const auto& object : this->_item)
 		{
-			var->set_position(x_center, y_pos);
-			y_pos += this->item_step + var->get_global_bounds().height;
+			object->set_position(pos);
+			pos.y += this->item_step;
 		}
+
+		Vector2F firstElementPosition = (*this->_item.begin())->get_position();
+		RectangleF pointerBounds = this->_pointer->get_global_bounds();
+		this->_pointer->set_position(x_center - (pointerBounds.width * 2), firstElementPosition.y + pointerBounds.height);
 
 		return true;
 	}
@@ -46,17 +51,60 @@ void Menu::set_pointer(const std::shared_ptr<OBJECT>& pointer)
 
 void Menu::add_item(const std::shared_ptr<OBJECT>& object)
 {
-	this->_item.push_back(object);
+	this->_item.emplace(object);
 }
 
 void Menu::step_forward()
 {
+	std::string selected_item_id = this->selected_item();
+
+	auto lastElement = (--this->_item.end());
+
+	if(selected_item_id != (*lastElement)->get_id())
+	{
+		Vector2F oldPosition = this->_pointer->get_position();
+		this->_pointer->set_position(oldPosition.x, oldPosition.y + this->item_step);
+	}
 }
 
 void Menu::step_back()
-{
+{	
+	std::string selected_item_id = this->selected_item();
+
+	auto firstElement = this->_item.begin();
+
+	if(selected_item_id != (*firstElement)->get_id())
+	{
+		Vector2F oldPosition = this->_pointer->get_position();
+		this->_pointer->set_position(oldPosition.x, oldPosition.y - this->item_step);
+	}
 }
 
 std::string Menu::selected_item()
 {
+	Vector2F itemPosition;
+	Vector2F pointerPosition = this->_pointer->get_position();
+	RectangleF itemRect;
+
+	for (const auto& object : this->_item)
+	{
+		itemPosition = object->get_position();
+		itemRect = object->get_global_bounds();
+
+		if(pointerPosition.y > itemPosition.y - itemRect.height
+			&& pointerPosition.y < itemPosition.y + itemRect.height)
+		{
+			return object->get_id();
+		}
+	}
+
+	return "";
+}
+
+
+void Menu::reset()
+{
+	this->_item.clear();
+	this->_layout = nullptr;
+	this->_pointer = nullptr;
 }

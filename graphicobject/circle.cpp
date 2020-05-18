@@ -65,6 +65,11 @@ bool Circle::collision(const std::shared_ptr<INTERACTION>& object)
     return this->_circleShape->getGlobalBounds().contains(object->get_position());
 }
 
+bool Circle::collision(const Vector2F& object)
+{
+    return this->_circleShape->getGlobalBounds().contains(object);
+}
+
 void Circle::move(const Vector2F& step)
 {
     this->move(step.x, step.y);

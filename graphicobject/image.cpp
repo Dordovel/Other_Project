@@ -50,6 +50,11 @@ bool Image::collision(const std::shared_ptr<INTERACTION>& object)
     return this->_sprite->getGlobalBounds().contains(object->get_position());
 }
 
+bool Image::collision(const Vector2F& object)
+{
+    return this->_sprite->getGlobalBounds().contains(object);
+}
+
 void Image::set_id(const std::string& id)
 {
     this->_id = id;

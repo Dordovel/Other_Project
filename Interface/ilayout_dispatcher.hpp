@@ -20,7 +20,9 @@ class ILayoutDispatcher
 			get_layout() const = 0;
 		virtual std::map<std::string, std::shared_ptr<OBJECT>> get_object() const = 0;
 
-		virtual std::string get_current_layout_id() = 0;
+		virtual std::string get_current_layout_id() const = 0;
+
+		virtual std::vector<std::string> get_change_history() const = 0;
 	
 		virtual ~ILayoutDispatcher() = default;
 };	

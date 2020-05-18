@@ -65,6 +65,11 @@ bool Text::collision(const std::shared_ptr<INTERACTION>& object)
     return this->_text->getGlobalBounds().contains(object->get_position());
 }
 
+bool Text::collision(const Vector2F& object)
+{
+    return this->_text->getGlobalBounds().contains(object);
+}
+
 void Text::move(const Vector2F& step)
 {
     this->move(step.x, step.y);

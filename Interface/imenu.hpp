@@ -21,5 +21,7 @@ class IMenu
 
 		virtual std::string selected_item() = 0;
 
+		virtual void reset() = 0;
+
 		virtual ~IMenu() = default;
 };

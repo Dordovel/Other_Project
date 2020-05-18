@@ -8,6 +8,7 @@ class LayoutDispatcher : public ILayoutDispatcher
         std::map<std::string, std::pair<std::shared_ptr<ILayout>, std::map<std::string, std::shared_ptr<OBJECT>>>> _layout;
         std::map<std::string, std::shared_ptr<OBJECT>> _object;
 		std::string _currentLayout;
+		std::vector<std::string> _layoutHistory;
 
 	public:
 		bool add_layout(const std::string& id, const std::shared_ptr<ILayout>& object) override;
@@ -29,7 +30,9 @@ class LayoutDispatcher : public ILayoutDispatcher
 		
 		std::map<std::string, std::shared_ptr<OBJECT>> get_object() const override;
 
-		std::string get_current_layout_id() override;
+		std::string get_current_layout_id() const override;
+
+		std::vector<std::string> get_change_history() const override;
 
 		~LayoutDispatcher() = default;
 		LayoutDispatcher() = default;

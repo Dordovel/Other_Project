@@ -43,6 +43,8 @@ class Image : public OBJECT, public SCALABLE
         RectangleF get_global_bounds() const override;
 
         bool collision(const std::shared_ptr<INTERACTION>& object) override;
+		
+        bool collision(const Vector2F& object) override;
 
         void set_id(const std::string& name) override;
 

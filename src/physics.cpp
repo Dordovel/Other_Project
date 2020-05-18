@@ -1,4 +1,3 @@
-#include <iostream>
 #include "../headers/physics.hpp"
 #include "../struct/rectobject.hpp"
 #include "../struct/vectorobject.hpp"

@@ -80,10 +80,16 @@ std::map<std::string, std::shared_ptr<OBJECT>> LayoutDispatcher::get_object() co
 
 void LayoutDispatcher::change_layout(const std::string& layoutName)
 {
+	this->_layoutHistory.push_back(this->_currentLayout);
 	this->_currentLayout = layoutName;
 }
 
-std::string LayoutDispatcher::get_current_layout_id()
+std::string LayoutDispatcher::get_current_layout_id() const
 {
 	return this->_currentLayout;
+}
+
+std::vector<std::string> LayoutDispatcher::get_change_history() const
+{
+	return this->_layoutHistory;
 }

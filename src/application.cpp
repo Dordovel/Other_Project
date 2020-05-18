@@ -1,4 +1,3 @@
-#include <iostream>
 #include "../headers/application.hpp"
 #include "../struct/drawableobject.hpp"
 #include "../struct/eventobject.hpp"

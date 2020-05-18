@@ -17,6 +17,8 @@ class View: public IView, public sf::View
 
         View(const Vector2F& position, float Width, float Height);
 
+        View(const Vector2F& position, const Vector2F& size);
+
         void zoom(float zoom) override;
 
         void set_position(const Vector2F& position) override;
@@ -26,6 +28,8 @@ class View: public IView, public sf::View
         void rotate(float angle) override;
 
         bool collision(const std::shared_ptr<INTERACTION>& object) override;
+
+        bool collision(const Vector2F& object) override;
 
         void move(const Vector2F& step) override;
 
