@@ -3,6 +3,29 @@
 #include "../struct/rectobject.hpp"
 #include "../struct/side.hpp"
 
+View::View(float X, float Y, float Width, float Height):_up(false),
+														_down(false),
+														_left(false),
+														_right(false)
+{
+    sf::View::setSize(Width, Height);
+    sf::View::setCenter(X, Y);
+}
+
+View::View(const Vector2F& position, float Width, float Height):View(position.x,
+																	position.y,
+																	Width,
+																	Height)
+{}
+
+View::View(const Vector2F& position, const Vector2F& size):View(position.x,
+																	position.y,
+																	size.x,
+																	size.y)
+{}
+
+View::View(const Vector2F& size):View(0, 0, size.x, size.y){}
+
 void View::zoom(float zoom)
 {
     sf::View::zoom(zoom);
@@ -65,27 +88,6 @@ RectangleF View::get_global_bounds() const
 
     return rt;
 }
-
-View::View(float X, float Y, float Width, float Height):_up(false),
-														_down(false),
-														_left(false),
-														_right(false)
-{
-    sf::View::setSize(Width, Height);
-    sf::View::setCenter(X, Y);
-}
-
-View::View(const Vector2F& position, float Width, float Height):View(position.x,
-																	position.y,
-																	Width,
-																	Height)
-{}
-
-View::View(const Vector2F& position, const Vector2F& size):View(position.x,
-																	position.y,
-																	size.x,
-																	size.y)
-{}
 
 void View::set_position(float X, float Y)
 {

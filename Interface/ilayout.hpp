@@ -9,7 +9,7 @@ class Vector2UI;
 class ILayout: public DRAWABLE, public ICollection, public IDENTIFIABLE
 {
     public:
-        virtual Vector2UI get_size() const = 0;
+		virtual Vector2UI get_size() const = 0;
 
         virtual ~ILayout() = default;
 };

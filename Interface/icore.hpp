@@ -13,6 +13,8 @@ class ICore
 {
     public:
         virtual void run() noexcept = 0;
+        virtual bool is_run() noexcept = 0;
+        virtual void shutdown() noexcept = 0;
         virtual void close() noexcept = 0;
         virtual void register_app(const std::shared_ptr<IApplication>& window) noexcept = 0;
         virtual void set_event_dispatcher(const std::shared_ptr<IEventDispatcher>& eventDispatcher) noexcept = 0;

@@ -15,6 +15,9 @@ class Core : public ICore
         std::shared_ptr<IEventDispatcher> _eventDispatcher;
 		std::shared_ptr<ILayoutDispatcher> _layoutDispatcher;
 
+		bool _coreIsRun;
+
+
     public:
         void run() noexcept override;
 
@@ -25,6 +28,10 @@ class Core : public ICore
         void set_event_dispatcher(const std::shared_ptr<IEventDispatcher>& eventDispatcher) noexcept override;
 
 		void set_layout_dispatcher(const std::shared_ptr<ILayoutDispatcher>& layoutDispatcher) noexcept override;
+
+		bool is_run() noexcept override;
+
+		void shutdown() noexcept override;
 
 		Core() = default;
 		~Core() = default;

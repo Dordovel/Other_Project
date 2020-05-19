@@ -2,12 +2,11 @@
 
 #include "../Interface/imenu.hpp"
 #include <vector>
-#include <set>
 
 class Menu : public IMenu
 {
 	private:
-		std::set<std::shared_ptr<OBJECT>> _item;
+		std::vector<std::shared_ptr<OBJECT>> _item;
 		std::shared_ptr<ILayout> _layout;
 		std::shared_ptr<OBJECT> _pointer;
 		float item_step;

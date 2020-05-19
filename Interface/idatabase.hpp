@@ -3,15 +3,19 @@
 
 enum class PersonProfession
 {
+    Berserk,
     BerserkRed ,
+
     Paladin ,
     PaladinRed ,
+
     Magic ,
     MagicRed ,
+
     Thief ,
+
     Warrior ,
-    WarriorRed ,
-    Berserk
+    WarriorRed
 };
 
 struct DataBaseResult;

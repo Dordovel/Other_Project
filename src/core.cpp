@@ -5,9 +5,21 @@ void Core::close() noexcept
     this->_window->window_close();
 }
 
+bool Core::is_run() noexcept
+{
+	return this->_window->is_open();
+}
+
+void Core::shutdown() noexcept
+{
+	this->_coreIsRun = false;
+}
+
 void Core::run() noexcept
 {
-    while (this->_window->is_open())
+	this->_coreIsRun = true;
+
+    while (this->_window->is_open() && this->_coreIsRun)
     {
         if(this->_eventDispatcher)
         {

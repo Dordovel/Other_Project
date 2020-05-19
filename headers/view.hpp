@@ -19,6 +19,8 @@ class View: public IView, public sf::View
 
         View(const Vector2F& position, const Vector2F& size);
 
+        View(const Vector2F& size);
+
         void zoom(float zoom) override;
 
         void set_position(const Vector2F& position) override;

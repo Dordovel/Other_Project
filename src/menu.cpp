@@ -51,16 +51,14 @@ void Menu::set_pointer(const std::shared_ptr<OBJECT>& pointer)
 
 void Menu::add_item(const std::shared_ptr<OBJECT>& object)
 {
-	this->_item.emplace(object);
+	this->_item.emplace_back(object);
 }
 
 void Menu::step_forward()
 {
 	std::string selected_item_id = this->selected_item();
 
-	auto lastElement = (--this->_item.end());
-
-	if(selected_item_id != (*lastElement)->get_id())
+	if(selected_item_id != this->_item.back()->get_id())
 	{
 		Vector2F oldPosition = this->_pointer->get_position();
 		this->_pointer->set_position(oldPosition.x, oldPosition.y + this->item_step);
@@ -71,9 +69,7 @@ void Menu::step_back()
 {	
 	std::string selected_item_id = this->selected_item();
 
-	auto firstElement = this->_item.begin();
-
-	if(selected_item_id != (*firstElement)->get_id())
+	if(selected_item_id != this->_item.front()->get_id())
 	{
 		Vector2F oldPosition = this->_pointer->get_position();
 		this->_pointer->set_position(oldPosition.x, oldPosition.y - this->item_step);
