@@ -12,7 +12,7 @@ class Core : public ICore
 {
     private:
         std::shared_ptr<IApplication> _window;
-        std::shared_ptr<IEventDispatcher> _eventDispatcher;
+        std::shared_ptr<IEvents> _eventDispatcher;
 		std::shared_ptr<ILayoutDispatcher> _layoutDispatcher;
 
 		bool _coreIsRun;
@@ -25,13 +25,13 @@ class Core : public ICore
 
         void register_app(const std::shared_ptr<IApplication>& window) noexcept override;
 
-        void set_event_dispatcher(const std::shared_ptr<IEventDispatcher>& eventDispatcher) noexcept override;
+        void set_event_dispatcher(const std::shared_ptr<IEvents>& eventDispatcher) noexcept override;
 
 		void set_layout_dispatcher(const std::shared_ptr<ILayoutDispatcher>& layoutDispatcher) noexcept override;
 
 		bool is_run() noexcept override;
 
-		void shutdown() noexcept override;
+		void interrupt() noexcept override;
 
 		Core() = default;
 		~Core() = default;

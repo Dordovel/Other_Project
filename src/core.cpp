@@ -10,7 +10,7 @@ bool Core::is_run() noexcept
 	return this->_window->is_open();
 }
 
-void Core::shutdown() noexcept
+void Core::interrupt() noexcept
 {
 	this->_coreIsRun = false;
 }
@@ -23,16 +23,14 @@ void Core::run() noexcept
     {
         if(this->_eventDispatcher)
         {
-			std::shared_ptr<IEvents> eventHandler = this->_eventDispatcher->get_event_handler();
-
-			if(eventHandler)
+			if(this->_eventDispatcher)
 			{
-				while (this->_window->event_handler(eventHandler->get_event_object()))
+				while (this->_window->event_handler(this->_eventDispatcher->get_event_object()))
 				{
-					eventHandler->catch_events_loop();
+					this->_eventDispatcher->catch_events_loop();
 				}
 				
-				eventHandler->catch_events_none();
+				this->_eventDispatcher->catch_events_none();
 			}
         }
 
@@ -72,9 +70,9 @@ void Core::register_app(const std::shared_ptr<IApplication>& window) noexcept
     this->_window = std::move(window);
 }
 
-void Core::set_event_dispatcher(const std::shared_ptr<IEventDispatcher>& eventDispatcher) noexcept
+void Core::set_event_dispatcher(const std::shared_ptr<IEvents>& eventDispatcher) noexcept
 {
-    this->_eventDispatcher= std::move(eventDispatcher);
+    this->_eventDispatcher = eventDispatcher;
 }
 
 void Core::set_layout_dispatcher(const std::shared_ptr<ILayoutDispatcher>& layoutDispatcher) noexcept

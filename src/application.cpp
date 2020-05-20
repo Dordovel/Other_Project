@@ -78,10 +78,10 @@ void Application::display()
         array4[1].color = sf::Color::Black;
         array4[0].color = sf::Color::Black;
 
-        sf::RenderWindow::draw(array1);
-        sf::RenderWindow::draw(array2);
-        sf::RenderWindow::draw(array3);
-        sf::RenderWindow::draw(array4);
+        //sf::RenderWindow::draw(array1);
+        //sf::RenderWindow::draw(array2);
+        //sf::RenderWindow::draw(array3);
+        //sf::RenderWindow::draw(array4);
     }
 
     sf::RenderWindow::display();

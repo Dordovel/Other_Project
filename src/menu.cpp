@@ -41,6 +41,7 @@ bool Menu::menu_configure()
 
 void Menu::set_layout(const std::shared_ptr<ILayout>& layout)
 {
+	this->reset();
 	this->_layout = layout;
 }
 
@@ -102,5 +103,4 @@ void Menu::reset()
 {
 	this->_item.clear();
 	this->_layout = nullptr;
-	this->_pointer = nullptr;
 }

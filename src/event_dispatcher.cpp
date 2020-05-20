@@ -1,8 +1,8 @@
 #include "../headers/event_dispatcher.hpp"
 
-bool EventDispatcher::register_event_handler(const std::string& id, const std::shared_ptr<IEvents>& eventHandler) noexcept
+bool EventDispatcher::register_event_handler(const std::shared_ptr<IEvents>& eventHandler) noexcept
 {
-	auto result = this->_events.emplace(id, eventHandler);
+	auto result = this->_events.emplace(eventHandler->get_id(), eventHandler);
 	return result.second;
 }
 
