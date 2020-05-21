@@ -1,9 +1,10 @@
 #include "../headers/layout_dispatcher.hpp"
-
+#include <iostream>
 
 void LayoutDispatcher::set_layout(const std::shared_ptr<ILayout>& object)
 {
 	this->_layout = object;
+	this->_layoutChilds.clear();
 }
 
 bool LayoutDispatcher::add_object(const std::shared_ptr<OBJECT>& object)

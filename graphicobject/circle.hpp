@@ -1,3 +1,4 @@
+#pragma once
 #include <SFML/Graphics/CircleShape.hpp>
 #include <memory>
 
@@ -55,6 +56,8 @@ class Circle : public OBJECT, public SCALABLE
 		void block_side(SIDE side, bool status) override;
 		
 		void set_color(const Color& color);
+
+		void set_points_count(int points);
 
         ~Circle() = default;
 };

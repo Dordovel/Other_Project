@@ -23,43 +23,43 @@ void Core::run() noexcept
     {
         if(this->_eventDispatcher)
         {
-			if(this->_eventDispatcher)
+			while (this->_window->event_handler(this->_eventDispatcher->get_event_object()))
 			{
-				while (this->_window->event_handler(this->_eventDispatcher->get_event_object()))
-				{
-					this->_eventDispatcher->catch_events_loop();
-				}
-				
-				this->_eventDispatcher->catch_events_none();
+				this->_eventDispatcher->catch_events_loop();
 			}
+			
+			this->_eventDispatcher->catch_events_none();
         }
 
-		auto layout  = this->_layoutDispatcher->get_layout();
-		auto object = this->_layoutDispatcher->get_object();
-
-		if(layout.first)
+		if(this->_layoutDispatcher)
 		{
-			if(layout.first->is_visible())
+			auto layout  = this->_layoutDispatcher->get_layout();
+			auto object = this->_layoutDispatcher->get_object();
+
+			if(layout.first)
 			{
-				this->_window->draw(layout.first);
+				if(layout.first->is_visible())
+				{
+					this->_window->draw(layout.first);
+				}
+
+				for(auto&& [id, child] : layout.second)
+				{
+					if(child->is_visible())
+					{
+						this->_window->draw(child);
+					}
+				}
 			}
 
-			for(auto&& [id, child] : layout.second)
+			for(auto&& [id, value] : object)
 			{
-				if(child->is_visible())
+				if (value->is_visible())
 				{
-					this->_window->draw(child);
+					this->_window->draw(value);
 				}
 			}
 		}
-
-        for(auto&& [id, value] : object)
-        {
-            if (value->is_visible())
-            {
-                this->_window->draw(value);
-            }
-        }
 
         this->_window->display();
     }
@@ -78,4 +78,14 @@ void Core::set_event_dispatcher(const std::shared_ptr<IEvents>& eventDispatcher)
 void Core::set_layout_dispatcher(const std::shared_ptr<ILayoutDispatcher>& layoutDispatcher) noexcept
 {
 	this->_layoutDispatcher = layoutDispatcher;
+}
+
+void Core::remove_layout_dispatcher() noexcept
+{
+	this->_layoutDispatcher = nullptr;
+}
+
+void Core::remove_event_dispatcher() noexcept
+{
+	this->_eventDispatcher = nullptr;
 }

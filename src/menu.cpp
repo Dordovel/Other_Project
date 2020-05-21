@@ -31,7 +31,7 @@ bool Menu::menu_configure()
 
 		Vector2F firstElementPosition = (*this->_item.begin())->get_position();
 		RectangleF pointerBounds = this->_pointer->get_global_bounds();
-		this->_pointer->set_position(x_center - (pointerBounds.width * 2), firstElementPosition.y + pointerBounds.height);
+		this->_pointer->set_position(x_center - (pointerBounds.width * 2), firstElementPosition.y + (pointerBounds.height / 2));
 
 		return true;
 	}

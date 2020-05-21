@@ -26,7 +26,9 @@ void Application::window_close()
 
 void Application::init()
 {
-    sf::RenderWindow::create(sf::VideoMode(this->_width , this->_height) , this->_windowName);
+	sf::ContextSettings setting;
+	setting.antialiasingLevel = 8;
+    sf::RenderWindow::create(sf::VideoMode(this->_width , this->_height) , this->_windowName, sf::Style::Default, setting);
 }
 
 bool Application::event_handler(EventObject& eventObject )

@@ -18,6 +18,8 @@ class ICore
         virtual void close() noexcept = 0;
         virtual void register_app(const std::shared_ptr<IApplication>& window) noexcept = 0;
         virtual void set_event_dispatcher(const std::shared_ptr<IEvents>& eventDispatcher) noexcept = 0;
+        virtual void remove_event_dispatcher() noexcept = 0;
 		virtual void set_layout_dispatcher(const std::shared_ptr<ILayoutDispatcher>& layoutDispatcher) noexcept = 0; 
+		virtual void remove_layout_dispatcher() noexcept = 0; 
         virtual ~ICore() = default;
 };

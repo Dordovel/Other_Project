@@ -27,7 +27,11 @@ class Core : public ICore
 
         void set_event_dispatcher(const std::shared_ptr<IEvents>& eventDispatcher) noexcept override;
 
+        void remove_event_dispatcher() noexcept override;
+
 		void set_layout_dispatcher(const std::shared_ptr<ILayoutDispatcher>& layoutDispatcher) noexcept override;
+
+		void remove_layout_dispatcher() noexcept override;
 
 		bool is_run() noexcept override;
 

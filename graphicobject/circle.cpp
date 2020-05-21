@@ -149,3 +149,8 @@ void Circle::set_color(const Color& color)
 {
 	this->_circleShape->setFillColor(color);
 }
+
+void Circle::set_points_count(int points)
+{
+	this->_circleShape->setPointCount(points);
+}

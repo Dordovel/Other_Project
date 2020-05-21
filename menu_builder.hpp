@@ -10,7 +10,6 @@
 
 
 std::string menu_builder(const std::shared_ptr<ICore>& core, 
-						const std::shared_ptr<IView>& view, 
 						const std::shared_ptr<OBJECT>& menuSelectedPointer,
 						const std::shared_ptr<ILayout>& layout,
 						const std::vector<std::pair<std::string, std::string>>& generateItem)
@@ -35,13 +34,16 @@ std::string menu_builder(const std::shared_ptr<ICore>& core,
 
 	menu->menu_configure();
 
-	Vector2UI layoutSize = layout->get_size();
-	view->set_position((layoutSize.x / 2), (layoutSize.y / 2));
-	view->set_size(layoutSize.x, layoutSize.y);
 
     std::shared_ptr<IEvents> layoutEvents (new Events);
 	layoutEvents->set_id(EVENT_MENU);
-	
+
+	layoutEvents->set_close_window_event([&selectedItem, &core]()
+			{
+				selectedItem = EXIT;
+				core->interrupt();
+			});
+
 	layoutEvents->add_user_event([&menu, &menuItems]()
 			{
 				std::string item_id = menu->selected_item();
@@ -50,7 +52,7 @@ std::string menu_builder(const std::shared_ptr<ICore>& core,
 				{
 					if(item->get_id() == item_id)
 					{
-						item->set_color(Color{255, 0, 0});
+						item->set_color(Color{0, 0, 150});
 					}
 					else
 					{

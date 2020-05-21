@@ -12,6 +12,8 @@ class View: public IView, public sf::View
 		bool _right;
 
     public:
+		
+		View() = default;
 
         View(float X, float Y, float Width, float Height);
 
