@@ -6,7 +6,7 @@
 #include "../struct/colllectionobject.hpp"
 
 
-class Layout : public ILayout
+class Layout final : public ILayout
 {   
     private:
         std::shared_ptr<tmx::MapLoader> _mapLoader;

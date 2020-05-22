@@ -4,7 +4,7 @@
 
 class RectangleI;
 
-class DataBase : public IDataBase
+class DataBase final : public IDataBase
 {
     private:
         std::map<PersonProfession , RectangleI> _rectList;

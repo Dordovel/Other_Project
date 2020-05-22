@@ -7,7 +7,7 @@
 #include "../object/scalable.hpp"
 #include "../object/object.hpp"
 
-class Image : public OBJECT, public SCALABLE
+class Image final : public OBJECT, public SCALABLE
 {
     private:
         std::shared_ptr<sf::Sprite> _sprite;

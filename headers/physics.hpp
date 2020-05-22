@@ -2,7 +2,7 @@
 #include "../Interface/iphysics.hpp"
 #include "../object/interaction.hpp"
 
-class Physics: public IPhysics
+class Physics final : public IPhysics
 {
     public:
 

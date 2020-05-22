@@ -5,7 +5,7 @@
 #include "../struct/eventobject.hpp"
 
 
-class Events: public IEvents
+class Events final : public IEvents
 {
     private:
 

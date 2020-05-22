@@ -3,7 +3,7 @@
 #include "../Interface/imenu.hpp"
 #include <vector>
 
-class Menu : public IMenu
+class Menu final : public IMenu
 {
 	private:
 		std::vector<std::shared_ptr<OBJECT>> _item;

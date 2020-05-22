@@ -2,7 +2,7 @@
 #include "../Interface/iclock.hpp"
 #include <SFML/System/Clock.hpp>
 
-    class Clock: public IClock , public sf::Clock
+    class Clock final : public IClock , public sf::Clock
 {
     private:
         float _frametime;

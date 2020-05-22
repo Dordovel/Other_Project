@@ -73,13 +73,10 @@ void Events::catch_mouse_wheel_scrolled_event()
 {
     if (this->_eventObject.type == sf::Event::MouseWheelScrolled)
     {
-        if (this->_eventObject.type == sf::Event::MouseMoved)
-        {
-            for(const auto& value : this->_eventMouseWheelScrolledPool)
-            {
-                value.fun(this->_eventObject.mouseWheelScroll.x, this->_eventObject.mouseWheelScroll.y, this->_eventObject.mouseWheelScroll.delta);
-            }
-        }
+		for(const auto& value : this->_eventMouseWheelScrolledPool)
+		{
+			value.fun(this->_eventObject.mouseWheelScroll.x, this->_eventObject.mouseWheelScroll.y, this->_eventObject.mouseWheelScroll.delta);
+		}
     }
 }
 

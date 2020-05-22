@@ -3,7 +3,7 @@
 #include "../Interface/iview.hpp"
 #include <SFML/Graphics/View.hpp>
 
-class View: public IView, public sf::View
+class View final : public IView, public sf::View
 {
 	private:
 		bool _up;

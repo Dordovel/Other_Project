@@ -7,21 +7,23 @@
 #include "./global.hpp"
 #include "./id.hpp"
 #include "./headers/layout_dispatcher.hpp"
+#include <array>
 
-
+template <size_t N>
 std::string menu_builder(const std::shared_ptr<ICore>& core, 
 						const std::shared_ptr<OBJECT>& menuSelectedPointer,
 						const std::shared_ptr<ILayout>& layout,
-						const std::vector<std::pair<std::string, std::string>>& generateItem)
+						std::array<std::pair<std::string, std::string>, N>&& generateItem)
 {
 	std::shared_ptr<IMenu> menu = std::make_shared<Menu>();
 	std::string selectedItem;
 
-	std::shared_ptr<ILayoutDispatcher> dispatcher(new LayoutDispatcher);
+	std::shared_ptr<ILayoutDispatcher> dispatcher = std::make_shared<LayoutDispatcher>();
 	dispatcher->set_layout(layout);
 	dispatcher->insert_layout_child(menuSelectedPointer);
 
-	std::vector<std::shared_ptr<Text>> menuItems = build_items(generateItem, RESOURCES_PATH + "Font.otf");
+	std::array<std::shared_ptr<Text>, N> menuItems = build_items(std::forward<decltype(generateItem)>(generateItem),
+																		RESOURCES_PATH + "Font.otf");
 
 	menu->set_pointer(menuSelectedPointer);
 	menu->set_layout(layout);
@@ -35,7 +37,7 @@ std::string menu_builder(const std::shared_ptr<ICore>& core,
 	menu->menu_configure();
 
 
-    std::shared_ptr<IEvents> layoutEvents (new Events);
+    std::shared_ptr<IEvents> layoutEvents = std::make_shared<Events>();
 	layoutEvents->set_id(EVENT_MENU);
 
 	layoutEvents->set_close_window_event([&selectedItem, &core]()

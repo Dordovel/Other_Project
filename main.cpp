@@ -16,62 +16,61 @@
 #include "./id.hpp"
 
 
-std::vector<std::pair<std::string, std::string>>
+std::array<std::pair<std::string, std::string>, 5>
  open_select_menu(const std::string& lastItem)
 {
-	std::string result;
-	std::vector<std::pair<std::string, std::string>> generateItem;
-
+	std::array<std::pair<std::string, std::string>, 5> generateItem;
 	
 	if(lastItem == NPC_RED_TYPE_ITEM)
 	{
-		generateItem.emplace_back(NPC_RED_PALADIN, "Paladin");
-		generateItem.emplace_back(NPC_RED_MAGIC, "Magic");
-		generateItem.emplace_back(NPC_RED_BERSERK, "Berserk");
-		generateItem.emplace_back(NPC_RED_WARRIOR, "Warrior");
+		generateItem[0] = std::pair(NPC_RED_PALADIN, "Paladin");
+		generateItem[1] = std::pair(NPC_RED_MAGIC, "Magic");
+		generateItem[2] = std::pair(NPC_RED_BERSERK, "Berserk");
+		generateItem[3] = std::pair(NPC_RED_WARRIOR, "Warrior");
 	}
 	else if(lastItem == NPC_BLUE_TYPE_ITEM)
 	{
-		generateItem.emplace_back(NPC_BLUE_PALADIN, "Paladin");
-		generateItem.emplace_back(NPC_BLUE_MAGIC, "Magic");
-		generateItem.emplace_back(NPC_BLUE_BERSERK, "Berserk");
-		generateItem.emplace_back(NPC_BLUE_WARRIOR, "Warrior");
+		generateItem[0] = std::pair(NPC_BLUE_PALADIN, "Paladin");
+		generateItem[1] = std::pair(NPC_BLUE_MAGIC, "Magic");
+		generateItem[2] = std::pair(NPC_BLUE_BERSERK, "Berserk");
+		generateItem[3] = std::pair(NPC_BLUE_WARRIOR, "Warrior");
 	}
 
-	generateItem.emplace_back(MENU_BACK_ITEM, "Back");
+	generateItem[4] = std::pair(MENU_BACK_ITEM, "Back");
 
 	return generateItem;
 }
 
-std::vector<std::pair<std::string, std::string>>
+std::array<std::pair<std::string, std::string>, 3>
 open_type_menu()
 {
-	std::string result;
-	std::vector<std::pair<std::string, std::string>> generateItem;
+	std::array<std::pair<std::string, std::string>, 3> generateItem;
 
-	generateItem.emplace_back(NPC_BLUE_TYPE_ITEM, "Blue");
-	generateItem.emplace_back(NPC_RED_TYPE_ITEM, "Red");
-	generateItem.emplace_back(MENU_BACK_ITEM, "Back");
+	generateItem[0] = std::pair(NPC_BLUE_TYPE_ITEM, "Blue");
+	generateItem[1] = std::pair(NPC_RED_TYPE_ITEM, "Red");
+	generateItem[2] = std::pair(MENU_BACK_ITEM, "Back");
 
 	return generateItem;
 }
 
-std::vector<std::pair<std::string, std::string>>
+std::array<std::pair<std::string, std::string>, 2>
 open_main_menu()
 {
-	std::vector<std::pair<std::string, std::string>> generateItem;
-	generateItem.emplace_back(MAIN_MENU_START_ITEM, "New");
-	generateItem.emplace_back(MENU_EXIT_ITEM, "Exit");
+	std::array<std::pair<std::string, std::string>, 2> generateItem;
+
+	generateItem[0] = std::pair(MAIN_MENU_START_ITEM, "New");
+	generateItem[1] = std::pair(MENU_EXIT_ITEM, "Exit");
 
 	return generateItem;
 }
 
-std::vector<std::pair<std::string, std::string>>
+std::array<std::pair<std::string, std::string>, 2>
 open_pause_menu()
 {
-	std::vector<std::pair<std::string, std::string>> generateItem;
-	generateItem.emplace_back(PAUSE_MENU_RESUME_ITEM, "Resume");
-	generateItem.emplace_back(MENU_EXIT_ITEM, "Main Menu");
+	std::array<std::pair<std::string, std::string>, 2> generateItem;
+
+	generateItem[0] = std::pair(PAUSE_MENU_RESUME_ITEM, "Resume");
+	generateItem[1] = std::pair(MENU_EXIT_ITEM, "Main Menu");
 
 	return generateItem;
 }
@@ -135,10 +134,10 @@ enum class MenuType
 
 std::string menu(MenuType type, const std::shared_ptr<IApplication>& app, const std::shared_ptr<IView>& view)
 {	
-	std::shared_ptr<ICore> core(new Core);
+	std::shared_ptr<ICore> core= std::make_shared<Core>();
 	core->register_app(app);
 
-	std::shared_ptr<Circle> menuSelectedPointer (new Circle(8));
+	std::shared_ptr<Circle> menuSelectedPointer = std::make_shared<Circle>(8);
 	menuSelectedPointer->set_id(MENU_SELECTED_POINTER);
 	menuSelectedPointer->visible(true);
 	menuSelectedPointer->set_points_count(4);
@@ -203,6 +202,7 @@ std::string menu(MenuType type, const std::shared_ptr<IApplication>& app, const 
 	}
 	else
 	{
+		layout->set_id(PAUSE_MENU);
 		result = menu_builder(core, menuSelectedPointer,layout, open_pause_menu());
 	}
 
@@ -211,19 +211,19 @@ std::string menu(MenuType type, const std::shared_ptr<IApplication>& app, const 
 
 int main()
 {
-    std::shared_ptr<IView> view (new View);
+    std::shared_ptr<IView> view = std::make_shared<View>();
 
-    std::shared_ptr<IApplication> window (new Application("Test_Game", 700, 500));
+    std::shared_ptr<IApplication> window = std::make_shared<Application>("Test_Game", 700, 500);
     window->init();
     window->set_position(500, 500);
 	window->set_view(view);	
 
-    std::shared_ptr<ICore> core (new Core);
+    std::shared_ptr<ICore> core = std::make_shared<Core>();
 	core->register_app(window);
 
-    std::shared_ptr<ILayoutDispatcher> layoutDispatcher (new LayoutDispatcher);
+    std::shared_ptr<ILayoutDispatcher> layoutDispatcher = std::make_shared<LayoutDispatcher>();
 
-    std::shared_ptr<IDataBase> dataBase (new DataBase(RESOURCES_PATH));
+    std::shared_ptr<IDataBase> dataBase = std::make_shared<DataBase>(RESOURCES_PATH);
 
 
 	bool isRun = true; 
@@ -248,21 +248,19 @@ int main()
 		view->zoom(DEFAULT_VIEW_ZOOM);
 
 		std::pair desert = MAP_PATH.at("desert");
-		std::shared_ptr<ILayout> mapTower (new Layout(desert.first, desert.second));
+		std::shared_ptr<ILayout> mapTower = std::make_shared<Layout>(desert.first, desert.second);
 		mapTower->set_id(TOWER_MAP);
 
-		std::shared_ptr<Circle> pointer(new Circle(4));
+		std::shared_ptr<Circle> right = std::make_shared<Circle>(4);
+		std::shared_ptr<Circle> left = std::make_shared<Circle>(4);
+		std::shared_ptr<Circle> up = std::make_shared<Circle>(4);
+		std::shared_ptr<Circle> down = std::make_shared<Circle>(4);
 
-		std::shared_ptr<Circle> right(new Circle(4));
-		std::shared_ptr<Circle> left(new Circle(4));
-		std::shared_ptr<Circle> up(new Circle(4));
-		std::shared_ptr<Circle> down(new Circle(4));
+		std::shared_ptr<IClock> clock = std::make_shared<Clock>(8000);
+		std::shared_ptr<IMove> mover = std::make_shared<Move>();
+		std::shared_ptr<IPhysics> physics = std::make_shared<Physics>();
 
-		std::shared_ptr<IClock> clock (new Clock(8000));
-		std::shared_ptr<IMove> mover (new Move);
-		std::shared_ptr<IPhysics> physics (new Physics);
-
-		std::shared_ptr<IEvents> events(new Events);
+		std::shared_ptr<IEvents> events= std::make_shared<Events>();
 
 		events->add_user_event([&physics, 
 									&layoutDispatcher, 
@@ -345,29 +343,15 @@ int main()
 				});
 
 
-		events->set_close_window_event([&core](){core->interrupt(); core->close();});
+		events->set_close_window_event([&core, &isRun]()
+				{
+					core->interrupt(); 
+					core->close(); 
+					isRun = false;
+				});
 
 		
 		events->add_user_event([&clock](){clock->restart();});
-
-
-		events->mouse_button_pressed(Mouse_Key::Left, [&pointer,
-														   window,
-														   &person,
-														   physics,
-														   &mover,
-														   &layoutDispatcher,
-														   &clock](int X, int Y)
-				 {
-					Vector2F coordinates = window->map_pixel_to_coords(X, Y);
-					pointer->visible(true);
-					pointer->set_position(coordinates);
-					mover->move(person, clock, physics, layoutDispatcher->get_layout().first, coordinates, SPEED);
-				 });
-
-
-		events->mouse_button_released([&pointer](){pointer->visible(false);});
-
 
 		events->add_key_event(Keyboard_Key::Escape, [&window,
 														&view,
@@ -469,7 +453,6 @@ int main()
 		core->set_event_dispatcher(events);
 		layoutDispatcher->set_layout(mapTower);
 		layoutDispatcher->insert_layout_child(person);
-
 
 		core->set_layout_dispatcher(layoutDispatcher);
 

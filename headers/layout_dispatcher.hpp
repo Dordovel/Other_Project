@@ -2,7 +2,7 @@
 
 #include "../Interface/ilayout_dispatcher.hpp"
 
-class LayoutDispatcher : public ILayoutDispatcher
+class LayoutDispatcher final : public ILayoutDispatcher
 {
 	private:
         std::map<std::string, std::shared_ptr<OBJECT>> _layoutChilds;

@@ -1,13 +1,15 @@
 #pragma once
 #include "./graphicobject/text.hpp"
-#include <vector>
 #include <memory>
-#include <unordered_map>
+#include <array>
 
-std::vector<std::shared_ptr<Text>> build_items(const std::vector<std::pair<std::string, std::string>>& listId,
+template <size_t N>
+std::array<std::shared_ptr<Text>, N> build_items(std::array<std::pair<std::string, std::string>, N>&& listId,
 												const std::string& resourcesPath)
 {
-	std::vector<std::shared_ptr<Text>> result;
+	std::array<std::shared_ptr<Text>, N> result;
+
+	size_t index = 0;
 
 	for(const auto& var : listId)
 	{
@@ -15,7 +17,8 @@ std::vector<std::shared_ptr<Text>> build_items(const std::vector<std::pair<std::
 		temp->set_text(var.second);
 		temp->set_id(var.first);
 
-		result.emplace_back(temp);
+		result[index] = temp;
+		index ++;
 	}
 
 	return result;

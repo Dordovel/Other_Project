@@ -6,7 +6,7 @@
 #include "../object/scalable.hpp"
 #include "../struct/colorobject.hpp"
 
-class Circle : public OBJECT, public SCALABLE
+class Circle final : public OBJECT, public SCALABLE
 {
     private:
         std::shared_ptr<sf::CircleShape> _circleShape;

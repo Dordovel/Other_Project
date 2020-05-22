@@ -5,7 +5,7 @@
 #include "../struct/colorobject.hpp"
 #include "../object/scalable.hpp"
 
-class Text : public OBJECT, public SCALABLE
+class Text final : public OBJECT, public SCALABLE
 
 {
 	private:

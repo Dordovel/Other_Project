@@ -8,7 +8,7 @@
 #include <map>
 
 
-class Core : public ICore
+class Core final : public ICore
 {
     private:
         std::shared_ptr<IApplication> _window;

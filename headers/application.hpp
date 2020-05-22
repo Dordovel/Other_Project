@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "../Interface/iapplication.hpp"
 
-class Application : public sf::RenderWindow , public IApplication
+class Application final : public sf::RenderWindow , public IApplication
 {
     private:
 		std::string _windowName;
