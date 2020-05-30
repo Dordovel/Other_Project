@@ -4,7 +4,7 @@
 #include "./headers/events.hpp"
 #include "./headers/database.hpp"
 #include "./headers/clock.hpp"
-#include "./graphicobject/image.hpp"
+#include "./graphicobject/sprite.hpp"
 #include "./headers/physics.hpp"
 #include "./headers/view.hpp"
 #include "./graphicobject/circle.hpp"
@@ -14,47 +14,46 @@
 #include "./struct/side.hpp"
 #include "./menu_builder.hpp"
 #include "./id.hpp"
+#include "./headers/npc.hpp"
+#include "./headers/animation.hpp"
 
-
-std::array<std::pair<std::string, std::string>, 5>
- open_select_menu(const std::string& lastItem)
+std::array<std::pair<std::string, std::string>, 4>
+ open_select_menu(const std::string& lastItem) noexcept
 {
-	std::array<std::pair<std::string, std::string>, 5> generateItem;
+	std::array<std::pair<std::string, std::string>, 4> generateItem;
 	
-	if(lastItem == NPC_RED_TYPE_ITEM)
+	if(lastItem == NPC_JEREMY_TYPE_ITEM)
 	{
-		generateItem[0] = std::pair(NPC_RED_PALADIN, "Paladin");
-		generateItem[1] = std::pair(NPC_RED_MAGIC, "Magic");
-		generateItem[2] = std::pair(NPC_RED_BERSERK, "Berserk");
-		generateItem[3] = std::pair(NPC_RED_WARRIOR, "Warrior");
+		generateItem[0] = std::pair(NPC_JEREMY_PINK, "Pink");
+		generateItem[1] = std::pair(NPC_JEREMY_GREEN, "Green");
+		generateItem[2] = std::pair(NPC_JEREMY_BLONDE, "Blonde");
 	}
-	else if(lastItem == NPC_BLUE_TYPE_ITEM)
+	else if(lastItem == NPC_MARTHA_TYPE_ITEM)
 	{
-		generateItem[0] = std::pair(NPC_BLUE_PALADIN, "Paladin");
-		generateItem[1] = std::pair(NPC_BLUE_MAGIC, "Magic");
-		generateItem[2] = std::pair(NPC_BLUE_BERSERK, "Berserk");
-		generateItem[3] = std::pair(NPC_BLUE_WARRIOR, "Warrior");
+		generateItem[0] = std::pair(NPC_MARTHA_PINK, "Pink");
+		generateItem[1] = std::pair(NPC_MARTHA_GREEN, "Green");
+		generateItem[2] = std::pair(NPC_MARTHA_BLONDE, "Blonde");
 	}
 
-	generateItem[4] = std::pair(MENU_BACK_ITEM, "Back");
+	generateItem[3] = std::pair(MENU_BACK_ITEM, "Back");
 
 	return generateItem;
 }
 
 std::array<std::pair<std::string, std::string>, 3>
-open_type_menu()
+open_type_menu() noexcept
 {
 	std::array<std::pair<std::string, std::string>, 3> generateItem;
 
-	generateItem[0] = std::pair(NPC_BLUE_TYPE_ITEM, "Blue");
-	generateItem[1] = std::pair(NPC_RED_TYPE_ITEM, "Red");
+	generateItem[0] = std::pair(NPC_JEREMY_TYPE_ITEM, "Jeremy");
+	generateItem[1] = std::pair(NPC_MARTHA_TYPE_ITEM, "Martha");
 	generateItem[2] = std::pair(MENU_BACK_ITEM, "Back");
 
 	return generateItem;
 }
 
 std::array<std::pair<std::string, std::string>, 2>
-open_main_menu()
+open_main_menu() noexcept
 {
 	std::array<std::pair<std::string, std::string>, 2> generateItem;
 
@@ -65,7 +64,7 @@ open_main_menu()
 }
 
 std::array<std::pair<std::string, std::string>, 2>
-open_pause_menu()
+open_pause_menu() noexcept
 {
 	std::array<std::pair<std::string, std::string>, 2> generateItem;
 
@@ -75,52 +74,41 @@ open_pause_menu()
 	return generateItem;
 }
 
-std::shared_ptr<Image> change_person_type(const std::string& type, const std::shared_ptr<IDataBase>& dataBase)
+std::shared_ptr<Npc> change_person_type(const std::string& type, const std::shared_ptr<IDataBase>& dataBase) noexcept
 
 {
-	const std::string file = "hero.png";
-	std::shared_ptr<Image> result = nullptr;
+	const std::string file = "hero/Jeremy/Jeremy_Blonde.png";
+	std::shared_ptr<Npc> result = nullptr;
 
-	if(type == NPC_RED_PALADIN)
+	if(type == NPC_JEREMY_PINK)
 	{
-		result = std::make_shared<Image>(dataBase->get_resources(PersonProfession::PaladinRed, file));
+		result = std::make_shared<Npc>(dataBase->get_resources(PersonProfession::JEREMY_PINK, SIDE::DOWN));
 	}
 
-	else if(type == NPC_RED_MAGIC)
+	else if(type == NPC_MARTHA_PINK)
 	{
-		result = std::make_shared<Image>(dataBase->get_resources(PersonProfession::MagicRed, file));
+		result = std::make_shared<Npc>(dataBase->get_resources(PersonProfession::MARTHA_PINK, SIDE::DOWN));
 	}
 
-	else if(type == NPC_RED_BERSERK)
+	else if(type == NPC_JEREMY_GREEN)
 	{
-		result = std::make_shared<Image>(dataBase->get_resources(PersonProfession::BerserkRed, file));
+		result = std::make_shared<Npc>(dataBase->get_resources(PersonProfession::JEREMY_GREEN, SIDE::DOWN));
 	}
 
-	else if(type == NPC_RED_WARRIOR)
+	else if(type == NPC_MARTHA_GREEN)
 	{
-		result = std::make_shared<Image>(dataBase->get_resources(PersonProfession::WarriorRed, file));
+		result = std::make_shared<Npc>(dataBase->get_resources(PersonProfession::MARTHA_GREEN, SIDE::DOWN));
 	}
 
-	else if(type == NPC_BLUE_PALADIN)
+	else if(type == NPC_JEREMY_BLONDE)
 	{
-		result = std::make_shared<Image>(dataBase->get_resources(PersonProfession::Paladin, file));
+		result = std::make_shared<Npc>(dataBase->get_resources(PersonProfession::JEREMY_BLONDE, SIDE::DOWN));
 	}
 
-	else if(type == NPC_BLUE_MAGIC)
+	else if(type == NPC_MARTHA_BLONDE)
 	{
-		result = std::make_shared<Image>(dataBase->get_resources(PersonProfession::Magic, file));
+		result = std::make_shared<Npc>(dataBase->get_resources(PersonProfession::MARTHA_BLONDE, SIDE::DOWN));
 	}
-
-	else if(type == NPC_BLUE_BERSERK)
-	{
-		result = std::make_shared<Image>(dataBase->get_resources(PersonProfession::Berserk, file));
-	}
-
-	else if(type == NPC_BLUE_WARRIOR)
-	{
-		result = std::make_shared<Image>(dataBase->get_resources(PersonProfession::Warrior, file));
-	}
-
 
 	return result;
 }	
@@ -132,9 +120,9 @@ enum class MenuType
 };
 
 
-std::string menu(MenuType type, const std::shared_ptr<IApplication>& app, const std::shared_ptr<IView>& view)
+std::string menu(MenuType type, const std::shared_ptr<IApplication>& app, const std::shared_ptr<IView>& view) noexcept
 {	
-	std::shared_ptr<ICore> core= std::make_shared<Core>();
+	std::shared_ptr<Core> core	= std::make_shared<Core>();
 	core->register_app(app);
 
 	std::shared_ptr<Circle> menuSelectedPointer = std::make_shared<Circle>(8);
@@ -143,7 +131,7 @@ std::string menu(MenuType type, const std::shared_ptr<IApplication>& app, const 
 	menuSelectedPointer->set_points_count(4);
 	
 	std::pair menu_bg = MAP_PATH.at("menu");
-	std::shared_ptr<ILayout> layout = std::make_shared<Layout>(menu_bg.first, menu_bg.second);
+	std::shared_ptr<Layout> layout = std::make_shared<Layout>(menu_bg.first, menu_bg.second);
 
 	Vector2UI layoutSize = layout->get_size();
 	view->set_position((layoutSize.x / 2), (layoutSize.y / 2));
@@ -211,21 +199,25 @@ std::string menu(MenuType type, const std::shared_ptr<IApplication>& app, const 
 
 int main()
 {
-    std::shared_ptr<IView> view = std::make_shared<View>();
+    std::shared_ptr<View> view = std::make_shared<View>();
 
-    std::shared_ptr<IApplication> window = std::make_shared<Application>("Test_Game", 700, 500);
+    std::shared_ptr<Application> window = std::make_shared<Application>("Test_Game", 700, 500);
     window->init();
     window->set_position(500, 500);
 	window->set_view(view);	
 
-    std::shared_ptr<ICore> core = std::make_shared<Core>();
+    std::shared_ptr<Core> core = std::make_shared<Core>();
 	core->register_app(window);
 
-    std::shared_ptr<ILayoutDispatcher> layoutDispatcher = std::make_shared<LayoutDispatcher>();
+    std::shared_ptr<LayoutDispatcher> layoutDispatcher = std::make_shared<LayoutDispatcher>();
 
-    std::shared_ptr<IDataBase> dataBase = std::make_shared<DataBase>(RESOURCES_PATH);
+    std::shared_ptr<DataBase> dataBase = std::make_shared<DataBase>(RESOURCES_PATH);
 
+	std::shared_ptr<Clock> clock = std::make_shared<Clock>();
 
+	std::shared_ptr<Anim> anim = std::make_shared<Anim>(0.2f);
+	anim->loop(true);
+	
 	bool isRun = true; 
 
 	while(isRun)
@@ -237,18 +229,42 @@ int main()
 			break;
 		}
 
-		std::shared_ptr<Image> person = nullptr;
+		std::shared_ptr<Npc> person = nullptr;
 		person = change_person_type(result, dataBase);
-		person->set_scale(OBJECT_SCALE);
 		person->set_position(1300, 1300);
+		person->set_scale(OBJECT_SCALE);
 		person->set_id(MAIN_PERSON);
+
+		Animation animationRight;
+		animationRight.set_object(person);
+		auto arrRight = dataBase->get_animation(SIDE::RIGHT);
+		for(const auto& var : arrRight)
+			animationRight.add_frame(var);
+
+		Animation animationLeft;
+		animationLeft.set_object(person);
+		auto arrLeft = dataBase->get_animation(SIDE::LEFT);
+		for(const auto& var : arrLeft)
+			animationLeft.add_frame(var);
 		
+		Animation animationUp;
+		animationUp.set_object(person);
+		auto arrUp = dataBase->get_animation(SIDE::UP);
+		for(const auto& var : arrUp)
+			animationUp.add_frame(var);
+
+		Animation animationDown;
+		animationDown.set_object(person);
+		auto arrDown = dataBase->get_animation(SIDE::DOWN);
+		for(const auto& var : arrDown)
+			animationDown.add_frame(var);
+
 		view->set_position(person->get_position());
 		view->set_size(DEFAULT_VIEW_SIZE);
 		view->zoom(DEFAULT_VIEW_ZOOM);
 
-		std::pair desert = MAP_PATH.at("desert");
-		std::shared_ptr<ILayout> mapTower = std::make_shared<Layout>(desert.first, desert.second);
+		std::pair desert = MAP_PATH.at("forest");
+		std::shared_ptr<Layout> mapTower = std::make_shared<Layout>(desert.first, desert.second);
 		mapTower->set_id(TOWER_MAP);
 
 		std::shared_ptr<Circle> right = std::make_shared<Circle>(4);
@@ -256,33 +272,97 @@ int main()
 		std::shared_ptr<Circle> up = std::make_shared<Circle>(4);
 		std::shared_ptr<Circle> down = std::make_shared<Circle>(4);
 
-		std::shared_ptr<IClock> clock = std::make_shared<Clock>(8000);
-		std::shared_ptr<IMove> mover = std::make_shared<Move>();
+		std::shared_ptr<Move> mover = std::make_shared<Move>();
+
 		std::shared_ptr<IPhysics> physics = std::make_shared<Physics>();
 
-		std::shared_ptr<IEvents> events= std::make_shared<Events>();
+		std::shared_ptr<Events> events= std::make_shared<Events>();
+		
+		SIDE side = SIDE::STOP;
+
+		events->set_close_window_event([&core, &isRun]()
+				{
+					core->interrupt(); 
+					core->close(); 
+					isRun = false;
+				});
+
+		events->add_user_event([&anim,
+								&clock]()
+				{
+					anim->run(clock->get_work_time() * DELAY);
+				});
+
+		events->add_user_event([&side,
+								&anim,
+								&animationUp,
+								&animationDown,
+								&animationLeft,
+								&animationRight]()
+				{
+					if(side != SIDE::STOP)
+					{
+						if(side == SIDE::LEFT)
+						{
+							anim->set_animation(&animationLeft);
+						}
+						if(side == SIDE::RIGHT)
+						{
+							anim->set_animation(&animationRight);
+						}
+						
+						if(side == SIDE::DOWN)
+						{
+							anim->set_animation(&animationDown);
+						}
+						
+						if(side == SIDE::UP)
+						{
+							anim->set_animation(&animationUp);
+						}
+						anim->stop(false);
+					}
+					else
+					{
+						anim->stop(true);
+					}
+					
+				});
+
+		events->add_user_event([&mover,
+								&person,
+								&side,
+								&view,
+								&clock]()
+				{
+					if(side != SIDE::STOP)
+					{
+						auto val = clock->get_elapsed_time();
+						mover->move(side, person, val / DELAY, SPEED);
+						mover->move(side, view, val / DELAY, SPEED);
+					}
+				});
 
 		events->add_user_event([&physics, 
-									&layoutDispatcher, 
-									&view,
-									&right,
-									&left,
-									&up,
-									&down]()
+								&layoutDispatcher, 
+								&view,
+								&right,
+								&left,
+								&up,
+								&down]()
 				{
 					auto current_layout = layoutDispatcher->get_layout();
-					int value = 20;
-
 					for(auto&& [id, object] : current_layout.second)
 					{
 						if(physics->check_collision(current_layout.first, object) != CollectionObject::NONE)
 						{
-							Vector2F current_position = object->get_position();
+							RectangleF rect = object->get_global_bounds();
 
-							right->set_position(current_position.x + 30, current_position.y + value);
-							left->set_position(current_position.x - value, current_position.y + value);
-							up->set_position(current_position.x + 4, current_position.y - value);
-							down->set_position(current_position.x + 4, current_position.y + 50);
+							right->set_position((rect.left + rect.width), (rect.top + (rect.height / 2)));
+							left->set_position(rect.left, (rect.top + (rect.height / 2)));
+							up->set_position((rect.left + (rect.width / 2)), rect.top);
+							down->set_position((rect.left + (rect.width / 2)), (rect.top + rect.height));
+
 
 							if(physics->check_collision(current_layout.first, right) != CollectionObject::NONE)
 							{
@@ -310,7 +390,7 @@ int main()
 
 								if(id == MAIN_PERSON)
 								{
-									view->block_side(SIDE::LEFT, true);	
+									view->block_side(SIDE::UP, true);	
 								}
 							}
 
@@ -320,7 +400,7 @@ int main()
 
 								if(id == MAIN_PERSON)
 								{
-									view->block_side(SIDE::LEFT, true);	
+									view->block_side(SIDE::DOWN, true);	
 								}
 							}
 						}
@@ -342,21 +422,10 @@ int main()
 					}
 				});
 
-
-		events->set_close_window_event([&core, &isRun]()
-				{
-					core->interrupt(); 
-					core->close(); 
-					isRun = false;
-				});
-
-		
-		events->add_user_event([&clock](){clock->restart();});
-
-		events->add_key_event(Keyboard_Key::Escape, [&window,
-														&view,
-														&person,
-														&core]()
+		events->key_pressed_event(Keyboard_Key::Escape, [&window,
+													&view,
+													&person,
+													&core]()
 				{
 					std::string result = menu(MenuType::PAUSE, window, view);
 					if(result == PAUSE_MENU_RESUME_ITEM)
@@ -372,83 +441,96 @@ int main()
 				}, EventHandlerType::EVENT_LOOP);
 
 
-		events->add_key_event(Keyboard_Key::D, [&mover,
-													&person, 
-													&clock, 
-													&view]()
+		events->key_pressed_event(Keyboard_Key::D, [&side]()
 				{
-					mover->move(SIDE::RIGHT, person, clock->get_time(), SPEED);
-					mover->move(SIDE::RIGHT, view, clock->get_time(), SPEED);
+					side = SIDE::RIGHT;
 				}, EventHandlerType::NONE);
 
-		events->add_key_event(Keyboard_Key::A, [&mover, 
-													&person, 
-													&clock, 
-													&view]()
+		events->key_pressed_event(Keyboard_Key::A, [&side]()
 				{
-					mover->move(SIDE::LEFT, person, clock->get_time(), SPEED);
-					mover->move(SIDE::LEFT, view, clock->get_time(), SPEED);
+					side = SIDE::LEFT;
 				}, EventHandlerType::NONE);
 
 
-		events->add_key_event(Keyboard_Key::S, [&mover, 
-													&person, 
-													&clock, 
-													&view]()
+		events->key_pressed_event(Keyboard_Key::S, [&side]()
 				{
-					mover->move(SIDE::DOWN, person, clock->get_time(), SPEED);
-					mover->move(SIDE::DOWN, view, clock->get_time(), SPEED);
+					side = SIDE::DOWN;
 				}, EventHandlerType::NONE);
 
 
-		events->add_key_event(Keyboard_Key::W, [&mover, 
-													&person, 
-													&clock, 
-													&view]()
+		events->key_pressed_event(Keyboard_Key::W, [&side]()
 				{
-					mover->move(SIDE::UP, person, clock->get_time(), SPEED);
-					mover->move(SIDE::UP, view, clock->get_time(), SPEED);
+					side = SIDE::UP;
 				}, EventHandlerType::NONE);
 
 
-		events->add_key_event(Keyboard_Key::Right, [&mover, 
-														&person, 
-														&clock, 
-														&view]()
+		events->key_pressed_event(Keyboard_Key::Right, [&side]() 
 				{
-					mover->move(SIDE::RIGHT, person, clock->get_time(), SPEED);
-					mover->move(SIDE::RIGHT, view, clock->get_time(), SPEED);
+					side = SIDE::RIGHT;
 				}, EventHandlerType::NONE);
 
 
-		events->add_key_event(Keyboard_Key::Left, [&mover,
-														&person,
-														&clock, 
-														&view]()
+		events->key_pressed_event(Keyboard_Key::Left, [&side]()
 				{
-					mover->move(SIDE::LEFT, person, clock->get_time(), SPEED);
-					mover->move(SIDE::LEFT, view, clock->get_time(), SPEED);
+					side = SIDE::LEFT;
 				}, EventHandlerType::NONE);
 
 
-		events->add_key_event(Keyboard_Key::Down, [&mover,
-														&person,
-														&clock, 
-														&view]()
+		events->key_pressed_event(Keyboard_Key::Down, [&side]()
 				{
-					mover->move(SIDE::DOWN, person, clock->get_time(), SPEED);
-					mover->move(SIDE::DOWN, view, clock->get_time(), SPEED);
+					side = SIDE::DOWN;
 				}, EventHandlerType::NONE);
 
 
-		events->add_key_event(Keyboard_Key::Up, [&mover, 
-													&person, 
-													&clock, 
-													&view]()
+		events->key_pressed_event(Keyboard_Key::Up, [&side]()
 				{
-					mover->move(SIDE::UP, person, clock->get_time(), SPEED);
-					mover->move(SIDE::UP, view, clock->get_time(), SPEED);
+					side = SIDE::UP;
 				}, EventHandlerType::NONE);
+
+		events->key_released_event(Keyboard_Key::D, [&side]()
+				{
+					side = SIDE::STOP;
+				});
+
+		events->key_released_event(Keyboard_Key::A, [&side]()
+				{
+					side = SIDE::STOP;
+				});
+
+		events->key_released_event(Keyboard_Key::S, [&side]()
+				{
+					side = SIDE::STOP;
+				});
+
+		events->key_released_event(Keyboard_Key::W, [&side]()
+				{
+					side = SIDE::STOP;
+				});
+
+		events->key_released_event(Keyboard_Key::Right, [&side]() 
+				{
+					side = SIDE::STOP;
+				});
+
+		events->key_released_event(Keyboard_Key::Left, [&side]()
+				{
+					side = SIDE::STOP;
+				});
+
+		events->key_released_event(Keyboard_Key::Down, [&side]()
+				{
+					side = SIDE::STOP;
+				});
+
+		events->key_released_event(Keyboard_Key::Up, [&side]()
+				{
+					side = SIDE::STOP;
+				});
+
+		events->add_user_event([&clock]()
+				{
+					clock->restart();
+				});
 
 		core->set_event_dispatcher(events);
 		layoutDispatcher->set_layout(mapTower);

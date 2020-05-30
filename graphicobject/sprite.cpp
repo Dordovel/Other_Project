@@ -1,19 +1,19 @@
-#include "./image.hpp"
+#include "./sprite.hpp"
 #include "../struct/drawableobject.hpp"
 #include "../struct/vectorobject.hpp"
 #include "../struct/side.hpp"
 
-DrawableObject Image::draw() const
+DrawableObject Sprite::draw() const noexcept
 {
     return DrawableObject{this->_sprite};
 }
 
-void Image::move(const Vector2F& step)
+void Sprite::move(const Vector2F& step) noexcept
 {
 	this->move(step.x, step.y);
 }
 
-void Image::move(float X, float Y)
+void Sprite::move(float X, float Y) noexcept
 {
 	if(this->_up)
 		if(Y < 0) Y = 0;
@@ -30,42 +30,42 @@ void Image::move(float X, float Y)
 	this->_sprite->move(X, Y);
 }
 
-Vector2F Image::get_position() const
+Vector2F Sprite::get_position() const noexcept
 {
     return {this->_sprite->getPosition()};
 }
 
-void Image::rotate(float angle)
+void Sprite::rotate(float angle) noexcept
 {
 	this->_sprite->rotate(angle);
 }
 
-RectangleF Image::get_global_bounds() const
+RectangleF Sprite::get_global_bounds() const noexcept
 {
     return {this->_sprite->getGlobalBounds()};
 }
 
-bool Image::collision(const std::shared_ptr<INTERACTION>& object)
+bool Sprite::collision(const std::shared_ptr<INTERACTION>& object) noexcept
 {
     return this->_sprite->getGlobalBounds().contains(object->get_position());
 }
 
-bool Image::collision(const Vector2F& object)
+bool Sprite::collision(const Vector2F& object) noexcept
 {
     return this->_sprite->getGlobalBounds().contains(object);
 }
 
-void Image::set_id(const std::string& id)
+void Sprite::set_id(const std::string& id) noexcept
 {
     this->_id = id;
 }
 
-std::string Image::get_id() const
+std::string Sprite::get_id() const noexcept
 {
     return this->_id;
 }
 
-Image::Image(const DataBaseResult& data):_isVisible(true),
+Sprite::Sprite(const DataBaseResult& data):_isVisible(true),
 											_up(false),
 											_down(false),
 											_left(false),
@@ -73,15 +73,26 @@ Image::Image(const DataBaseResult& data):_isVisible(true),
 {
     this->_texture = std::make_shared<sf::Texture>();
     this->_texture->loadFromFile(data.rv);
-    this->_sprite = std::make_shared<sf::Sprite>(*(_texture), data.lv);
+    this->_sprite = std::make_shared<sf::Sprite>(*(_texture), data.rect);
 }
 
-void Image::set_position(const Vector2F& position)
+void Sprite::set_position(const Vector2F& position) noexcept
 {
     this->set_position(position.x, position.y);
 }
 
-void Image::set_position(float X, float Y)
+void Sprite::set_texture_rect(const RectangleI& rect)
+{
+	this->_sprite->setTextureRect(rect);
+}
+
+void Sprite::set_texture(const DataBaseResult& data)
+{
+    this->_texture = std::make_shared<sf::Texture>();
+    this->_texture->loadFromFile(data.rv);
+}
+
+void Sprite::set_position(float X, float Y) noexcept
 {
 	Vector2F current_position = this->get_position();
 
@@ -100,27 +111,27 @@ void Image::set_position(float X, float Y)
 	this->_sprite->setPosition(X, Y);
 }
 
-void Image::visible(bool flag)
+void Sprite::visible(bool flag) noexcept
 {
     this->_isVisible = flag;
 }
 
-bool Image::is_visible()
+bool Sprite::is_visible() noexcept
 {
     return this->_isVisible;
 }
 
-void Image::set_scale(Vector2F scale)
+void Sprite::set_scale(Vector2F scale) noexcept
 {
 	this->_sprite->setScale(scale);
 }
 
-Vector2F Image::get_scale()
+Vector2F Sprite::get_scale() noexcept
 {
 	return this->_sprite->getScale();
 }
 
-void Image::block_side(SIDE side, bool status)
+void Sprite::block_side(SIDE side, bool status) noexcept
 {
 	if(side == SIDE::UP)
 	{

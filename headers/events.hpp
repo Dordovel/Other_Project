@@ -9,10 +9,17 @@ class Events final : public IEvents
 {
     private:
 
+        enum class KeyEventType
+        {
+            Pressed,
+            Released
+        };
+
         struct EventHandler
         {
             Keyboard_Key::Key key;
             std::function<void()> fun;
+            Events::KeyEventType type;
         };
 
         struct EventHandlerMousePressed
@@ -45,8 +52,9 @@ class Events final : public IEvents
 
         std::function<void()> _closeWindowEvent;
 
-        std::vector<Events::EventHandler> _eventLoopPool;
-        std::vector<Events::EventHandler> _eventNonePool;
+        std::vector<Events::EventHandler> _keyPressedEventLoop;
+        std::vector<Events::EventHandler> _keyPressedEventNone;
+        std::vector<Events::EventHandler> _keyReleaseEvents;
         std::map<Mouse_Key::Button, Events::EventHandlerMousePressed> _eventMousePressedPool;
         std::vector<Events::EventHandlerMouseMoved> _eventMouseMovedPool;
         std::vector<Events::EventHandlerMouseWheelScrolled> _eventMouseWheelScrolledPool;
@@ -62,28 +70,33 @@ class Events final : public IEvents
         inline void catch_mouse_released_event();
 
     public:
-        void set_close_window_event(const std::function<void()>& closeWindowEvent) override;
-        void add_key_event(int key , const std::function<void()>& fun , EventHandlerType eventType) override;
+        void set_close_window_event(const std::function<void()>& closeWindowEvent) noexcept override;
+        
+        void key_pressed_event(int key , const std::function<void()>& fun , EventHandlerType eventType) noexcept override;
+        
+        void key_released_event(int key , const std::function<void()>& fun) noexcept;
+
         inline void catch_events_loop() override;
+        
         inline void catch_events_none() override;
 
-        void mouse_button_pressed(int key, const std::function<void(int X, int Y)>& fun) override;
+        void mouse_button_pressed(int key, const std::function<void(int X, int Y)>& fun) noexcept override;
 
-        void mouse_button_released(const std::function<void()>& fun) override;
+        void mouse_button_released(const std::function<void()>& fun) noexcept override;
 
-        void mouse_moved(const std::function<void(int X, int Y)>& fun) override;
+        void mouse_moved(const std::function<void(int X, int Y)>& fun) noexcept override;
 
-        void mouse_wheel_scrolled(const std::function<void(int X, int Y, int Delta)>& fun) override;
+        void mouse_wheel_scrolled(const std::function<void(int X, int Y, int Delta)>& fun) noexcept override;
 
-        void mouse_entered(const std::function<void()>& fun) override;
+        void mouse_entered(const std::function<void()>& fun) noexcept override;
 
-        void add_user_event(const std::function<void()>& event) override;
+        void add_user_event(const std::function<void()>& event) noexcept override;
 
-        EventObject& get_event_object() override;
+        EventObject& get_event_object() noexcept override;
 
-		std::string get_id() const override;
+		std::string get_id() const noexcept override;
 
-        void set_id(const std::string& id) override;
+        void set_id(const std::string& id) noexcept override;
 
         ~Events() = default;
 		Events() = default;

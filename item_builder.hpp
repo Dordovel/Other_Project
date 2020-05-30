@@ -5,7 +5,7 @@
 
 template <size_t N>
 std::array<std::shared_ptr<Text>, N> build_items(std::array<std::pair<std::string, std::string>, N>&& listId,
-												const std::string& resourcesPath)
+												const std::string& resourcesPath) noexcept
 {
 	std::array<std::shared_ptr<Text>, N> result;
 

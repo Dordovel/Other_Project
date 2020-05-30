@@ -1,16 +1,16 @@
 #include "../headers/clock.hpp"
 
-float Clock::get_time() const
+unsigned int Clock::get_elapsed_time() const noexcept
 {
-    return this->_frametime;
+    return this->_clock.getElapsedTime().asMilliseconds();
 }
 
-void Clock::restart()
+unsigned int Clock::get_work_time() const noexcept
 {
-    this->_frametime = sf::Clock::getElapsedTime().asMicroseconds() / this->_param;
-    sf::Clock::restart();
+	return this->_workTime.asMilliseconds();
 }
 
-Clock::Clock(float param):_param(param),
-                            _frametime(0)
-{}
+void Clock::restart() noexcept
+{
+    this->_workTime = this->_clock.restart();
+}

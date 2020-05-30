@@ -3,7 +3,7 @@
 #include "../struct/vectorobject.hpp"
 #include "../id.hpp"
 
-bool Menu::menu_configure()
+bool Menu::menu_configure() noexcept
 {
 	Vector2UI layoutSize = this->_layout->get_size();
 	
@@ -39,23 +39,23 @@ bool Menu::menu_configure()
 	return false;
 }
 
-void Menu::set_layout(const std::shared_ptr<ILayout>& layout)
+void Menu::set_layout(const std::shared_ptr<ILayout>& layout) noexcept
 {
 	this->reset();
 	this->_layout = layout;
 }
 
-void Menu::set_pointer(const std::shared_ptr<OBJECT>& pointer)
+void Menu::set_pointer(const std::shared_ptr<OBJECT>& pointer) noexcept
 {
 	this->_pointer = pointer;
 }
 
-void Menu::add_item(const std::shared_ptr<OBJECT>& object)
+void Menu::add_item(const std::shared_ptr<OBJECT>& object) noexcept
 {
 	this->_item.emplace_back(object);
 }
 
-void Menu::step_forward()
+void Menu::step_forward() noexcept
 {
 	std::string selected_item_id = this->selected_item();
 
@@ -66,7 +66,7 @@ void Menu::step_forward()
 	}
 }
 
-void Menu::step_back()
+void Menu::step_back() noexcept
 {	
 	std::string selected_item_id = this->selected_item();
 
@@ -77,7 +77,7 @@ void Menu::step_back()
 	}
 }
 
-std::string Menu::selected_item()
+std::string Menu::selected_item() noexcept
 {
 	Vector2F itemPosition;
 	Vector2F pointerPosition = this->_pointer->get_position();
@@ -99,7 +99,7 @@ std::string Menu::selected_item()
 }
 
 
-void Menu::reset()
+void Menu::reset() noexcept
 {
 	this->_item.clear();
 	this->_layout = nullptr;

@@ -3,7 +3,8 @@
 class IClock
 {
     public:
-        virtual float get_time() const = 0;
-        virtual void restart() = 0;
+        virtual unsigned int get_elapsed_time() const noexcept = 0;
+		virtual unsigned int get_work_time() const noexcept = 0;
+        virtual void restart() noexcept = 0;
         virtual ~IClock() = default;;
 };

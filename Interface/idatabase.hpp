@@ -1,29 +1,27 @@
 #pragma once
 #include <string>
+#include <array>
 
 enum class PersonProfession
 {
-    Berserk,
-    BerserkRed ,
+	JEREMY_PINK,
+	MARTHA_PINK,
 
-    Paladin ,
-    PaladinRed ,
+	JEREMY_GREEN,
+	MARTHA_GREEN,
 
-    Magic ,
-    MagicRed ,
-
-    Thief ,
-
-    Warrior ,
-    WarriorRed
+	JEREMY_BLONDE,
+	MARTHA_BLONDE,
 };
 
-struct DataBaseResult;
+enum class SIDE;
+class RectangleI;
+class DataBaseResult;
 
 class IDataBase
 {
     public:
-        virtual DataBaseResult get_resources(PersonProfession person , const std::string& fileName) const = 0;
-        virtual DataBaseResult get_resources(const std::string& fileName) const = 0;
+        virtual DataBaseResult get_resources(PersonProfession person, SIDE side) const noexcept = 0;
+		virtual std::array<RectangleI, 3> get_animation(SIDE side) const noexcept = 0;
         virtual  ~IDataBase() = default;
 };

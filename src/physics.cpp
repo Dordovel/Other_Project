@@ -3,14 +3,14 @@
 #include "../struct/vectorobject.hpp"
 #include "../struct/colllectionobject.hpp"
 
-bool Physics::check_intersection(const std::shared_ptr<INTERACTION>& lv, const std::shared_ptr<INTERACTION>& rv)
+bool Physics::check_intersection(const std::shared_ptr<INTERACTION>& lv, const std::shared_ptr<INTERACTION>& rv) noexcept
 {
     if(!lv || !rv) return false;
     return lv->collision(rv);
 }
 
 CollectionObject Physics::check_collision(const std::shared_ptr<ICollection>& lv,
-								const std::shared_ptr<INTERACTION>& rv)
+								const std::shared_ptr<INTERACTION>& rv) noexcept
 {
     RectangleF bounds = rv->get_global_bounds();
 

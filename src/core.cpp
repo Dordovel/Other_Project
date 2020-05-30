@@ -15,7 +15,7 @@ void Core::interrupt() noexcept
 	this->_coreIsRun = false;
 }
 
-void Core::run() noexcept
+void Core::run()
 {
 	this->_coreIsRun = true;
 
@@ -33,7 +33,7 @@ void Core::run() noexcept
 
 		if(this->_layoutDispatcher)
 		{
-			auto layout  = this->_layoutDispatcher->get_layout();
+			auto layout = this->_layoutDispatcher->get_layout();
 			auto object = this->_layoutDispatcher->get_object();
 
 			if(layout.first)

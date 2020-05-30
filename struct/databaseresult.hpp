@@ -4,6 +4,6 @@
 
 struct DataBaseResult
 {
-    RectangleI lv;
     std::string  rv;
+	RectangleI rect;
 };

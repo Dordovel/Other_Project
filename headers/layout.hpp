@@ -23,19 +23,19 @@ class Layout final : public ILayout
     public:
         Layout(const std::string& pathToMap , const std::string& mapFileName);
 
-        std::map<CollectionObject, std::vector<RectangleF>> get_objects(const RectangleF &rectangleF) const override;
+        std::map<CollectionObject, std::vector<RectangleF>> get_objects(const RectangleF &rectangleF) const noexcept override;
 
-        void set_id(const std::string& id) override;
+        void set_id(const std::string& id) noexcept override;
 
-        std::string get_id() const override;
+        std::string get_id() const noexcept override;
 
-        void visible(bool flag) override;
+        void visible(bool flag) noexcept override;
 
-        bool is_visible() override;
+        bool is_visible() noexcept override;
 
-        DrawableObject draw() const override;
+        DrawableObject draw() const noexcept override;
 
-        Vector2UI get_size() const override;
+        Vector2UI get_size() const noexcept override;
 
 		~Layout();
 };

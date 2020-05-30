@@ -40,36 +40,36 @@ bool Layout::check_map_static_object_with_string(CollectionObject object, const 
     return false;
 }
 
-Vector2UI Layout::get_size() const
+Vector2UI Layout::get_size() const noexcept
 {
     return this->_mapLoader->getMapSize();
 }
-DrawableObject Layout::draw() const
+DrawableObject Layout::draw() const noexcept
 {
     return DrawableObject{this->_mapLoader};
 }
 
-void Layout::set_id(const std::string& id)
+void Layout::set_id(const std::string& id) noexcept
 {
     this->_id = id;
 }
 
-std::string Layout::get_id() const
+std::string Layout::get_id() const noexcept
 {
     return this->_id;
 }
 
-void Layout::visible(bool flag)
+void Layout::visible(bool flag) noexcept
 {
     this->_isVisible = flag;
 }
 
-bool Layout::is_visible()
+bool Layout::is_visible() noexcept
 {
     return this->_isVisible;
 }
 
-std::map<CollectionObject, std::vector<RectangleF>> Layout::get_objects(const RectangleF &rectangleF) const
+std::map<CollectionObject, std::vector<RectangleF>> Layout::get_objects(const RectangleF &rectangleF) const noexcept
 {
     std::map<CollectionObject, std::vector<RectangleF>> result{};
 

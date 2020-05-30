@@ -6,12 +6,12 @@
 #include "../struct/side.hpp"
 
 
-void Move::game_object_move(const std::shared_ptr<MOVABLE>& object , float posX , float posY)
+void Move::game_object_move(const std::shared_ptr<MOVABLE>& object , float posX , float posY) noexcept
 {
 	object->move ( posX , posY );
 }
 
-void Move::moveUp(const std::shared_ptr<MOVABLE>& object, float clock, float speed)
+void Move::moveUp(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
 {
 	float posX = 0;
 	float posY = -(speed * clock);
@@ -19,7 +19,7 @@ void Move::moveUp(const std::shared_ptr<MOVABLE>& object, float clock, float spe
 	game_object_move(object , posX , posY );
 }
 
-void Move::moveDown(const std::shared_ptr<MOVABLE>& object, float clock, float speed)
+void Move::moveDown(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
 {
 	float posX = 0;
 	float posY = speed * clock;
@@ -27,7 +27,7 @@ void Move::moveDown(const std::shared_ptr<MOVABLE>& object, float clock, float s
 	game_object_move(object , posX , posY );
 }
 
-void Move::moveLeft(const std::shared_ptr<MOVABLE>& object, float clock, float speed)
+void Move::moveLeft(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
 {
 	float posX = -(speed * clock);
 	float posY = 0;
@@ -35,7 +35,7 @@ void Move::moveLeft(const std::shared_ptr<MOVABLE>& object, float clock, float s
 	game_object_move(object , posX , posY );
 }
 
-void Move::moveRight(const std::shared_ptr<MOVABLE>& object, float clock, float speed)
+void Move::moveRight(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
 {
 	float posX = speed * clock;
 	float posY = 0;
@@ -43,7 +43,8 @@ void Move::moveRight(const std::shared_ptr<MOVABLE>& object, float clock, float 
 	game_object_move(object, posX, posY);
 }
 
-void Move::move(SIDE side, const std::shared_ptr<MOVABLE>& object, float clock, float speed)
+
+void Move::move(SIDE side, const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
 {
 	if(side == SIDE::UP && !this->_up)
 	{
@@ -66,7 +67,7 @@ void Move::move(SIDE side, const std::shared_ptr<MOVABLE>& object, float clock, 
 	}
 }
 
-void Move::block_side(SIDE side, bool status)
+void Move::block_side(SIDE side, bool status) noexcept
 {
 	if(side == SIDE::UP)
 	{

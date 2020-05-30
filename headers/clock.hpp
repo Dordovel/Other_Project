@@ -2,16 +2,16 @@
 #include "../Interface/iclock.hpp"
 #include <SFML/System/Clock.hpp>
 
-    class Clock final : public IClock , public sf::Clock
+class Clock final : public IClock 
 {
     private:
-        float _frametime;
-        float _param;
+		sf::Clock _clock;
+		sf::Time _workTime;
 
     public:
-        float get_time() const override;
-        void restart() override;
-        explicit Clock(float param);
+        unsigned int get_elapsed_time() const noexcept override;
+		unsigned int get_work_time() const noexcept override;
+        void restart() noexcept override;
 
 		Clock() = default;
 		~Clock() = default;

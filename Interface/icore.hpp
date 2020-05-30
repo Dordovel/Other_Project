@@ -12,7 +12,7 @@
 class ICore
 {
     public:
-        virtual void run() noexcept = 0;
+        virtual void run() = 0;
         virtual bool is_run() noexcept = 0;
         virtual void interrupt() noexcept = 0;
         virtual void close() noexcept = 0;

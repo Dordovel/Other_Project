@@ -13,7 +13,7 @@ template <size_t N>
 std::string menu_builder(const std::shared_ptr<ICore>& core, 
 						const std::shared_ptr<OBJECT>& menuSelectedPointer,
 						const std::shared_ptr<ILayout>& layout,
-						std::array<std::pair<std::string, std::string>, N>&& generateItem)
+						std::array<std::pair<std::string, std::string>, N>&& generateItem) noexcept
 {
 	std::shared_ptr<IMenu> menu = std::make_shared<Menu>();
 	std::string selectedItem;
@@ -22,7 +22,7 @@ std::string menu_builder(const std::shared_ptr<ICore>& core,
 	dispatcher->set_layout(layout);
 	dispatcher->insert_layout_child(menuSelectedPointer);
 
-	std::array<std::shared_ptr<Text>, N> menuItems = build_items(std::forward<decltype(generateItem)>(generateItem),
+	std::array menuItems = build_items(std::forward<decltype(generateItem)>(generateItem),
 																		RESOURCES_PATH + "Font.otf");
 
 	menu->set_pointer(menuSelectedPointer);
@@ -64,19 +64,19 @@ std::string menu_builder(const std::shared_ptr<ICore>& core,
 			});
 
 
-	layoutEvents->add_key_event(Keyboard_Key::Up, [&menu]()
+	layoutEvents->key_pressed_event(Keyboard_Key::Up, [&menu]()
 			{
 				menu->step_back();
 			}, EventHandlerType::EVENT_LOOP);
 
 
-	layoutEvents->add_key_event(Keyboard_Key::Down, [&menu]()
+	layoutEvents->key_pressed_event(Keyboard_Key::Down, [&menu]()
 			{
 				menu->step_forward();
 			}, EventHandlerType::EVENT_LOOP);
 
 
-	layoutEvents->add_key_event(Keyboard_Key::Enter, [&menu,
+	layoutEvents->key_pressed_event(Keyboard_Key::Enter, [&menu,
 														&core,
 														&selectedItem]()
 			{

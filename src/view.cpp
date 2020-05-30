@@ -26,37 +26,37 @@ View::View(const Vector2F& position, const Vector2F& size):View(position.x,
 
 View::View(const Vector2F& size):View(0, 0, size.x, size.y){}
 
-void View::zoom(float zoom)
+void View::zoom(float zoom) noexcept
 {
     sf::View::zoom(zoom);
 }
 
-void View::set_position(const Vector2F& position)
+void View::set_position(const Vector2F& position) noexcept
 {
     this->set_position(position.x, position.y);
 }
 
-void View::rotate(float angle)
+void View::rotate(float angle) noexcept
 {
     sf::View::rotate(angle);
 }
 
-bool View::collision(const std::shared_ptr<INTERACTION>& object)
+bool View::collision(const std::shared_ptr<INTERACTION>& object) noexcept
 {
     return this->get_global_bounds().contains(object->get_position());
 }
 
-bool View::collision(const Vector2F& object)
+bool View::collision(const Vector2F& object) noexcept
 {
     return this->get_global_bounds().contains(object);
 }
 
-void View::move(const Vector2F& step)
+void View::move(const Vector2F& step) noexcept
 {
     this->move(step.x, step.y);
 }
 
-void View::move(float X, float Y)
+void View::move(float X, float Y) noexcept
 {
 	if(this->_up)
 		if(Y < 0) Y = 0;
@@ -73,12 +73,12 @@ void View::move(float X, float Y)
     sf::View::move(X, Y);
 }
 
-Vector2F View::get_position() const
+Vector2F View::get_position() const noexcept
 {
     return sf::View::getCenter();
 }
 
-RectangleF View::get_global_bounds() const
+RectangleF View::get_global_bounds() const noexcept
 {
     sf::FloatRect rt;
     rt.left = sf::View::getCenter().x - sf::View::getSize().x / 2.f;
@@ -89,7 +89,7 @@ RectangleF View::get_global_bounds() const
     return rt;
 }
 
-void View::set_position(float X, float Y)
+void View::set_position(float X, float Y) noexcept
 {
 	Vector2F current_position = this->get_position();
 
@@ -108,22 +108,22 @@ void View::set_position(float X, float Y)
 	sf::View::setCenter(X, Y);
 }
 
-Vector2F View::get_size() const
+Vector2F View::get_size() const noexcept
 {
 	return sf::View::getSize();
 }
 
-void View::set_size(const Vector2F& size)
+void View::set_size(const Vector2F& size) noexcept
 {
 	sf::View::setSize(size);
 }
 
-void View::set_size(float x, float y)
+void View::set_size(float x, float y) noexcept
 {
 	sf::View::setSize(x, y);
 }
 
-void View::block_side(SIDE side, bool status)
+void View::block_side(SIDE side, bool status) noexcept
 {
 	if(side == SIDE::UP)
 	{

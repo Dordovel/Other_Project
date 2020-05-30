@@ -6,10 +6,10 @@ class Physics final : public IPhysics
 {
     public:
 
-        bool check_intersection(const std::shared_ptr<INTERACTION>& lv, const std::shared_ptr<INTERACTION>& rv) override;
+        bool check_intersection(const std::shared_ptr<INTERACTION>& lv, const std::shared_ptr<INTERACTION>& rv) noexcept override;
 
         CollectionObject check_collision(const std::shared_ptr<ICollection>& lv,
-								const std::shared_ptr<INTERACTION>& rv) override;
+								const std::shared_ptr<INTERACTION>& rv) noexcept override;
 
 		Physics() = default;
 		~Physics() = default;

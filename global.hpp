@@ -3,10 +3,10 @@
 #include <map>
 
 constexpr int SPEED = 2;
+constexpr float DELAY = 4;
+const static Vector2F OBJECT_SCALE = {1, 1.3f};
 const static Vector2F DEFAULT_VIEW_SIZE = {300, 300};
-constexpr int DEFAULT_VIEW_ZOOM = 2;
-const static std::string NPC_FILE_NAME = "hero.png";
-const static Vector2F OBJECT_SCALE = {0.2f, 0.3f};
+constexpr float DEFAULT_VIEW_ZOOM = 2;
 const static Vector2F CIRCLE_SCALE = {0.2f, 0.2f};
 const static std::string RESOURCES_PATH = "./Game_Resources/Image/";
 const static std::map<std::string, std::pair<std::string, std::string>, std::less<>> MAP_PATH = 

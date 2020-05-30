@@ -1,26 +1,21 @@
 #pragma once
 
-#include "../object/object.hpp"
-#include <SFML/Graphics/Text.hpp>
 #include "../struct/colorobject.hpp"
+#include "../object/object.hpp"
+#include <SFML/Graphics/RectangleShape.hpp>
 #include "../object/scalable.hpp"
 
-class Text final : public OBJECT, public SCALABLE
-
+class Rectangle final : public OBJECT, public SCALABLE
 {
 	private:
-        std::shared_ptr<sf::Text> _text;
-        std::string _id;
-        bool _isVisible;
-		sf::Font _font;
+		std::shared_ptr<sf::RectangleShape> _rectangle;
+		std::string _id;
+		bool _isVisible;
 
-		bool _up;
-		bool _down;
-		bool _left;
-		bool _right;
+		bool _up, _down, _left, _right;		
 
 	public:
-
+				
         DrawableObject draw() const noexcept override;
 
         void set_id(const std::string& id) noexcept override;
@@ -45,13 +40,9 @@ class Text final : public OBJECT, public SCALABLE
 
         RectangleF get_global_bounds() const noexcept override;
 
-        explicit Text(const std::string& pathToFontFile);
+        explicit Rectangle(float width, float height);
 
-		void set_text(const std::string& str);
-
-		void set_font_size(int size);
-
-		void set_color(const Color& color);
+        explicit Rectangle(Vector2F size);
 
         void visible(bool flag) noexcept override;
 
@@ -62,4 +53,6 @@ class Text final : public OBJECT, public SCALABLE
 		Vector2F get_scale() noexcept override;
 
 		void block_side(SIDE side, bool status) noexcept override;
+		
+		void set_color(const Color& color);
 };

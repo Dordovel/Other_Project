@@ -23,33 +23,33 @@ class View final : public IView, public sf::View
 
         View(const Vector2F& size);
 
-        void zoom(float zoom) override;
+        void zoom(float zoom) noexcept override;
 
-        void set_position(const Vector2F& position) override;
+        void set_position(const Vector2F& position) noexcept override;
 
-        void set_position(float X, float Y) override;
+        void set_position(float X, float Y) noexcept override;
 
-        void rotate(float angle) override;
+        void rotate(float angle) noexcept override;
 
-        bool collision(const std::shared_ptr<INTERACTION>& object) override;
+        bool collision(const std::shared_ptr<INTERACTION>& object) noexcept override;
 
-        bool collision(const Vector2F& object) override;
+        bool collision(const Vector2F& object) noexcept override;
 
-        void move(const Vector2F& step) override;
+        void move(const Vector2F& step) noexcept override;
 
-        void move(float X, float Y) override;
+        void move(float X, float Y) noexcept override;
 
-        Vector2F get_position() const override;
+        Vector2F get_position() const noexcept override;
 
-        RectangleF get_global_bounds() const override;
+        RectangleF get_global_bounds() const noexcept override;
 
-		Vector2F get_size() const override;
+		Vector2F get_size() const noexcept override;
 
-		void set_size(const Vector2F& size) override;
+		void set_size(const Vector2F& size) noexcept override;
 
-		void set_size(float x, float y) override;
+		void set_size(float x, float y) noexcept override;
 	
-		void block_side(SIDE side, bool status) override;
+		void block_side(SIDE side, bool status) noexcept override;
 	
 		~View() = default;
 };

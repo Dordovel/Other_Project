@@ -7,21 +7,21 @@
 class IMenu
 {
 	public:
-		virtual bool menu_configure() = 0;
+		virtual bool menu_configure() noexcept = 0;
 
-		virtual void set_layout(const std::shared_ptr<ILayout>& layout) = 0;
+		virtual void set_layout(const std::shared_ptr<ILayout>& layout) noexcept = 0;
 
-		virtual void set_pointer(const std::shared_ptr<OBJECT>& pointer) = 0;
+		virtual void set_pointer(const std::shared_ptr<OBJECT>& pointer) noexcept = 0;
 
-		virtual void add_item(const std::shared_ptr<OBJECT>& object) = 0;
+		virtual void add_item(const std::shared_ptr<OBJECT>& object) noexcept = 0;
 
-		virtual void step_forward() = 0;
+		virtual void step_forward() noexcept = 0;
 
-		virtual void step_back() = 0;
+		virtual void step_back() noexcept = 0;
 
-		virtual std::string selected_item() = 0;
+		virtual std::string selected_item() noexcept = 0;
 
-		virtual void reset() = 0;
+		virtual void reset() noexcept = 0;
 
 		virtual ~IMenu() = default;
 };

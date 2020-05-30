@@ -19,7 +19,7 @@ class Core final : public ICore
 
 
     public:
-        void run() noexcept override;
+        void run() override;
 
         void close() noexcept override;
 

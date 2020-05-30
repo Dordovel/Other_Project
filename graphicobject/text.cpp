@@ -6,37 +6,37 @@
 #include "../struct/side.hpp"
 
 Text::Text(const std::string& pathToFontFile):_text(std::make_shared<sf::Text>()),
-                            _isVisible(true),
-							_up(false),
-							_down(false),
-							_left(false),
-							_right(false)
+																_isVisible(true),
+																_up(false),
+																_down(false),
+																_left(false),
+																_right(false)
 {
 	this->_font.loadFromFile(pathToFontFile);
 	this->_text->setFont(this->_font);
 }
 
-DrawableObject Text::draw() const
+DrawableObject Text::draw() const noexcept
 {
     return {this->_text};
 }
 
-void Text::set_id(const std::string& id)
+void Text::set_id(const std::string& id) noexcept
 {
     this->_id = id;
 }
 
-std::string Text::get_id() const
+std::string Text::get_id() const noexcept
 {
     return this->_id;
 }
 
-void Text::set_position(const Vector2F& position)
+void Text::set_position(const Vector2F& position) noexcept
 {
     this->set_position(position.x, position.y);
 }
 
-void Text::set_position(float X, float Y)
+void Text::set_position(float X, float Y) noexcept
 {
 	Vector2F current_position = this->get_position();
 
@@ -55,27 +55,27 @@ void Text::set_position(float X, float Y)
     this->_text->setPosition(X, Y);
 }
 
-void Text::rotate(float angle)
+void Text::rotate(float angle) noexcept
 {
     this->_text->rotate(angle);
 }
 
-bool Text::collision(const std::shared_ptr<INTERACTION>& object)
+bool Text::collision(const std::shared_ptr<INTERACTION>& object) noexcept
 {
     return this->_text->getGlobalBounds().contains(object->get_position());
 }
 
-bool Text::collision(const Vector2F& object)
+bool Text::collision(const Vector2F& object) noexcept
 {
     return this->_text->getGlobalBounds().contains(object);
 }
 
-void Text::move(const Vector2F& step)
+void Text::move(const Vector2F& step) noexcept
 {
     this->move(step.x, step.y);
 }
 
-void Text::move(float X, float Y)
+void Text::move(float X, float Y) noexcept
 {
 	if(this->_up)
 		if(Y < 0) Y = 0;
@@ -92,32 +92,32 @@ void Text::move(float X, float Y)
     this->_text->move(X, Y);
 }
 
-Vector2F Text::get_position() const
+Vector2F Text::get_position() const noexcept
 {
     return this->_text->getPosition();
 }
 
-RectangleF Text::get_global_bounds() const
+RectangleF Text::get_global_bounds() const noexcept
 {
     return this->_text->getGlobalBounds();
 }
 
-void Text::visible(bool flag)
+void Text::visible(bool flag) noexcept
 {
     this->_isVisible = flag;
 }
 
-bool Text::is_visible()
+bool Text::is_visible() noexcept
 {
     return this->_isVisible;
 }
 
-void Text::set_scale(Vector2F scale)
+void Text::set_scale(Vector2F scale) noexcept
 {
 	this->_text->setScale(scale);
 }
 
-Vector2F Text::get_scale()
+Vector2F Text::get_scale() noexcept
 {
 	return this->_text->getScale();
 }
@@ -137,7 +137,7 @@ void Text::set_color(const Color& color)
 	this->_text->setFillColor(color);
 }
 
-void Text::block_side(SIDE side, bool status)
+void Text::block_side(SIDE side, bool status) noexcept
 {
 	if(side == SIDE::UP)
 	{

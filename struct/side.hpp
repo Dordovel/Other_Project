@@ -5,6 +5,7 @@ enum class SIDE
 	UP,
 	DOWN,
 	LEFT,
-	RIGHT
+	RIGHT,
+	STOP
 };
 
