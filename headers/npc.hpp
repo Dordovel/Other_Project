@@ -11,8 +11,9 @@ namespace PROJECT::NPC
 		private:
 			float _armor = {0};
 			float _damage = {0};
-			int _health = {0};
-			int _points = {0};
+			int _health = {-1};
+			int _maxHealth = {-1};
+			int _points = {-1};
 			std::map<PROJECT::MOVE::Side, PROJECT::ANIMATION::Animation> _animWalk;
 			std::map<PROJECT::MOVE::Side, PROJECT::ANIMATION::Animation> _animAttack;
 
@@ -21,6 +22,8 @@ namespace PROJECT::NPC
 			void set_armor(float armor) noexcept override;
 			float get_damage() const noexcept override;
 			void set_damage(float damage) noexcept override;
+			int get_max_health() const noexcept override;
+			void set_max_health(int health) noexcept override;
 			int get_health() const noexcept override;
 			void set_health(int health) noexcept override;
 			int get_points() const noexcept override;

@@ -18,10 +18,14 @@
 #include "./headers/npc.hpp"
 #include "./headers/questnpc.hpp"
 #include "./headers/attack.hpp"
-#include "./headers/calculation_health.hpp"
 
 using namespace PROJECT;
 using namespace std::literals;
+
+float convert_value(int lv, int rv, float value)
+{
+	return (rv * ((value / lv) * 100)) / 100;
+}
 
 std::array<std::pair<std::string, std::string>, 4>
 open_select_menu(std::string_view lastItem) noexcept
@@ -233,12 +237,16 @@ int main()
 		person = std::make_shared<PROJECT::NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::JEREMY_PINK, MOVE::Side::DOWN), MAIN_PERSON);
 		person->set_position(1300, 1300);
 		person->set_scale(OBJECT_SCALE);
-		person->set_health(200);
+		person->set_max_health(200);
+		person->set_health(person->get_max_health());
+		person->set_damage(10);
 
 		std::shared_ptr<PROJECT::NPC::Npc> personTest = nullptr;
 		personTest = change_person_type(NPC_MARTHA_GREEN, dataBase, "TEST");
 		personTest->set_position(1400, 1400);
 		personTest->set_scale(OBJECT_SCALE);
+		personTest->set_max_health(200);
+		personTest->set_health(personTest->get_max_health());
 		personTest->set_damage(10);
 
 		person->add_animation_walk(MOVE::Side::RIGHT, dataBase.get_animation_walk(MOVE::Side::RIGHT));
@@ -407,7 +415,11 @@ int main()
 		std::shared_ptr<BASE::GRAPHIC::IRectangle> personHealthBackground = std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARBackgroundWidth, PROGRESSBARBackgroundHeight, "HEALTHBackground");
 		personHealthBackground->set_texture(dataBase.get_resources("healthPanel.png", {0, 0, 450, 150}));
 
-		CalculationHealth calculationHealth(personHealth->get_size().x, person->get_health());
+		std::shared_ptr<BASE::GRAPHIC::IRectangle> enemyHealth = std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARWidth, PROGRESSBARHeight, "ENEMY_HEALTH");
+		enemyHealth->set_color(BASE::GRAPHIC::Color::Purple);
+		enemyHealth->visible(false);
+		std::shared_ptr<BASE::GRAPHIC::IRectangle> enemyHealthBackground = std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARBackgroundWidth, PROGRESSBARBackgroundHeight, "ENEMY_HEALTHBackground");
+		enemyHealthBackground->set_texture(dataBase.get_resources("healthPanel.png", {0, 0, 450, 150}));
 
 		auto text = std::make_shared<BASE::GRAPHIC::Text>(RESOURCES_PATH + "Font.otf", personTest->get_id());
 		text->set_text("Hello, World");
@@ -471,9 +483,21 @@ int main()
 //POSITIONING HEALTH BAR
 //{
 			loopRect = view->get_global_bounds();
-			personHealth->set_position((loopRect.left + PROGRESSBARHeight), (loopRect.top + PROGRESSBARHeight));
-			personHealth->set_size(calculationHealth.get_value(person->get_health()), PROGRESSBARHeight); 
-			personHealthBackground->set_position((loopRect.left + 10), (loopRect.top + 10));
+			personHealth->set_position((loopRect.left + PROGRESSBARHeight),
+										(loopRect.top + PROGRESSBARHeight));
+			personHealth->set_size(convert_value(person->get_max_health(),
+													PROGRESSBARWidth,
+													person->get_health()), 
+									PROGRESSBARHeight); 
+			personHealthBackground->set_position((loopRect.left + 10),
+													(loopRect.top + 10));
+
+			loopRect = view->get_global_bounds();
+			enemyHealth->set_position((((loopRect.left + loopRect.width) - PROGRESSBARWidth) - PROGRESSBARHeight),
+										(loopRect.top + PROGRESSBARHeight));
+			loopVec = enemyHealth->get_position();
+			enemyHealthBackground->set_position((loopVec.x - 10),
+												(loopVec.y - 10));
 //}
 //END POSITIONING HEALTH BAR
 
@@ -519,6 +543,16 @@ int main()
 
 						(*loopTextElement)->set_text(std::to_string(attackDamage.first));
 					}
+
+					enemyHealth->set_size(convert_value(dynamicObject->get_max_health(),
+														PROGRESSBARWidth, 
+														dynamicObject->get_health()), 
+											PROGRESSBARHeight); 
+					enemyHealth->visible(true);
+				}
+				else
+				{
+					enemyHealth->visible(false);
 				}
 	//}
 	//END CHECK PERSON INTERACTIOIN WITH NPC OBJECT
@@ -554,6 +588,7 @@ int main()
 			{
 				anim.set_animation(&person->get_animation_attack(personAttackSide));
 				anim.stop(false);
+
 			}
 
 			if(personMoveSide == MOVE::Side::NONE
@@ -570,6 +605,12 @@ int main()
 			app->draw(*currentLayout);
 			app->draw(personHealthBackground);
 			app->draw(personHealth);
+			
+			if(enemyHealth->is_visible())
+			{
+				app->draw(enemyHealthBackground);
+				app->draw(enemyHealth);
+			}
 
 			app->draw(person);
 

@@ -24,6 +24,16 @@ namespace PROJECT::NPC
 		this->_damage = damage;
 	}
 
+	int Npc::get_max_health() const noexcept
+	{
+		return this->_maxHealth;
+	}
+
+	void Npc::set_max_health(int health) noexcept
+	{
+		this->_maxHealth = health;
+	}
+
 	int Npc::get_health() const noexcept
 	{
 		return this->_health;
