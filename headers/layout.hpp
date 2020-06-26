@@ -3,39 +3,44 @@
 #include "../Interface/ilayout.hpp"
 #include <cstring>
 #include <memory>
-#include "../struct/colllectionobject.hpp"
+#include "../struct/collectionobject.hpp"
 
+namespace PROJECT::COLLECTION
+{
+    class Layout final : public PROJECT::COLLECTION::ILayout
+    {   
+        private:
+            std::shared_ptr<tmx::MapLoader> _mapLoader;
+            std::string  _id;
+            bool _isVisible;
+            std::map<std::string, std::string> _mapStaticObjectInString = {
+                    {CollectionObject::TREE, "Tree"}, {CollectionObject::BORDER, "Border"}
+                };
 
-class Layout final : public ILayout
-{   
-    private:
-        std::shared_ptr<tmx::MapLoader> _mapLoader;
-        std::string  _id;
-        bool _isVisible;
-        std::map<CollectionObject, std::string> _mapStaticObjectInString = {
-                {CollectionObject::TREE, "Tree"}, {CollectionObject::BORDER, "Border"}
-            };
+            bool check_map_static_object_with_string(std::string object, std::string_view objectName);
 
-        bool check_map_static_object_with_string(CollectionObject object, const std::string& objectName);
+            void load_map_from_file(std::string_view pathToMap);
 
-        void load_map_from_file(const std::string& pathToMap);
+        public:
+            Layout(std::string_view pathToMap, std::string_view mapFileName, std::string_view id);
 
-    public:
-        Layout(const std::string& pathToMap , const std::string& mapFileName);
+            std::map<std::string, std::vector<PROJECT::BASE::DATA::RectangleF>> get_objects(const PROJECT::BASE::DATA::RectangleF &rectangleF) const noexcept override;
 
-        std::map<CollectionObject, std::vector<RectangleF>> get_objects(const RectangleF &rectangleF) const noexcept override;
+            std::string get_id() const noexcept override;
 
-        void set_id(const std::string& id) noexcept override;
+            void visible(bool flag) noexcept override;
 
-        std::string get_id() const noexcept override;
+            bool is_visible() noexcept override;
 
-        void visible(bool flag) noexcept override;
+            PROJECT::BASE::DATA::DrawableObject draw() const noexcept override;
 
-        bool is_visible() noexcept override;
+            PROJECT::BASE::DATA::Vector2UI get_size() const noexcept override;
 
-        DrawableObject draw() const noexcept override;
+            ~Layout();
 
-        Vector2UI get_size() const noexcept override;
+			Layout(Layout&&) = default;
 
-		~Layout();
+			Layout& operator= (Layout&&) = default;
+
+    };
 };

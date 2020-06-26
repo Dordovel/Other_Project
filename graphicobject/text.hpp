@@ -1,65 +1,72 @@
 #pragma once
 
-#include "../object/object.hpp"
 #include <SFML/Graphics/Text.hpp>
-#include "../struct/colorobject.hpp"
-#include "../object/scalable.hpp"
+#include "./itext.hpp"
 
-class Text final : public OBJECT, public SCALABLE
-
+namespace PROJECT::BASE::GRAPHIC
 {
-	private:
-        std::shared_ptr<sf::Text> _text;
-        std::string _id;
-        bool _isVisible;
-		sf::Font _font;
+    class Text final : public PROJECT::BASE::GRAPHIC::IText
+    {
+        private:
+            std::shared_ptr<sf::Text> _text;
+            std::string _id;
+            bool _isVisible;
+            sf::Font _font;
 
-		bool _up;
-		bool _down;
-		bool _left;
-		bool _right;
+            bool _up;
+            bool _down;
+            bool _left;
+            bool _right;
 
-	public:
+        public:
+            explicit Text(std::string_view pathToFontFile, std::string_view id);
 
-        DrawableObject draw() const noexcept override;
+            PROJECT::BASE::DATA::DrawableObject draw() const noexcept override;
 
-        void set_id(const std::string& id) noexcept override;
+            std::string get_id() const noexcept override;
 
-        std::string get_id() const noexcept override;
+            void set_position(const PROJECT::BASE::DATA::Vector2F& position) noexcept override;
 
-        void set_position(const Vector2F& position) noexcept override;
+            void set_position(float X, float Y) noexcept override;
 
-        void set_position(float X, float Y) noexcept override;
+            bool collision(const std::shared_ptr<INTERACTION>& object) noexcept override;
 
-        void rotate(float angle) noexcept override;
+            bool collision(const PROJECT::BASE::DATA::Vector2F& vec) noexcept override;
 
-        bool collision(const std::shared_ptr<INTERACTION>& object) noexcept override;
+            bool collision(const PROJECT::BASE::DATA::RectangleF& rect) noexcept override;
 
-        bool collision(const Vector2F& object) noexcept override;
+            void move(const PROJECT::BASE::DATA::Vector2F& step) noexcept override;
 
-        void move(const Vector2F& step) noexcept override;
+            void move(float X, float Y) noexcept override;
 
-        void move(float X, float Y) noexcept override;
+            PROJECT::BASE::DATA::Vector2F get_position() const noexcept override;
 
-        Vector2F get_position() const noexcept override;
+            PROJECT::BASE::DATA::RectangleF get_global_bounds() const noexcept override;
 
-        RectangleF get_global_bounds() const noexcept override;
+            void set_text(std::string_view str) override;
 
-        explicit Text(const std::string& pathToFontFile);
+            void set_font_size(int size) override;
 
-		void set_text(const std::string& str);
+            void set_color(const Color& color) override;
 
-		void set_font_size(int size);
+            void visible(bool flag) noexcept override;
 
-		void set_color(const Color& color);
+            bool is_visible() noexcept override;
 
-        void visible(bool flag) noexcept override;
+            void set_scale(PROJECT::BASE::DATA::Vector2F scale) noexcept override;
 
-        bool is_visible() noexcept override;
+            PROJECT::BASE::DATA::Vector2F get_scale() noexcept override;
 
-		void set_scale(Vector2F scale) noexcept override;
+            void block_side(PROJECT::MOVE::Side side, bool status) noexcept override;
 
-		Vector2F get_scale() noexcept override;
+            void block_all_side() noexcept override;
 
-		void block_side(SIDE side, bool status) noexcept override;
+            void unblock_all_side() noexcept override;
+
+            ~Text();
+
+			Text(Text&&) = default;
+
+			Text& operator= (Text&&) = default;
+    };
 };

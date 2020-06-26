@@ -3,12 +3,17 @@
 #include <vector>
 #include <map>
 
-enum class CollectionObject;
-class RectangleF;
-
-class ICollection
+namespace PROJECT::BASE::DATA
 {
-    public:
-        virtual std::map<CollectionObject, std::vector<RectangleF>> get_objects(const RectangleF& rectangleF) const noexcept = 0;
-        virtual ~ICollection() = default;
+    class RectangleF;
+};
+
+namespace PROJECT::COLLECTION
+{
+    class ICollection
+    {
+        public:
+            virtual std::map<std::string, std::vector<PROJECT::BASE::DATA::RectangleF>> get_objects(const PROJECT::BASE::DATA::RectangleF& rectangleF) const noexcept = 0;
+            virtual ~ICollection() = default;
+    };
 };

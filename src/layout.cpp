@@ -5,89 +5,91 @@
 #include "../struct/vectorobject.hpp"
 #include "../struct/drawableobject.hpp"
 
-Layout::Layout(const std::string& pathToMap , const std::string& mapFileName):_mapLoader(std::make_shared<tmx::MapLoader>(pathToMap)),
-                                                                                _isVisible(true)
+namespace PROJECT::COLLECTION
 {
-	std::cout<<pathToMap + mapFileName<<std::endl;
-    this->load_map_from_file(mapFileName);
-}
-
-Layout::~Layout()
-{
-	std::cout<<this->get_id()<<"	Deleted"<<std::endl;
-}
-
-void Layout::load_map_from_file(const std::string& pathToFile)
-{
-    bool load_map_status = this->_mapLoader->load(pathToFile);
-
-	if(!load_map_status)
-	{
-		std::cout<<"Layout not load"<<std::endl;
-
-		//assert(load_map_status);
-	}
-}
-
-bool Layout::check_map_static_object_with_string(CollectionObject object, const std::string& objectName)
-{
-    auto temp = this->_mapStaticObjectInString.find(object);
-    if(temp != this->_mapStaticObjectInString.end())
+    Layout::Layout(std::string_view pathToMap , std::string_view mapFileName, std::string_view id):
+                                                                                    _mapLoader(std::make_shared<tmx::MapLoader>(pathToMap.data())),
+                                                                                    _id(id),
+                                                                                    _isVisible(true)
     {
-        return (strcmp(objectName.c_str(), temp->second.c_str()) == 0);
+        std::cout<<"Layout(): "<< this->get_id()<< '\n';
+        std::cout<<pathToMap<< mapFileName<< '\n';
+        this->load_map_from_file(mapFileName);
     }
 
-    return false;
-}
-
-Vector2UI Layout::get_size() const noexcept
-{
-    return this->_mapLoader->getMapSize();
-}
-DrawableObject Layout::draw() const noexcept
-{
-    return DrawableObject{this->_mapLoader};
-}
-
-void Layout::set_id(const std::string& id) noexcept
-{
-    this->_id = id;
-}
-
-std::string Layout::get_id() const noexcept
-{
-    return this->_id;
-}
-
-void Layout::visible(bool flag) noexcept
-{
-    this->_isVisible = flag;
-}
-
-bool Layout::is_visible() noexcept
-{
-    return this->_isVisible;
-}
-
-std::map<CollectionObject, std::vector<RectangleF>> Layout::get_objects(const RectangleF &rectangleF) const noexcept
-{
-    std::map<CollectionObject, std::vector<RectangleF>> result{};
-
-    this->_mapLoader->updateQuadTree(rectangleF);
-
-    auto mapObjectList = _mapLoader->queryQuadTree(rectangleF);
-
-    for(auto var : mapObjectList)
+    Layout::~Layout()
     {
-        for(auto&& [object, name] : this->_mapStaticObjectInString)
+        std::cout<<"~Layout(): "<<this->get_id()<< '\n';
+    }
+
+    void Layout::load_map_from_file(std::string_view pathToFile)
+    {
+        bool load_map_status = this->_mapLoader->load(pathToFile.data());
+
+        if(!load_map_status)
         {
-            if(name == var->getParent())
-            {
-                auto status = result.emplace(object, std::vector<RectangleF>());
-                status.first->second.emplace_back(var->getAABB());
-            }
+            std::cout<<"Layout not load"<<std::endl;
+
+            //assert(load_map_status);
         }
     }
 
-    return result;
-}
+    bool Layout::check_map_static_object_with_string(std::string object, std::string_view objectName)
+    {
+        auto temp = this->_mapStaticObjectInString.find(object);
+        if(temp != this->_mapStaticObjectInString.end())
+        {
+            return (strcmp(objectName.data(), temp->second.c_str()) == 0);
+        }
+
+        return false;
+    }
+
+    PROJECT::BASE::DATA::Vector2UI Layout::get_size() const noexcept
+    {
+        return this->_mapLoader->getMapSize();
+    }
+
+    PROJECT::BASE::DATA::DrawableObject Layout::draw() const noexcept
+    {
+        return PROJECT::BASE::DATA::DrawableObject{this->_mapLoader};
+    }
+
+    std::string Layout::get_id() const noexcept
+    {
+        return this->_id;
+    }
+
+    void Layout::visible(bool flag) noexcept
+    {
+        this->_isVisible = flag;
+    }
+
+    bool Layout::is_visible() noexcept
+    {
+        return this->_isVisible;
+    }
+
+    std::map<std::string, std::vector<PROJECT::BASE::DATA::RectangleF>> Layout::get_objects(const PROJECT::BASE::DATA::RectangleF &rectangleF) const noexcept
+    {
+        std::map<std::string, std::vector<PROJECT::BASE::DATA::RectangleF>> result{};
+
+        this->_mapLoader->updateQuadTree(rectangleF);
+
+        auto mapObjectList = _mapLoader->queryQuadTree(rectangleF);
+
+        for(auto* var : mapObjectList)
+        {
+            for(auto&& [object, name] : this->_mapStaticObjectInString)
+            {
+                if(name == var->getParent())
+                {
+                    auto status = result.emplace(object, std::vector<PROJECT::BASE::DATA::RectangleF>());
+                    status.first->second.emplace_back(var->getAABB());
+                }
+            }
+        }
+
+        return result;
+    }
+};

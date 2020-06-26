@@ -1,91 +1,89 @@
 #include "./move.hpp"
-#include <thread>
-#include <chrono>
-#include "../headers/clock.hpp"
-#include "../headers/physics.hpp"
 #include "../struct/side.hpp"
 
-
-void Move::game_object_move(const std::shared_ptr<MOVABLE>& object , float posX , float posY) noexcept
+namespace PROJECT::MOVE
 {
-	object->move ( posX , posY );
-}
-
-void Move::moveUp(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
-{
-	float posX = 0;
-	float posY = -(speed * clock);
-
-	game_object_move(object , posX , posY );
-}
-
-void Move::moveDown(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
-{
-	float posX = 0;
-	float posY = speed * clock;
-
-	game_object_move(object , posX , posY );
-}
-
-void Move::moveLeft(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
-{
-	float posX = -(speed * clock);
-	float posY = 0;
-
-	game_object_move(object , posX , posY );
-}
-
-void Move::moveRight(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
-{
-	float posX = speed * clock;
-	float posY = 0;
-
-	game_object_move(object, posX, posY);
-}
-
-
-void Move::move(SIDE side, const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
-{
-	if(side == SIDE::UP && !this->_up)
+	void Move::game_object_move(const std::shared_ptr<MOVABLE>& object , float posX , float posY) noexcept
 	{
-		Move::moveUp(object, clock, speed);
+		object->move ( posX , posY );
 	}
 
-	if(side == SIDE::DOWN && !this->_down)
+	void Move::moveUp(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
 	{
-		Move::moveDown(object, clock, speed);
+		float posX = 0;
+		float posY = -(speed * clock);
+
+		game_object_move(object , posX , posY );
 	}
 
-	if(side == SIDE::LEFT && !this->_left)
+	void Move::moveDown(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
 	{
-		Move::moveLeft(object, clock, speed);
+		float posX = 0;
+		float posY = speed * clock;
+
+		game_object_move(object , posX , posY );
 	}
 
-	if(side == SIDE::RIGHT && !this->_right)
+	void Move::moveLeft(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
 	{
-		Move::moveRight(object, clock, speed);
-	}
-}
+		float posX = -(speed * clock);
+		float posY = 0;
 
-void Move::block_side(SIDE side, bool status) noexcept
-{
-	if(side == SIDE::UP)
-	{
-		this->_up = status;
+		game_object_move(object , posX , posY );
 	}
 
-	if(side == SIDE::DOWN)
+	void Move::moveRight(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
 	{
-		this->_down = status;
+		float posX = speed * clock;
+		float posY = 0;
+
+		game_object_move(object, posX, posY);
 	}
 
-	if(side == SIDE::LEFT)
+
+	void Move::move(Side side, const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
 	{
-		this->_left = status;
+		if(side == Side::UP && !this->_up)
+		{
+			Move::moveUp(object, clock, speed);
+		}
+
+		if(side == Side::DOWN && !this->_down)
+		{
+			Move::moveDown(object, clock, speed);
+		}
+
+		if(side == Side::LEFT && !this->_left)
+		{
+			Move::moveLeft(object, clock, speed);
+		}
+
+		if(side == Side::RIGHT && !this->_right)
+		{
+			Move::moveRight(object, clock, speed);
+		}
 	}
 
-	if(side == SIDE::RIGHT)
+	void Move::block_side(Side side, bool status) noexcept
 	{
-		this->_right = status;
+		if(side == Side::UP)
+		{
+			this->_up = status;
+		}
+
+		if(side == Side::DOWN)
+		{
+			this->_down = status;
+		}
+
+		if(side == Side::LEFT)
+		{
+			this->_left = status;
+		}
+
+		if(side == Side::RIGHT)
+		{
+			this->_right = status;
+		}
 	}
-}
+};

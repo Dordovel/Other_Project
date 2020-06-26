@@ -1,13 +1,14 @@
 #pragma once
 
-class DataBaseResult;
-class RectangleI;
+namespace PROJECT::BASE::DATA
+{
+	class RectangleI;
+};
 
 class ANIMATED
 {
 	public:
-		virtual void set_texture(const DataBaseResult& data) = 0;
-		virtual void set_texture_rect(const RectangleI& rect) = 0;
+		virtual void set_texture_rect(const PROJECT::BASE::DATA::RectangleI& rect) = 0;
 
 		virtual ~ANIMATED() = default;
 };

@@ -1,4 +1,3 @@
-#include "./headers/core.hpp"
 #include "./headers/application.hpp"
 #include "./headers/layout.hpp"
 #include "./headers/events.hpp"
@@ -9,33 +8,40 @@
 #include "./headers/view.hpp"
 #include "./graphicobject/circle.hpp"
 #include "./algorithm/move.hpp"
-#include "./headers/layout_dispatcher.hpp"
 #include "./graphicobject/text.hpp"
 #include "./struct/side.hpp"
 #include "./menu_builder.hpp"
 #include "./id.hpp"
-#include "./headers/npc.hpp"
 #include "./headers/animation.hpp"
+#include "./graphicobject/rectangle.hpp"
+#include "./headers/collision.hpp"
+#include "./headers/npc.hpp"
+#include "./headers/questnpc.hpp"
+#include "./headers/attack.hpp"
+#include "./headers/calculation_health.hpp"
+
+using namespace PROJECT;
+using namespace std::literals;
 
 std::array<std::pair<std::string, std::string>, 4>
- open_select_menu(const std::string& lastItem) noexcept
+open_select_menu(std::string_view lastItem) noexcept
 {
 	std::array<std::pair<std::string, std::string>, 4> generateItem;
 	
 	if(lastItem == NPC_JEREMY_TYPE_ITEM)
 	{
-		generateItem[0] = std::pair(NPC_JEREMY_PINK, "Pink");
-		generateItem[1] = std::pair(NPC_JEREMY_GREEN, "Green");
-		generateItem[2] = std::pair(NPC_JEREMY_BLONDE, "Blonde");
+		generateItem[0] = std::pair(NPC_JEREMY_PINK, "Pink"sv);
+		generateItem[1] = std::pair(NPC_JEREMY_GREEN, "Green"sv);
+		generateItem[2] = std::pair(NPC_JEREMY_BLONDE, "Blonde"sv);
 	}
 	else if(lastItem == NPC_MARTHA_TYPE_ITEM)
 	{
-		generateItem[0] = std::pair(NPC_MARTHA_PINK, "Pink");
-		generateItem[1] = std::pair(NPC_MARTHA_GREEN, "Green");
-		generateItem[2] = std::pair(NPC_MARTHA_BLONDE, "Blonde");
+		generateItem[0] = std::pair(NPC_MARTHA_PINK, "Pink"sv);
+		generateItem[1] = std::pair(NPC_MARTHA_GREEN, "Green"sv);
+		generateItem[2] = std::pair(NPC_MARTHA_BLONDE, "Blonde"sv);
 	}
 
-	generateItem[3] = std::pair(MENU_BACK_ITEM, "Back");
+	generateItem[3] = std::pair(MENU_BACK_ITEM, "Back"sv);
 
 	return generateItem;
 }
@@ -45,9 +51,9 @@ open_type_menu() noexcept
 {
 	std::array<std::pair<std::string, std::string>, 3> generateItem;
 
-	generateItem[0] = std::pair(NPC_JEREMY_TYPE_ITEM, "Jeremy");
-	generateItem[1] = std::pair(NPC_MARTHA_TYPE_ITEM, "Martha");
-	generateItem[2] = std::pair(MENU_BACK_ITEM, "Back");
+	generateItem[0] = std::pair(NPC_JEREMY_TYPE_ITEM, "Jeremy"sv);
+	generateItem[1] = std::pair(NPC_MARTHA_TYPE_ITEM, "Martha"sv);
+	generateItem[2] = std::pair(MENU_BACK_ITEM, "Back"sv);
 
 	return generateItem;
 }
@@ -57,8 +63,8 @@ open_main_menu() noexcept
 {
 	std::array<std::pair<std::string, std::string>, 2> generateItem;
 
-	generateItem[0] = std::pair(MAIN_MENU_START_ITEM, "New");
-	generateItem[1] = std::pair(MENU_EXIT_ITEM, "Exit");
+	generateItem[0] = std::pair(MAIN_MENU_START_ITEM, "New"sv);
+	generateItem[1] = std::pair(MENU_EXIT_ITEM, "Exit"sv);
 
 	return generateItem;
 }
@@ -68,46 +74,45 @@ open_pause_menu() noexcept
 {
 	std::array<std::pair<std::string, std::string>, 2> generateItem;
 
-	generateItem[0] = std::pair(PAUSE_MENU_RESUME_ITEM, "Resume");
-	generateItem[1] = std::pair(MENU_EXIT_ITEM, "Main Menu");
+	generateItem[0] = std::pair(PAUSE_MENU_RESUME_ITEM, "Resume"sv);
+	generateItem[1] = std::pair(MENU_EXIT_ITEM, "Main Menu"sv);
 
 	return generateItem;
 }
 
-std::shared_ptr<Npc> change_person_type(const std::string& type, const std::shared_ptr<IDataBase>& dataBase) noexcept
+std::shared_ptr<PROJECT::NPC::Npc> change_person_type(std::string_view type, const DATABASE::IDataBase& dataBase, std::string_view id) noexcept
 
 {
-	const std::string file = "hero/Jeremy/Jeremy_Blonde.png";
-	std::shared_ptr<Npc> result = nullptr;
+	std::shared_ptr<PROJECT::NPC::Npc> result = nullptr;
 
 	if(type == NPC_JEREMY_PINK)
 	{
-		result = std::make_shared<Npc>(dataBase->get_resources(PersonProfession::JEREMY_PINK, SIDE::DOWN));
+		result = std::make_shared<PROJECT::NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::JEREMY_PINK, MOVE::Side::DOWN), id);
 	}
 
 	else if(type == NPC_MARTHA_PINK)
 	{
-		result = std::make_shared<Npc>(dataBase->get_resources(PersonProfession::MARTHA_PINK, SIDE::DOWN));
+		result = std::make_shared<PROJECT::NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_PINK, MOVE::Side::DOWN), id);
 	}
 
 	else if(type == NPC_JEREMY_GREEN)
 	{
-		result = std::make_shared<Npc>(dataBase->get_resources(PersonProfession::JEREMY_GREEN, SIDE::DOWN));
+		result = std::make_shared<PROJECT::NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::JEREMY_GREEN, MOVE::Side::DOWN), id);
 	}
 
 	else if(type == NPC_MARTHA_GREEN)
 	{
-		result = std::make_shared<Npc>(dataBase->get_resources(PersonProfession::MARTHA_GREEN, SIDE::DOWN));
+		result = std::make_shared<PROJECT::NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_GREEN, MOVE::Side::DOWN), id);
 	}
 
 	else if(type == NPC_JEREMY_BLONDE)
 	{
-		result = std::make_shared<Npc>(dataBase->get_resources(PersonProfession::JEREMY_BLONDE, SIDE::DOWN));
+		result = std::make_shared<PROJECT::NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::JEREMY_BLONDE, MOVE::Side::DOWN), id);
 	}
 
 	else if(type == NPC_MARTHA_BLONDE)
 	{
-		result = std::make_shared<Npc>(dataBase->get_resources(PersonProfession::MARTHA_BLONDE, SIDE::DOWN));
+		result = std::make_shared<PROJECT::NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_BLONDE, MOVE::Side::DOWN), id);
 	}
 
 	return result;
@@ -120,65 +125,58 @@ enum class MenuType
 };
 
 
-std::string menu(MenuType type, const std::shared_ptr<IApplication>& app, const std::shared_ptr<IView>& view) noexcept
+std::string menu(MenuType type, const std::shared_ptr<APPLICATION::IApplication>& app, const std::shared_ptr<APPLICATION::IView>& view) noexcept
 {	
-	std::shared_ptr<Core> core	= std::make_shared<Core>();
-	core->register_app(app);
-
-	std::shared_ptr<Circle> menuSelectedPointer = std::make_shared<Circle>(8);
-	menuSelectedPointer->set_id(MENU_SELECTED_POINTER);
+	std::shared_ptr<BASE::GRAPHIC::Circle> menuSelectedPointer = std::make_shared<BASE::GRAPHIC::Circle>(8, MENU_SELECTED_POINTER);
 	menuSelectedPointer->visible(true);
 	menuSelectedPointer->set_points_count(4);
 	
 	std::pair menu_bg = MAP_PATH.at("menu");
-	std::shared_ptr<Layout> layout = std::make_shared<Layout>(menu_bg.first, menu_bg.second);
-
-	Vector2UI layoutSize = layout->get_size();
-	view->set_position((layoutSize.x / 2), (layoutSize.y / 2));
-	view->set_size(layoutSize.x, layoutSize.y);
 
 	std::string result;
 
 	if(type == MenuType::MAIN)
 	{
+		std::shared_ptr<COLLECTION::Layout> layout = std::make_shared<COLLECTION::Layout>(menu_bg.first, menu_bg.second, MAIN_MENU);
+
+		BASE::DATA::Vector2UI layoutSize = layout->get_size();
+		view->set_position((layoutSize.x / 2), (layoutSize.y / 2));
+		view->set_size(layoutSize.x, layoutSize.y);
+
 		bool isMainMenu = true;
 		bool isSecondMenu = true;
 
 		while(isMainMenu)
 		{
-			layout->set_id(MAIN_MENU);
-			result = menu_builder(core, menuSelectedPointer,layout, open_main_menu());
+			result = menu_builder(app, menuSelectedPointer, layout, open_main_menu());
 
 			if(result == MAIN_MENU_START_ITEM)
 			{
 				while(isSecondMenu)
 				{
-					layout->set_id(NPC_SELECT_TYPE_MENU);
-					result = menu_builder(core, menuSelectedPointer,layout, open_type_menu());
+					result = menu_builder(app, menuSelectedPointer, layout, open_type_menu());
 
 					if(result == MENU_BACK_ITEM)
 					{
 						break;
 					}
-					else if(result == EXIT)
+
+					if(result == EXIT)
 					{
 						isMainMenu = false;
 						isSecondMenu = false;
 					}
 					else
 					{
-						layout->set_id(NPC_SELECT_MENU);
-						result = menu_builder(core, menuSelectedPointer,layout, open_select_menu(result));
+						result = menu_builder(app, menuSelectedPointer, layout, open_select_menu(result));
 						
 						if(result == MENU_BACK_ITEM)
 						{
 							continue;
 						}
-						else 
-						{
-							isMainMenu = false;
-							isSecondMenu = false;
-						}
+
+						isMainMenu = false;
+						isSecondMenu = false;
 					}
 				}
 			}
@@ -190,8 +188,13 @@ std::string menu(MenuType type, const std::shared_ptr<IApplication>& app, const 
 	}
 	else
 	{
-		layout->set_id(PAUSE_MENU);
-		result = menu_builder(core, menuSelectedPointer,layout, open_pause_menu());
+		std::shared_ptr<COLLECTION::Layout> layout = std::make_shared<COLLECTION::Layout>(menu_bg.first, menu_bg.second, PAUSE_MENU);
+
+		BASE::DATA::Vector2UI layoutSize = layout->get_size();
+		view->set_position((layoutSize.x / 2), (layoutSize.y / 2));
+		view->set_size(layoutSize.x, layoutSize.y);
+
+		result = menu_builder(app, menuSelectedPointer, layout, open_pause_menu());
 	}
 
 	return result;
@@ -199,235 +202,89 @@ std::string menu(MenuType type, const std::shared_ptr<IApplication>& app, const 
 
 int main()
 {
-    std::shared_ptr<View> view = std::make_shared<View>();
+    std::shared_ptr<APPLICATION::View> view = std::make_shared<APPLICATION::View>();
 
-    std::shared_ptr<Application> window = std::make_shared<Application>("Test_Game", 700, 500);
-    window->init();
-    window->set_position(500, 500);
-	window->set_view(view);	
+    std::shared_ptr<APPLICATION::Application> app = std::make_shared<APPLICATION::Application>("Test_Game", 700, 500);
+    app->init();
+    app->set_position(500, 500);
+	app->set_view(view);	
 
-    std::shared_ptr<Core> core = std::make_shared<Core>();
-	core->register_app(window);
+    DATABASE::DataBase dataBase(RESOURCES_PATH);
 
-    std::shared_ptr<LayoutDispatcher> layoutDispatcher = std::make_shared<LayoutDispatcher>();
+	CLOCK::Clock clock;
 
-    std::shared_ptr<DataBase> dataBase = std::make_shared<DataBase>(RESOURCES_PATH);
+	ANIMATION::Anim anim(0.2F);
+	anim.loop(true);
 
-	std::shared_ptr<Clock> clock = std::make_shared<Clock>();
-
-	std::shared_ptr<Anim> anim = std::make_shared<Anim>(0.2f);
-	anim->loop(true);
-	
+	bool isOpen = true; 
 	bool isRun = true; 
 
-	while(isRun)
+	while(isOpen)
 	{
-		std::string result = menu(MenuType::MAIN, window, view);
-		if(result == MENU_EXIT_ITEM || result == EXIT)
-		{
-			core->close();
-			break;
-		}
+		//std::string result = menu(MenuType::MAIN, app, view);
+		//if(result == MENU_EXIT_ITEM || result == EXIT)
+		//{
+		//	app->close();
+		//	break;
+		//}
 
-		std::shared_ptr<Npc> person = nullptr;
-		person = change_person_type(result, dataBase);
+		std::shared_ptr<PROJECT::NPC::Npc> person = nullptr;
+		//person = change_person_type(result, dataBase, MAIN_PERSON);
+		person = std::make_shared<PROJECT::NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::JEREMY_PINK, MOVE::Side::DOWN), MAIN_PERSON);
 		person->set_position(1300, 1300);
 		person->set_scale(OBJECT_SCALE);
-		person->set_id(MAIN_PERSON);
+		person->set_health(200);
 
-		Animation animationRight;
-		animationRight.set_object(person);
-		auto arrRight = dataBase->get_animation(SIDE::RIGHT);
-		for(const auto& var : arrRight)
-			animationRight.add_frame(var);
+		std::shared_ptr<PROJECT::NPC::Npc> personTest = nullptr;
+		personTest = change_person_type(NPC_MARTHA_GREEN, dataBase, "TEST");
+		personTest->set_position(1400, 1400);
+		personTest->set_scale(OBJECT_SCALE);
+		personTest->set_damage(10);
 
-		Animation animationLeft;
-		animationLeft.set_object(person);
-		auto arrLeft = dataBase->get_animation(SIDE::LEFT);
-		for(const auto& var : arrLeft)
-			animationLeft.add_frame(var);
+		person->add_animation_walk(MOVE::Side::RIGHT, dataBase.get_animation_walk(MOVE::Side::RIGHT));
+		person->add_animation_walk(MOVE::Side::LEFT, dataBase.get_animation_walk(MOVE::Side::LEFT));
+		person->add_animation_walk(MOVE::Side::DOWN, dataBase.get_animation_walk(MOVE::Side::DOWN));
+		person->add_animation_walk(MOVE::Side::UP, dataBase.get_animation_walk(MOVE::Side::UP));
+
 		
-		Animation animationUp;
-		animationUp.set_object(person);
-		auto arrUp = dataBase->get_animation(SIDE::UP);
-		for(const auto& var : arrUp)
-			animationUp.add_frame(var);
+		person->add_animation_attack(MOVE::Side::RIGHT, dataBase.get_animation_attack(MOVE::Side::RIGHT));
+		person->add_animation_attack(MOVE::Side::LEFT, dataBase.get_animation_attack(MOVE::Side::LEFT));
+		person->add_animation_attack(MOVE::Side::DOWN, dataBase.get_animation_attack(MOVE::Side::DOWN));
+		person->add_animation_attack(MOVE::Side::UP, dataBase.get_animation_attack(MOVE::Side::UP));
 
-		Animation animationDown;
-		animationDown.set_object(person);
-		auto arrDown = dataBase->get_animation(SIDE::DOWN);
-		for(const auto& var : arrDown)
-			animationDown.add_frame(var);
+		anim.set_object(person);
 
 		view->set_position(person->get_position());
 		view->set_size(DEFAULT_VIEW_SIZE);
 		view->zoom(DEFAULT_VIEW_ZOOM);
 
-		std::pair desert = MAP_PATH.at("forest");
-		std::shared_ptr<Layout> mapTower = std::make_shared<Layout>(desert.first, desert.second);
-		mapTower->set_id(TOWER_MAP);
+		MOVE::Side personMoveSide = MOVE::Side::NONE;
+		MOVE::Side personAttackSide = MOVE::Side::NONE;
+		bool personAttackStatus = false;
 
-		std::shared_ptr<Circle> right = std::make_shared<Circle>(4);
-		std::shared_ptr<Circle> left = std::make_shared<Circle>(4);
-		std::shared_ptr<Circle> up = std::make_shared<Circle>(4);
-		std::shared_ptr<Circle> down = std::make_shared<Circle>(4);
+		std::pair forest = MAP_PATH.at("forest");
+		std::shared_ptr<COLLECTION::Layout> mapForest = std::make_shared<COLLECTION::Layout>(forest.first, forest.second, TOWER_MAP);
 
-		std::shared_ptr<Move> mover = std::make_shared<Move>();
+		MOVE::Move* mover = new MOVE::Move;
 
-		std::shared_ptr<IPhysics> physics = std::make_shared<Physics>();
+		std::shared_ptr<EVENT::Events> events = std::make_shared<EVENT::Events>(EVENT_MAP);
 
-		std::shared_ptr<Events> events= std::make_shared<Events>();
-		
-		SIDE side = SIDE::STOP;
+		COLLISION::Collision collision;
 
-		events->set_close_window_event([&core, &isRun]()
+		events->set_close_window_event([&app, &isRun, &isOpen]()
 				{
-					core->interrupt(); 
-					core->close(); 
+					app->window_close();
 					isRun = false;
+					isOpen = false;
 				});
 
-		events->add_user_event([&anim,
-								&clock]()
-				{
-					anim->run(clock->get_work_time() * DELAY);
-				});
-
-		events->add_user_event([&side,
-								&anim,
-								&animationUp,
-								&animationDown,
-								&animationLeft,
-								&animationRight]()
-				{
-					if(side != SIDE::STOP)
-					{
-						if(side == SIDE::LEFT)
-						{
-							anim->set_animation(&animationLeft);
-						}
-						if(side == SIDE::RIGHT)
-						{
-							anim->set_animation(&animationRight);
-						}
-						
-						if(side == SIDE::DOWN)
-						{
-							anim->set_animation(&animationDown);
-						}
-						
-						if(side == SIDE::UP)
-						{
-							anim->set_animation(&animationUp);
-						}
-						anim->stop(false);
-					}
-					else
-					{
-						anim->stop(true);
-					}
-					
-				});
-
-		events->add_user_event([&mover,
-								&person,
-								&side,
-								&view,
-								&clock]()
-				{
-					if(side != SIDE::STOP)
-					{
-						auto val = clock->get_elapsed_time();
-						mover->move(side, person, val / DELAY, SPEED);
-						mover->move(side, view, val / DELAY, SPEED);
-					}
-				});
-
-		events->add_user_event([&physics, 
-								&layoutDispatcher, 
-								&view,
-								&right,
-								&left,
-								&up,
-								&down]()
-				{
-					auto current_layout = layoutDispatcher->get_layout();
-					for(auto&& [id, object] : current_layout.second)
-					{
-						if(physics->check_collision(current_layout.first, object) != CollectionObject::NONE)
-						{
-							RectangleF rect = object->get_global_bounds();
-
-							right->set_position((rect.left + rect.width), (rect.top + (rect.height / 2)));
-							left->set_position(rect.left, (rect.top + (rect.height / 2)));
-							up->set_position((rect.left + (rect.width / 2)), rect.top);
-							down->set_position((rect.left + (rect.width / 2)), (rect.top + rect.height));
-
-
-							if(physics->check_collision(current_layout.first, right) != CollectionObject::NONE)
-							{
-								object->block_side(SIDE::RIGHT, true);
-								
-								if(id == MAIN_PERSON)
-								{
-									view->block_side(SIDE::RIGHT, true);	
-								}
-							}
-							
-							if(physics->check_collision(current_layout.first, left) != CollectionObject::NONE)
-							{
-								object->block_side(SIDE::LEFT, true);	
-
-								if(id == MAIN_PERSON)
-								{
-									view->block_side(SIDE::LEFT, true);	
-								}
-							}
-
-							if(physics->check_collision(current_layout.first, up) != CollectionObject::NONE)
-							{
-								object->block_side(SIDE::UP, true);	
-
-								if(id == MAIN_PERSON)
-								{
-									view->block_side(SIDE::UP, true);	
-								}
-							}
-
-							if(physics->check_collision(current_layout.first, down) != CollectionObject::NONE)
-							{
-								object->block_side(SIDE::DOWN, true);	
-
-								if(id == MAIN_PERSON)
-								{
-									view->block_side(SIDE::DOWN, true);	
-								}
-							}
-						}
-						else
-						{
-							object->block_side(SIDE::LEFT, false);
-							object->block_side(SIDE::UP, false);
-							object->block_side(SIDE::RIGHT, false);
-							object->block_side(SIDE::DOWN, false);
-
-							if(id == MAIN_PERSON)
-							{
-								view->block_side(SIDE::LEFT, false);
-								view->block_side(SIDE::UP, false);
-								view->block_side(SIDE::RIGHT, false);
-								view->block_side(SIDE::DOWN, false);
-							}
-						}
-					}
-				});
-
-		events->key_pressed_event(Keyboard_Key::Escape, [&window,
+		events->key_pressed_event(EVENT::Keyboard_Key::Escape, [&app,
 													&view,
 													&person,
-													&core]()
+													&isRun]()
 				{
-					std::string result = menu(MenuType::PAUSE, window, view);
+					view->unblock_all_side();
+					std::string result = menu(MenuType::PAUSE, app, view);
 					if(result == PAUSE_MENU_RESUME_ITEM)
 					{
 						view->set_position(person->get_position());
@@ -436,110 +293,308 @@ int main()
 					}
 					else
 					{
-						core->interrupt();
+						isRun = false;
 					}
-				}, EventHandlerType::EVENT_LOOP);
+				}, EVENT::EventHandlerType::EVENT_LOOP);
 
-
-		events->key_pressed_event(Keyboard_Key::D, [&side]()
+		events->key_pressed_event(EVENT::Keyboard_Key::E, [&personAttackStatus]()
 				{
-					side = SIDE::RIGHT;
-				}, EventHandlerType::NONE);
+					personAttackStatus = true;
+				}, EVENT::EventHandlerType::NONE);
 
-		events->key_pressed_event(Keyboard_Key::A, [&side]()
+		events->key_released_event(EVENT::Keyboard_Key::E, [&personAttackStatus]()
 				{
-					side = SIDE::LEFT;
-				}, EventHandlerType::NONE);
-
-
-		events->key_pressed_event(Keyboard_Key::S, [&side]()
-				{
-					side = SIDE::DOWN;
-				}, EventHandlerType::NONE);
-
-
-		events->key_pressed_event(Keyboard_Key::W, [&side]()
-				{
-					side = SIDE::UP;
-				}, EventHandlerType::NONE);
-
-
-		events->key_pressed_event(Keyboard_Key::Right, [&side]() 
-				{
-					side = SIDE::RIGHT;
-				}, EventHandlerType::NONE);
-
-
-		events->key_pressed_event(Keyboard_Key::Left, [&side]()
-				{
-					side = SIDE::LEFT;
-				}, EventHandlerType::NONE);
-
-
-		events->key_pressed_event(Keyboard_Key::Down, [&side]()
-				{
-					side = SIDE::DOWN;
-				}, EventHandlerType::NONE);
-
-
-		events->key_pressed_event(Keyboard_Key::Up, [&side]()
-				{
-					side = SIDE::UP;
-				}, EventHandlerType::NONE);
-
-		events->key_released_event(Keyboard_Key::D, [&side]()
-				{
-					side = SIDE::STOP;
+					personAttackStatus = false;
 				});
 
-		events->key_released_event(Keyboard_Key::A, [&side]()
+
+
+		events->key_pressed_event(EVENT::Keyboard_Key::D, [&personMoveSide]()
 				{
-					side = SIDE::STOP;
+					personMoveSide = MOVE::Side::RIGHT;
+				}, EVENT::EventHandlerType::NONE);
+
+		events->key_pressed_event(EVENT::Keyboard_Key::A, [&personMoveSide]()
+				{
+					personMoveSide = MOVE::Side::LEFT;
+				}, EVENT::EventHandlerType::NONE);
+
+
+		events->key_pressed_event(EVENT::Keyboard_Key::S, [&personMoveSide]()
+				{
+					personMoveSide = MOVE::Side::DOWN;
+				}, EVENT::EventHandlerType::NONE);
+
+
+		events->key_pressed_event(EVENT::Keyboard_Key::W, [&personMoveSide]()
+				{
+					personMoveSide = MOVE::Side::UP;
+				}, EVENT::EventHandlerType::NONE);
+
+
+		events->key_pressed_event(EVENT::Keyboard_Key::Right, [&personMoveSide]() 
+				{
+					personMoveSide = MOVE::Side::RIGHT;
+				}, EVENT::EventHandlerType::NONE);
+
+
+		events->key_pressed_event(EVENT::Keyboard_Key::Left, [&personMoveSide]()
+				{
+					personMoveSide = MOVE::Side::LEFT;
+				}, EVENT::EventHandlerType::NONE);
+
+
+		events->key_pressed_event(EVENT::Keyboard_Key::Down, [&personMoveSide]()
+				{
+					personMoveSide = MOVE::Side::DOWN;
+				}, EVENT::EventHandlerType::NONE);
+
+
+		events->key_pressed_event(EVENT::Keyboard_Key::Up, [&personMoveSide]()
+				{
+					personMoveSide = MOVE::Side::UP;
+				}, EVENT::EventHandlerType::NONE);
+
+
+		events->key_released_event(EVENT::Keyboard_Key::D, [&personMoveSide]()
+				{
+					personMoveSide = MOVE::Side::NONE;
 				});
 
-		events->key_released_event(Keyboard_Key::S, [&side]()
+		events->key_released_event(EVENT::Keyboard_Key::A, [&personMoveSide]()
 				{
-					side = SIDE::STOP;
+					personMoveSide = MOVE::Side::NONE;
 				});
 
-		events->key_released_event(Keyboard_Key::W, [&side]()
+		events->key_released_event(EVENT::Keyboard_Key::S, [&personMoveSide]()
 				{
-					side = SIDE::STOP;
+					personMoveSide = MOVE::Side::NONE;
 				});
 
-		events->key_released_event(Keyboard_Key::Right, [&side]() 
+		events->key_released_event(EVENT::Keyboard_Key::W, [&personMoveSide]()
 				{
-					side = SIDE::STOP;
+					personMoveSide = MOVE::Side::NONE;
 				});
 
-		events->key_released_event(Keyboard_Key::Left, [&side]()
+		events->key_released_event(EVENT::Keyboard_Key::Right, [&personMoveSide]() 
 				{
-					side = SIDE::STOP;
+					personMoveSide = MOVE::Side::NONE;
 				});
 
-		events->key_released_event(Keyboard_Key::Down, [&side]()
+		events->key_released_event(EVENT::Keyboard_Key::Left, [&personMoveSide]()
 				{
-					side = SIDE::STOP;
+					personMoveSide = MOVE::Side::NONE;
 				});
 
-		events->key_released_event(Keyboard_Key::Up, [&side]()
+		events->key_released_event(EVENT::Keyboard_Key::Down, [&personMoveSide]()
 				{
-					side = SIDE::STOP;
+					personMoveSide = MOVE::Side::NONE;
 				});
 
-		events->add_user_event([&clock]()
+		events->key_released_event(EVENT::Keyboard_Key::Up, [&personMoveSide]()
 				{
-					clock->restart();
+					personMoveSide = MOVE::Side::NONE;
 				});
 
-		core->set_event_dispatcher(events);
-		layoutDispatcher->set_layout(mapTower);
-		layoutDispatcher->insert_layout_child(person);
 
-		core->set_layout_dispatcher(layoutDispatcher);
+		const int PROGRESSBARWidth = 100;
+		const int PROGRESSBARBackgroundWidth = 120;
+		const int PROGRESSBARBackgroundHeight = 40;
+		const int PROGRESSBARHeight = 20;
 
-		core->run();
+		std::shared_ptr<BASE::GRAPHIC::IRectangle> personHealth = std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARWidth, PROGRESSBARHeight, "HEALTH");
+		personHealth->set_color(BASE::GRAPHIC::Color::Red);
+		std::shared_ptr<BASE::GRAPHIC::IRectangle> personHealthBackground = std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARBackgroundWidth, PROGRESSBARBackgroundHeight, "HEALTHBackground");
+		personHealthBackground->set_texture(dataBase.get_resources("healthPanel.png", {0, 0, 450, 150}));
+
+		CalculationHealth calculationHealth(personHealth->get_size().x, person->get_health());
+
+		auto text = std::make_shared<BASE::GRAPHIC::Text>(RESOURCES_PATH + "Font.otf", personTest->get_id());
+		text->set_text("Hello, World");
+		text->visible(true);
+		text->set_color(BASE::GRAPHIC::Color::Black);
+		text->set_font_size(20);
+
+
+		float time;
+		auto* currentLayout = &mapForest;
+		NPC::Attack attack;
+		attack.set_param(5.F);
+
+//VARIABLE FOR USE IN LOOP
+//{
+		std::pair attackDamage = {-1, -1};
+		std::pair interactionStaticObjectSide(MOVE::Side::NONE, ""s);
+		std::pair interactionDynamicObjectSide(MOVE::Side::NONE, ""s);
+		BASE::DATA::RectangleF loopRect = {};
+		BASE::DATA::RectangleF loopRectTemp = {};
+		BASE::DATA::Vector2F loopVec = {};
+		BASE::DATA::Vector2F loopVecTemp = {};
+		size_t loopContainerIter = 0;
+		size_t loopContainerSize = 0;
+		std::shared_ptr<NPC::Npc>* loopNpcElement = nullptr;
+		std::shared_ptr<BASE::GRAPHIC::IText>* loopTextElement = nullptr;
+//}
+//END VARIABLE FOR USE IN LOOP
+
+//VISUAL OBJECT
+//{
+		std::vector<std::shared_ptr<NPC::Npc>> dynamicObjectList = {personTest};
+		dynamicObjectList.reserve(1);
+
+		std::vector<std::shared_ptr<NPC::QuestNpc>> questObjectList;
+		questObjectList.reserve(1);
+
+		std::vector<std::shared_ptr<BASE::GRAPHIC::IText>> dynamicElementStatus = {text};
+		dynamicElementStatus.reserve(1);
+//}
+//END VISUAL OBJECT
+
+		while (app->is_open() && isRun)
+		{
+			clock.restart();
+			time = clock.get_work_time();
+
+			anim.run(time * DELAY);
+
+//EVENT HANDLER
+//{
+			while (app->event_handler(events->get_event_object()))
+			{
+				events->catch_events_loop();
+			}
+			events->catch_events_none();
+//}
+//END EVENT HANDLER
+
+
+//POSITIONING HEALTH BAR
+//{
+			loopRect = view->get_global_bounds();
+			personHealth->set_position((loopRect.left + PROGRESSBARHeight), (loopRect.top + PROGRESSBARHeight));
+			personHealth->set_size(calculationHealth.get_value(person->get_health()), PROGRESSBARHeight); 
+			personHealthBackground->set_position((loopRect.left + 10), (loopRect.top + 10));
+//}
+//END POSITIONING HEALTH BAR
+
+			person->unblock_all_side();
+			view->unblock_all_side();
+
+//CHECK PERSON INTERACTIOIN WITH MAP OBJECT
+//{
+			if(const auto& value = collision.check_object_collision(*currentLayout, person); value.first != MOVE::Side::NONE)
+			{
+				person->block_side(value.first, true);
+				view->block_side(value.first, true);
+			}
+//}
+//END CHECK PERSON INTERACTIOIN WITH MAP OBJECT
+
+//CHECK NPC INTERACTIOIN WITH MAP OBJECT
+//{
+			for(const auto& dynamicObject : dynamicObjectList)
+			{
+				dynamicObject->unblock_all_side();
+
+				if(auto value = collision.check_object_collision(*currentLayout, dynamicObject); value.first != MOVE::Side::NONE)
+				{
+					dynamicObject->block_side(value.first, true);
+				}	
+
+	//CHECK PERSON INTERACTIOIN WITH NPC OBJECT
+	//{
+				if(auto value = collision.check_object_collision(person, dynamicObject); value.first != MOVE::Side::NONE)
+				{
+					person->block_side(value.first, true);
+					view->block_side(value.first, true);
+
+					attackDamage = attack.attack(person,
+												dynamicObject,
+												personAttackStatus,
+												time * DELAY);
+					if(attackDamage.first != -1)
+					{
+						loopTextElement = &(*std::find_if(dynamicElementStatus.begin(), dynamicElementStatus.end(),
+								[&dynamicObject](auto value){return value->get_id() == dynamicObject->get_id();}));
+
+						(*loopTextElement)->set_text(std::to_string(attackDamage.first));
+					}
+				}
+	//}
+	//END CHECK PERSON INTERACTIOIN WITH NPC OBJECT
+			}
+//}
+//END CHECK NPC INTERACTIOIN WITH MAP OBJECT
+
+
+//CHECK PERSON INTERACTIOIN WITH QUEST NPC OBJECT
+//{
+			for(const auto& questNpc : questObjectList)
+			{
+				if(auto value = collision.check_object_collision(person, questNpc); value.first != MOVE::Side::NONE)
+				{
+					person->block_side(value.first, true);
+					view->block_side(value.first, true);
+				}
+			}
+//}
+//END CHECK PERSON INTERACTIOIN WITH QUEST NPC OBJECT
+
+			if(personMoveSide != MOVE::Side::NONE)
+			{
+				mover->move(personMoveSide, person, time / DELAY , SPEED);
+				mover->move(personMoveSide, view, time / DELAY , SPEED);
+				personAttackSide = personMoveSide;
+
+				anim.set_animation(&person->get_animation_walk(personMoveSide));
+				anim.stop(false);
+			}
+
+			if(personAttackStatus)
+			{
+				anim.set_animation(&person->get_animation_attack(personAttackSide));
+				anim.stop(false);
+			}
+
+			if(personMoveSide == MOVE::Side::NONE
+					&& !personAttackStatus)
+			{
+				if(anim.end())
+				{
+					anim.stop(true);
+				}
+			}
+	
+//DRAW OBJECTS
+//{
+			app->draw(*currentLayout);
+			app->draw(personHealthBackground);
+			app->draw(personHealth);
+
+			app->draw(person);
+
+			loopContainerSize = dynamicObjectList.size();
+			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
+			{
+				loopNpcElement = &dynamicObjectList.at(loopContainerIter);
+				app->draw(*loopNpcElement);
+
+				loopTextElement = &dynamicElementStatus.at(loopContainerIter);
+				loopRect = (*loopTextElement)->get_global_bounds();
+				loopVec = {0, loopRect.height * 2};
+
+				(*loopTextElement)->set_position((*loopNpcElement)->get_position() - loopVec);
+				app->draw(*loopTextElement);
+			}
+//}
+//END DRAW OBJECTS
+
+			app->display();
+
+		}
+
+		delete mover;
 	}
 
-	return 0;
+	return EXIT_SUCCESS;
 }

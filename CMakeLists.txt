@@ -4,6 +4,10 @@ project(SFMLProject_rebuild)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "-Wall -g")
 
+#set(CMAKE_CXX_CLANG_TIDY clang-tidy-10 -checks=-*,readability-avoid-const-params-in-decls,readability-const-return-type,readability-container-size-empty,readability-convert-member-functions-to-static,readability-delete-null-pointer,readability-deleted-default,readability-else-after-return,readability-function-size,readability-identifier-naming,readability-implicit-bool-conversion,readability-inconsistent-declaration-parameter-name,readability-isolate-declaration,readability-magic-numbers,readability-make-member-function-const,readability-misleading-indentation,readability-misplaced-array-index,readability-named-parameter,readability-non-const-parameter,readability-qualified-auto,readability-redundant-access-specifiers,readability-redundant-control-flow,readability-redundant-declaration,readability-redundant-function-ptr-dereference,readability-redundant-member-init,readability-redundant-preprocessor,readability-redundant-smartptr-get,readability-redundant-string-cstr,readability-redundant-string-init,readability-simplify-boolean-expr,readability-simplify-subscript-expr,readability-static-accessed-through-instance,readability-static-definition-in-anonymous-namespace,readability-string-compare,readability-uniqueptr-delete-release,readability-uppercase-literal-suffix,readability-use-anyofallof)
+
+
+
 include_directories(.)
 include_directories(Game_Resources/map_loader/include)
 include_directories(Game_Resources/map_loader/include/Box2D)
@@ -26,101 +30,101 @@ file(GLOB SOURCE_FILES_ALGORITHM ${CMAKE_SOURCE_DIR}/algorithm/*.cpp)
 file(GLOB SOURCE_FILES_OBJECT ${CMAKE_SOURCE_DIR}/graphicobject/*.cpp)
 
 add_executable(SFMLProject_rebuild
-        Game_Resources/map_loader/include/Box2D/Collision/Shapes/b2ChainShape.cpp
-        Game_Resources/map_loader/include/Box2D/Collision/Shapes/b2ChainShape.h
-        Game_Resources/map_loader/include/Box2D/Collision/Shapes/b2CircleShape.cpp
-        Game_Resources/map_loader/include/Box2D/Collision/Shapes/b2CircleShape.h
-        Game_Resources/map_loader/include/Box2D/Collision/Shapes/b2EdgeShape.cpp
-        Game_Resources/map_loader/include/Box2D/Collision/Shapes/b2EdgeShape.h
-        Game_Resources/map_loader/include/Box2D/Collision/Shapes/b2PolygonShape.cpp
-        Game_Resources/map_loader/include/Box2D/Collision/Shapes/b2PolygonShape.h
-        Game_Resources/map_loader/include/Box2D/Collision/Shapes/b2Shape.h
-        Game_Resources/map_loader/include/Box2D/Collision/b2BroadPhase.cpp
-        Game_Resources/map_loader/include/Box2D/Collision/b2BroadPhase.h
-        Game_Resources/map_loader/include/Box2D/Collision/b2CollideCircle.cpp
-        Game_Resources/map_loader/include/Box2D/Collision/b2CollideEdge.cpp
-        Game_Resources/map_loader/include/Box2D/Collision/b2CollidePolygon.cpp
-        Game_Resources/map_loader/include/Box2D/Collision/b2Collision.cpp
-        Game_Resources/map_loader/include/Box2D/Collision/b2Collision.h
-        Game_Resources/map_loader/include/Box2D/Collision/b2Distance.cpp
-        Game_Resources/map_loader/include/Box2D/Collision/b2Distance.h
-        Game_Resources/map_loader/include/Box2D/Collision/b2DynamicTree.cpp
-        Game_Resources/map_loader/include/Box2D/Collision/b2DynamicTree.h
-        Game_Resources/map_loader/include/Box2D/Collision/b2TimeOfImpact.cpp
-        Game_Resources/map_loader/include/Box2D/Collision/b2TimeOfImpact.h
-        Game_Resources/map_loader/include/Box2D/Common/b2BlockAllocator.cpp
-        Game_Resources/map_loader/include/Box2D/Common/b2BlockAllocator.h
-        Game_Resources/map_loader/include/Box2D/Common/b2Draw.cpp
-        Game_Resources/map_loader/include/Box2D/Common/b2Draw.h
-        Game_Resources/map_loader/include/Box2D/Common/b2GrowableStack.h
-        Game_Resources/map_loader/include/Box2D/Common/b2Math.cpp
-        Game_Resources/map_loader/include/Box2D/Common/b2Math.h
-        Game_Resources/map_loader/include/Box2D/Common/b2Settings.cpp
-        Game_Resources/map_loader/include/Box2D/Common/b2Settings.h
-        Game_Resources/map_loader/include/Box2D/Common/b2StackAllocator.cpp
-        Game_Resources/map_loader/include/Box2D/Common/b2StackAllocator.h
-        Game_Resources/map_loader/include/Box2D/Common/b2Timer.cpp
-        Game_Resources/map_loader/include/Box2D/Common/b2Timer.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Contacts/b2ChainAndCircleContact.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Contacts/b2ChainAndCircleContact.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Contacts/b2ChainAndPolygonContact.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Contacts/b2ChainAndPolygonContact.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Contacts/b2CircleContact.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Contacts/b2CircleContact.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Contacts/b2Contact.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Contacts/b2Contact.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Contacts/b2ContactSolver.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Contacts/b2ContactSolver.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Contacts/b2EdgeAndCircleContact.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Contacts/b2EdgeAndCircleContact.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Contacts/b2PolygonAndCircleContact.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Contacts/b2PolygonAndCircleContact.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Contacts/b2PolygonContact.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Contacts/b2PolygonContact.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2DistanceJoint.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2DistanceJoint.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2FrictionJoint.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2FrictionJoint.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2GearJoint.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2GearJoint.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2Joint.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2Joint.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2MotorJoint.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2MotorJoint.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2MouseJoint.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2MouseJoint.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2PrismaticJoint.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2PrismaticJoint.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2PulleyJoint.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2PulleyJoint.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2RevoluteJoint.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2RevoluteJoint.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2RopeJoint.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2RopeJoint.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2WeldJoint.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2WeldJoint.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2WheelJoint.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/Joints/b2WheelJoint.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/b2Body.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/b2Body.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/b2ContactManager.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/b2ContactManager.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/b2Fixture.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/b2Fixture.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/b2Island.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/b2Island.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/b2TimeStep.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/b2World.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/b2World.h
-        Game_Resources/map_loader/include/Box2D/Dynamics/b2WorldCallbacks.cpp
-        Game_Resources/map_loader/include/Box2D/Dynamics/b2WorldCallbacks.h
-        Game_Resources/map_loader/include/Box2D/Rope/b2Rope.cpp
-        Game_Resources/map_loader/include/Box2D/Rope/b2Rope.h
-        Game_Resources/map_loader/include/Box2D/Box2D.h
+              Game_Resources/map_loader/include/box2d/b2_block_allocator.h
+        Game_Resources/map_loader/include/box2d/b2_body.h
+        Game_Resources/map_loader/include/box2d/b2_broad_phase.h
+        Game_Resources/map_loader/include/box2d/b2_chain_shape.h
+        Game_Resources/map_loader/include/box2d/b2_circle_shape.h
+        Game_Resources/map_loader/include/box2d/b2_collision.h
+        Game_Resources/map_loader/include/box2d/b2_contact.h
+        Game_Resources/map_loader/include/box2d/b2_contact_manager.h
+        Game_Resources/map_loader/include/box2d/b2_distance.h
+        Game_Resources/map_loader/include/box2d/b2_distance_joint.h
+        Game_Resources/map_loader/include/box2d/b2_draw.h
+        Game_Resources/map_loader/include/box2d/b2_dynamic_tree.h
+        Game_Resources/map_loader/include/box2d/b2_edge_shape.h
+        Game_Resources/map_loader/include/box2d/b2_fixture.h
+        Game_Resources/map_loader/include/box2d/b2_friction_joint.h
+        Game_Resources/map_loader/include/box2d/b2_gear_joint.h
+        Game_Resources/map_loader/include/box2d/b2_growable_stack.h
+        Game_Resources/map_loader/include/box2d/b2_joint.h
+        Game_Resources/map_loader/include/box2d/b2_math.h
+        Game_Resources/map_loader/include/box2d/b2_motor_joint.h
+        Game_Resources/map_loader/include/box2d/b2_mouse_joint.h
+        Game_Resources/map_loader/include/box2d/b2_polygon_shape.h
+        Game_Resources/map_loader/include/box2d/b2_prismatic_joint.h
+        Game_Resources/map_loader/include/box2d/b2_pulley_joint.h
+        Game_Resources/map_loader/include/box2d/b2_revolute_joint.h
+        Game_Resources/map_loader/include/box2d/b2_rope.h
+        Game_Resources/map_loader/include/box2d/b2_rope_joint.h
+        Game_Resources/map_loader/include/box2d/b2_settings.h
+        Game_Resources/map_loader/include/box2d/b2_shape.h
+        Game_Resources/map_loader/include/box2d/b2_stack_allocator.h
+        Game_Resources/map_loader/include/box2d/b2_time_of_impact.h
+        Game_Resources/map_loader/include/box2d/b2_time_step.h
+        Game_Resources/map_loader/include/box2d/b2_timer.h
+        Game_Resources/map_loader/include/box2d/b2_weld_joint.h
+        Game_Resources/map_loader/include/box2d/b2_wheel_joint.h
+        Game_Resources/map_loader/include/box2d/b2_world.h
+        Game_Resources/map_loader/include/box2d/b2_world_callbacks.h
+        Game_Resources/map_loader/include/box2d/box2d.h
+        Game_Resources/map_loader/include/collision/b2_broad_phase.cpp
+        Game_Resources/map_loader/include/collision/b2_chain_shape.cpp
+        Game_Resources/map_loader/include/collision/b2_circle_shape.cpp
+        Game_Resources/map_loader/include/collision/b2_collide_circle.cpp
+        Game_Resources/map_loader/include/collision/b2_collide_edge.cpp
+        Game_Resources/map_loader/include/collision/b2_collide_polygon.cpp
+        Game_Resources/map_loader/include/collision/b2_collision.cpp
+        Game_Resources/map_loader/include/collision/b2_distance.cpp
+        Game_Resources/map_loader/include/collision/b2_dynamic_tree.cpp
+        Game_Resources/map_loader/include/collision/b2_edge_shape.cpp
+        Game_Resources/map_loader/include/collision/b2_polygon_shape.cpp
+        Game_Resources/map_loader/include/collision/b2_time_of_impact.cpp
+        Game_Resources/map_loader/include/common/b2_block_allocator.cpp
+        Game_Resources/map_loader/include/common/b2_draw.cpp
+        Game_Resources/map_loader/include/common/b2_math.cpp
+        Game_Resources/map_loader/include/common/b2_settings.cpp
+        Game_Resources/map_loader/include/common/b2_stack_allocator.cpp
+        Game_Resources/map_loader/include/common/b2_timer.cpp
+        Game_Resources/map_loader/include/dynamics/b2_body.cpp
+        Game_Resources/map_loader/include/dynamics/b2_chain_circle_contact.cpp
+        Game_Resources/map_loader/include/dynamics/b2_chain_circle_contact.h
+        Game_Resources/map_loader/include/dynamics/b2_chain_polygon_contact.cpp
+        Game_Resources/map_loader/include/dynamics/b2_chain_polygon_contact.h
+        Game_Resources/map_loader/include/dynamics/b2_circle_contact.cpp
+        Game_Resources/map_loader/include/dynamics/b2_circle_contact.h
+        Game_Resources/map_loader/include/dynamics/b2_contact.cpp
+        Game_Resources/map_loader/include/dynamics/b2_contact_manager.cpp
+        Game_Resources/map_loader/include/dynamics/b2_contact_solver.cpp
+        Game_Resources/map_loader/include/dynamics/b2_contact_solver.h
+        Game_Resources/map_loader/include/dynamics/b2_distance_joint.cpp
+        Game_Resources/map_loader/include/dynamics/b2_edge_circle_contact.cpp
+        Game_Resources/map_loader/include/dynamics/b2_edge_circle_contact.h
+        Game_Resources/map_loader/include/dynamics/b2_edge_polygon_contact.cpp
+        Game_Resources/map_loader/include/dynamics/b2_edge_polygon_contact.h
+        Game_Resources/map_loader/include/dynamics/b2_fixture.cpp
+        Game_Resources/map_loader/include/dynamics/b2_friction_joint.cpp
+        Game_Resources/map_loader/include/dynamics/b2_gear_joint.cpp
+        Game_Resources/map_loader/include/dynamics/b2_island.cpp
+        Game_Resources/map_loader/include/dynamics/b2_island.h
+        Game_Resources/map_loader/include/dynamics/b2_joint.cpp
+        Game_Resources/map_loader/include/dynamics/b2_motor_joint.cpp
+        Game_Resources/map_loader/include/dynamics/b2_mouse_joint.cpp
+        Game_Resources/map_loader/include/dynamics/b2_polygon_circle_contact.cpp
+        Game_Resources/map_loader/include/dynamics/b2_polygon_circle_contact.h
+        Game_Resources/map_loader/include/dynamics/b2_polygon_contact.cpp
+        Game_Resources/map_loader/include/dynamics/b2_polygon_contact.h
+        Game_Resources/map_loader/include/dynamics/b2_prismatic_joint.cpp
+        Game_Resources/map_loader/include/dynamics/b2_pulley_joint.cpp
+        Game_Resources/map_loader/include/dynamics/b2_revolute_joint.cpp
+        Game_Resources/map_loader/include/dynamics/b2_rope_joint.cpp
+        Game_Resources/map_loader/include/dynamics/b2_weld_joint.cpp
+        Game_Resources/map_loader/include/dynamics/b2_wheel_joint.cpp
+        Game_Resources/map_loader/include/dynamics/b2_world.cpp
+        Game_Resources/map_loader/include/dynamics/b2_world_callbacks.cpp
         Game_Resources/map_loader/include/pugixml/pugiconfig.hpp
         Game_Resources/map_loader/include/pugixml/pugixml.hpp
+        Game_Resources/map_loader/include/rope/b2_rope.cpp
         Game_Resources/map_loader/include/tmx/DebugShape.hpp
         Game_Resources/map_loader/include/tmx/Export.hpp
         Game_Resources/map_loader/include/tmx/Helpers.hpp
@@ -140,8 +144,9 @@ add_executable(SFMLProject_rebuild
         Game_Resources/map_loader/MapLoader/miniz.c
         Game_Resources/map_loader/MapLoader/miniz.h
         Game_Resources/map_loader/MapLoader/QuadTreeNode.cpp
-        Game_Resources/map_loader/MapLoader/tmx2box2d.cpp
-        ${SOURCE_FILES}
+        Game_Resources/map_loader/MapLoader/tmx2box2d.cpp 
+ 		${SOURCE_FILES}
+		${CMAKE_SOURCE_DIR}/struct/collectionobject.cpp
         ${SOURCE_FILES_ALGORITHM}
         ${SOURCE_FILES_OBJECT}
         main.cpp)

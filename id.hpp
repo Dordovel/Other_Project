@@ -2,7 +2,7 @@
 #include <string>
 
 const static std::string MAIN_PERSON = "MAIN_PERSON";
-const static std::string TOWER_MAP = "DESERT_MAP"; 
+const static std::string TOWER_MAP = "TOWER_MAP"; 
 const static std::string FOREST_MAP = "FOREST_MAP";
 const static std::string PAUSE_MENU = "PAUSE_MENU";
 const static std::string MOUSE_POINTER = "MOUSE_POINTER";
@@ -15,8 +15,6 @@ const static std::string EVENT_MENU = "EVENT_MENU";
 const static std::string EVENT_NPC_SELECTED_MENU = "NPC_SELECTED_MENU_EVENT";
 const static std::string MAIN_MENU = "MAIN_MENU";
 const static std::string MAIN_MENU_START_ITEM = "MAIN_MENU_START";
-const static std::string NPC_SELECT_MENU = "NPC_SELECT_MENU";
-const static std::string NPC_SELECT_TYPE_MENU = "NPC_SELECT_TYPE_MENU";
 const static std::string NPC_JEREMY_TYPE_ITEM = "NPC_JEREMY_TYPE";
 const static std::string NPC_MARTHA_TYPE_ITEM = "NPC_MARTHA_TYPE";
 const static std::string NPC_JEREMY_BLONDE = "NPC_JEREM_BLONDE";

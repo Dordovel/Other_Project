@@ -2,12 +2,15 @@
 
 #include <string>
 
-class DrawableObject;
+namespace PROJECT::BASE::DATA
+{
+    class DrawableObject;
+};
 
 class DRAWABLE
 {
     public:
-        virtual DrawableObject draw() const noexcept = 0;
+        virtual PROJECT::BASE::DATA::DrawableObject draw() const noexcept = 0;
         virtual void visible(bool flag) noexcept = 0;
         virtual bool is_visible() noexcept = 0;
 		

@@ -3,154 +3,171 @@
 #include "./circle.hpp"
 #include "../struct/rectobject.hpp"
 #include "../struct/side.hpp"
+#include "../struct/rgb.hpp"
 
-Circle::Circle(float radius):_circleShape(new sf::CircleShape(radius)),
-														_isVisible(false),
-														_up(false),
-														_down(false),
-														_left(false),
-														_right(false)
+namespace PROJECT::BASE::GRAPHIC
 {
-    this->_circleShape->setFillColor(sf::Color::Green);
-    this->_circleShape->setOutlineColor(sf::Color::Black);
-    this->_circleShape->setOutlineThickness(radius / 10);
-}
-
-DrawableObject Circle::draw() const noexcept
-{
-    return {this->_circleShape};
-}
-
-void Circle::set_id(const std::string& id) noexcept
-{
-    this->_id = id;
-}
-
-std::string Circle::get_id() const noexcept
-{
-    return this->_id;
-}
-
-void Circle::set_position(const Vector2F& position) noexcept
-{
-    this->set_position(position.x, position.y);
-}
-
-void Circle::set_position(float X, float Y) noexcept
-{
-	Vector2F current_position = this->get_position();
-
-	if(this->_up)
-		if(Y < current_position.y) Y = current_position.y;
-
-	if(this->_down)
-		if(Y > current_position.y) Y = current_position.y;
-
-	if(this->_left)
-		if(X < current_position.y) X = current_position.x;
-
-	if(this->_right)
-		if(X > current_position.y) X = current_position.x;
-
-    this->_circleShape->setPosition(X, Y);
-}
-
-void Circle::rotate(float angle) noexcept
-{
-    this->_circleShape->rotate(angle);
-}
-
-bool Circle::collision(const std::shared_ptr<INTERACTION>& object) noexcept
-{
-    return this->_circleShape->getGlobalBounds().contains(object->get_position());
-}
-
-bool Circle::collision(const Vector2F& object) noexcept
-{
-    return this->_circleShape->getGlobalBounds().contains(object);
-}
-
-void Circle::move(const Vector2F& step) noexcept
-{
-    this->move(step.x, step.y);
-}
-
-void Circle::move(float X, float Y) noexcept
-{
-	if(this->_up)
-		if(Y < 0) Y = 0;
-
-	if(this->_down)
-		if(Y > 0) Y = 0;
-
-	if(this->_left)
-		if(X < 0) X = 0;
-
-	if(this->_right)
-		if(X > 0) X = 0;
-
-    this->_circleShape->move(X, Y);
-}
-
-Vector2F Circle::get_position() const  noexcept
-{
-    return this->_circleShape->getPosition();
-}
-
-RectangleF Circle::get_global_bounds() const noexcept
-{
-    return this->_circleShape->getGlobalBounds();
-}
-
-void Circle::visible(bool flag) noexcept
-{
-    this->_isVisible = flag;
-}
-
-bool Circle::is_visible() noexcept
-{
-    return this->_isVisible;
-}
-
-void Circle::set_scale(Vector2F scale) noexcept
-{
-	this->_circleShape->setScale(scale);
-}
-
-Vector2F Circle::get_scale() noexcept
-{
-	return this->_circleShape->getScale();
-}
-
-void Circle::block_side(SIDE side, bool status) noexcept
-{
-	if(side == SIDE::UP)
+	Circle::Circle(float radius, std::string_view id):_circleShape(new sf::CircleShape(radius)),
+															_id(id),
+															_isVisible(false),
+															_up(false),
+															_down(false),
+															_left(false),
+															_right(false)
 	{
-		this->_up = status;
+		this->_circleShape->setFillColor(sf::Color::Green);
+		this->_circleShape->setOutlineColor(sf::Color::Black);
+		this->_circleShape->setOutlineThickness(radius / 10);
+
+		std::cout<<"Circle(): "<<this->get_id()<< '\n';
 	}
 
-	if(side == SIDE::DOWN)
+	Circle::~Circle()
 	{
-		this->_down = status;
+		std::cout<<"\t~Circle(): "<< this->get_id()<< '\n';
 	}
 
-	if(side == SIDE::LEFT)
+	PROJECT::BASE::DATA::DrawableObject Circle::draw() const noexcept
 	{
-		this->_left = status;
+		return {this->_circleShape};
 	}
 
-	if(side == SIDE::RIGHT)
+	std::string Circle::get_id() const noexcept
 	{
-		this->_right = status;
+		return this->_id;
 	}
-}
 
-void Circle::set_color(const Color& color)
-{
-	this->_circleShape->setFillColor(color);
-}
+	void Circle::set_position(const PROJECT::BASE::DATA::Vector2F& position) noexcept
+	{
+		this->set_position(position.x, position.y);
+	}
 
-void Circle::set_points_count(int points)
-{
-	this->_circleShape->setPointCount(points);
-}
+	void Circle::set_position(float X, float Y) noexcept
+	{
+		PROJECT::BASE::DATA::Vector2F current_position = this->get_position();
+
+		if(this->_up)
+			if(Y < current_position.y) Y = current_position.y;
+
+		if(this->_down)
+			if(Y > current_position.y) Y = current_position.y;
+
+		if(this->_left)
+			if(X < current_position.y) X = current_position.x;
+
+		if(this->_right)
+			if(X > current_position.y) X = current_position.x;
+
+		this->_circleShape->setPosition(X, Y);
+	}
+
+	bool Circle::collision(const std::shared_ptr<INTERACTION>& object) noexcept
+	{
+		return this->_circleShape->getGlobalBounds().contains(object->get_position());
+	}
+
+	bool Circle::collision(const PROJECT::BASE::DATA::Vector2F& vec) noexcept
+	{
+		return this->_circleShape->getGlobalBounds().contains(vec);
+	}
+
+	bool Circle::collision(const PROJECT::BASE::DATA::RectangleF& rect) noexcept
+	{
+		return this->_circleShape->getGlobalBounds().intersects(rect);
+	}
+
+	void Circle::move(const PROJECT::BASE::DATA::Vector2F& step) noexcept
+	{
+		this->move(step.x, step.y);
+	}
+
+	void Circle::move(float X, float Y) noexcept
+	{
+		if(this->_up)
+			if(Y < 0) Y = 0;
+
+		if(this->_down)
+			if(Y > 0) Y = 0;
+
+		if(this->_left)
+			if(X < 0) X = 0;
+
+		if(this->_right)
+			if(X > 0) X = 0;
+
+		this->_circleShape->move(X, Y);
+	}
+
+	PROJECT::BASE::DATA::Vector2F Circle::get_position() const  noexcept
+	{
+		return this->_circleShape->getPosition();
+	}
+
+	PROJECT::BASE::DATA::RectangleF Circle::get_global_bounds() const noexcept
+	{
+		return this->_circleShape->getGlobalBounds();
+	}
+
+	void Circle::visible(bool flag) noexcept
+	{
+		this->_isVisible = flag;
+	}
+
+	bool Circle::is_visible() noexcept
+	{
+		return this->_isVisible;
+	}
+
+	void Circle::set_scale(PROJECT::BASE::DATA::Vector2F scale) noexcept
+	{
+		this->_circleShape->setScale(scale);
+	}
+
+	PROJECT::BASE::DATA::Vector2F Circle::get_scale() noexcept
+	{
+		return this->_circleShape->getScale();
+	}
+
+	void Circle::block_side(PROJECT::MOVE::Side side, bool status) noexcept
+	{
+		if(side == PROJECT::MOVE::Side::UP)
+		{
+			this->_up = status;
+		}
+
+		if(side == PROJECT::MOVE::Side::DOWN)
+		{
+			this->_down = status;
+		}
+
+		if(side == PROJECT::MOVE::Side::LEFT)
+		{
+			this->_left = status;
+		}
+
+		if(side == PROJECT::MOVE::Side::RIGHT)
+		{
+			this->_right = status;
+		}
+	}
+
+	void Circle::block_all_side() noexcept
+	{
+		this->_up = this->_down = this->_left = this->_right = true;
+	}
+
+	void Circle::unblock_all_side() noexcept
+	{
+		this->_up = this->_down = this->_left = this->_right = false;
+	}
+
+	void Circle::set_color(const Color& color)
+	{
+		this->_circleShape->setFillColor(RGB::color(color));
+	}
+
+	void Circle::set_points_count(int points)
+	{
+		this->_circleShape->setPointCount(points);
+	}
+};

@@ -3,40 +3,43 @@
 #include <vector>
 #include <SFML/System/Time.hpp>
 
-class Animation : public IAnimation
+namespace PROJECT::ANIMATION
 {
-	private:
-		std::vector<RectangleI> _frames;
-		std::shared_ptr<ANIMATED> _object;
+	class Animation : public PROJECT::ANIMATION::IAnimation
+	{
+		private:
+			std::vector<PROJECT::BASE::DATA::RectangleI> _frames;
 
-	public:
-		void add_frame(const RectangleI& frame);
-		void set_object(const std::shared_ptr<ANIMATED>& object);
-		const RectangleI& get_frame(std::size_t index);
-		std::shared_ptr<ANIMATED> get_object();
-		std::size_t get_frame_count() const;
+		public:
+			void add_frame(const PROJECT::BASE::DATA::RectangleI& frame);
+			const PROJECT::BASE::DATA::RectangleI& get_frame(std::size_t index);
+			std::size_t get_frame_count() const;
 
-		Animation() = default;
-};
+			Animation() = default;
+	};
 
 
-class Anim : public IAnim
-{
-	private:
-		IAnimation* _anim;
-		std::shared_ptr<IClock> _clock;
-		bool _loop, _stop, _play;
-		std::size_t _currentFrame;
-		sf::Time _currentTime;
-		sf::Time _frameTime;
+	class Anim : public PROJECT::ANIMATION::IAnim
+	{
+		private:
+			IAnimation* _anim;
+			bool _loop, _stop;
+			std::size_t _currentFrame;
+			sf::Time _currentTime;
+			sf::Time _frameTime;
 
-	public:
+			std::shared_ptr<ANIMATED> _object;
 
-		void set_clock(const std::shared_ptr<IClock>& clock) override;
-		void set_animation(IAnimation* anim) override;
-		void run(unsigned int delta) override;
-		void stop(bool stop) override;
-		void loop(bool loop) override;
+			void reset() noexcept;
 
-		Anim(float param);
+		public:
+			void set_object(const std::shared_ptr<ANIMATED>& object) noexcept override;
+			void set_animation(IAnimation* anim) noexcept override;
+			void run(unsigned int delta) noexcept override;
+			void stop(bool stop) noexcept override;
+			void loop(bool loop) noexcept override;
+			bool end() const noexcept override;
+
+			Anim(float param);
+	};
 };

@@ -2,15 +2,18 @@
 #include "../Interface/iphysics.hpp"
 #include "../object/interaction.hpp"
 
-class Physics final : public IPhysics
+namespace PROJECT::PHYSICS
 {
-    public:
+	class Physics final : public PROJECT::PHYSICS::IPhysics
+	{
+		public:
 
-        bool check_intersection(const std::shared_ptr<INTERACTION>& lv, const std::shared_ptr<INTERACTION>& rv) noexcept override;
+			bool check_intersection(const std::shared_ptr<INTERACTION>& lv, const std::shared_ptr<INTERACTION>& rv) noexcept override;
 
-        CollectionObject check_collision(const std::shared_ptr<ICollection>& lv,
-								const std::shared_ptr<INTERACTION>& rv) noexcept override;
+			std::string check_collision(const std::shared_ptr<PROJECT::COLLECTION::ICollection>& lv,
+									const std::shared_ptr<INTERACTION>& rv) noexcept override;
 
-		Physics() = default;
-		~Physics() = default;
+			Physics() = default;
+			~Physics() = default;
+	};
 };

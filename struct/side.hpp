@@ -1,11 +1,13 @@
 #pragma once
 
-enum class SIDE
+namespace PROJECT::MOVE
 {
-	UP,
-	DOWN,
-	LEFT,
-	RIGHT,
-	STOP
+	enum class Side
+	{
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT,
+		NONE
+	};
 };
-

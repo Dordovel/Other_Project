@@ -1,18 +1,24 @@
 #pragma once 
 
-class INpc
+#include "./iarmor.hpp"
+#include "./ipoints.hpp"
+#include "./ihealth.hpp"
+#include "./idamage.hpp"
+#include "./animation.hpp"
+
+namespace PROJECT::MOVE
 {
-	public:
+	enum class Side;
+}
 
-		virtual int get_health() const noexcept = 0;
-		virtual int get_points() const noexcept = 0;
-		virtual float get_damage() const noexcept = 0;
-		virtual float get_armor() const noexcept = 0;
+namespace PROJECT::NPC
+{
+	class INpc : public IDamage, public IHealth, public IPoints, public IArmor
+	{
+		public:
 
-		virtual void set_health(int health) noexcept = 0;
-		virtual void set_points(int points) noexcept = 0;
-		virtual void set_armor(float armor) noexcept = 0;
-		virtual void set_damage(float damage) noexcept = 0;
-
-		virtual ~INpc() = default;
+			virtual PROJECT::ANIMATION::IAnimation& get_animation_attack(PROJECT::MOVE::Side side) noexcept = 0;
+			virtual PROJECT::ANIMATION::IAnimation& get_animation_walk(PROJECT::MOVE::Side side) noexcept = 0;
+			virtual ~INpc() = default;
+	};
 };

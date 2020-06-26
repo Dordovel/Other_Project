@@ -1,31 +1,34 @@
 #include "../headers/physics.hpp"
 #include "../struct/rectobject.hpp"
 #include "../struct/vectorobject.hpp"
-#include "../struct/colllectionobject.hpp"
+#include "../struct/collectionobject.hpp"
 
-bool Physics::check_intersection(const std::shared_ptr<INTERACTION>& lv, const std::shared_ptr<INTERACTION>& rv) noexcept
+namespace PROJECT::PHYSICS
 {
-    if(!lv || !rv) return false;
-    return lv->collision(rv);
-}
+	bool Physics::check_intersection(const std::shared_ptr<INTERACTION>& lv, const std::shared_ptr<INTERACTION>& rv) noexcept
+	{
+		if(!lv || !rv) return false;
+		return lv->collision(rv);
+	}
 
-CollectionObject Physics::check_collision(const std::shared_ptr<ICollection>& lv,
-								const std::shared_ptr<INTERACTION>& rv) noexcept
-{
-    RectangleF bounds = rv->get_global_bounds();
+	std::string Physics::check_collision(const std::shared_ptr<PROJECT::COLLECTION::ICollection>& lv,
+		  const std::shared_ptr<INTERACTION>& rv) noexcept
+	{
+		PROJECT::BASE::DATA::RectangleF bounds = rv->get_global_bounds();
 
-    auto collisionPoint = lv->get_objects(rv->get_global_bounds());
+		auto collisionPoint = lv->get_objects(rv->get_global_bounds());
 
-    for(auto&& [key, points] : collisionPoint)
-    {
-		for(auto var : points)
+		for(auto&& [key, points] : collisionPoint)
 		{
-			if (var.intersects(bounds))
+			for(auto var : points)
 			{
-				return key;
-			}
-		}	
-    }
+				if (var.intersects(bounds))
+				{
+					return key;
+				}
+			}	
+		}
 
-    return CollectionObject::NONE;
-}
+		return PROJECT::COLLECTION::CollectionObject::NONE;
+	}
+};

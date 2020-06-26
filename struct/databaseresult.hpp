@@ -2,8 +2,11 @@
 #include <string>
 #include "./rectobject.hpp"
 
-struct DataBaseResult
+namespace PROJECT::DATABASE
 {
-    std::string  rv;
-	RectangleI rect;
+    struct DataBaseResult
+    {
+        std::string  rv;
+        PROJECT::BASE::DATA::RectangleI rect;
+    };
 };

@@ -4,19 +4,27 @@
 #include "../struct/side.hpp"
 #include <array>
 
-class RectangleI;
-
-class DataBase final : public IDataBase
+namespace PROJECT::BASE::DATA
 {
-    private:
-        std::map<PersonProfession , std::string> _rectList;
-        std::string _pathToResourcesFile;
-		std::map<SIDE, std::array<RectangleI, 3>> _animationSide;
-
-    public:
-        explicit DataBase(const std::string& pathToResourcesFile);
-		DataBaseResult get_resources(PersonProfession person, SIDE side) const noexcept override;
-		std::array<RectangleI, 3> get_animation(SIDE side) const noexcept override;
-        ~DataBase() = default;
+    class RectangleI;
 };
 
+namespace PROJECT::DATABASE
+{
+    class DataBase final : public IDataBase
+    {
+        private:
+            std::map<PersonProfession , std::string> _rectList;
+            std::string _pathToResourcesFile;
+            std::map<PROJECT::MOVE::Side, std::array<PROJECT::BASE::DATA::RectangleI, 3>> _animationSide;
+            std::map<PROJECT::MOVE::Side, std::array<PROJECT::BASE::DATA::RectangleI, 3>> _animationAttack;
+
+        public:
+            explicit DataBase(const std::string& pathToResourcesFile);
+            DataBaseResult get_resources(PersonProfession person, PROJECT::MOVE::Side side) const noexcept override;
+			PROJECT::DATABASE::DataBaseResult get_resources(std::string_view file, const PROJECT::BASE::DATA::RectangleI& rect) const noexcept override;
+            std::array<PROJECT::BASE::DATA::RectangleI, 3> get_animation_walk(PROJECT::MOVE::Side side) const noexcept override;
+            std::array<PROJECT::BASE::DATA::RectangleI, 3> get_animation_attack(PROJECT::MOVE::Side side) const noexcept override;
+            ~DataBase() = default;
+    };
+};

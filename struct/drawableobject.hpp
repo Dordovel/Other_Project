@@ -3,8 +3,13 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <memory>
 
-class DrawableObject
+namespace PROJECT::BASE::DATA
 {
-    public:
-        std::shared_ptr<sf::Drawable> object;
+    class DrawableObject
+    {
+        public:
+            std::shared_ptr<sf::Drawable> object;
+
+			~DrawableObject() = default;
+    };
 };
