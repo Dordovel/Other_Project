@@ -2,7 +2,6 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include "./irectangle.hpp"
-#include <SFML/Graphics/Texture.hpp>
 
 namespace PROJECT::BASE::GRAPHIC
 {
@@ -12,13 +11,10 @@ namespace PROJECT::BASE::GRAPHIC
             std::shared_ptr<sf::RectangleShape> _rectangle;
             std::string _id;
             bool _isVisible;
-			std::shared_ptr<sf::Texture> _texture;
 
             bool _up, _down, _left, _right;
 
         public:
-
-			void set_texture(const PROJECT::DATABASE::DataBaseResult& resources) override;
 
             PROJECT::BASE::DATA::DrawableObject draw() const noexcept override;
 

@@ -43,14 +43,6 @@ namespace PROJECT::BASE::GRAPHIC
 		this->set_position(position.x, position.y);
 	}
 
-	void Rectangle::set_texture(const PROJECT::DATABASE::DataBaseResult& resources)
-	{
-		this->_texture = std::make_shared<sf::Texture>();
-		assert(this->_texture->loadFromFile(resources.rv) && "NOT LOAD");
-		this->_rectangle->setTexture(this->_texture.get());
-		this->_rectangle->setTextureRect(resources.rect);
-	}
-
 	void Rectangle::set_size(const BASE::DATA::Vector2F& size) noexcept
 	{
 		this->_rectangle->setSize(size);

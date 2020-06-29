@@ -21,7 +21,7 @@ namespace PROJECT::ANIMATION
 
 
 
-	Anim::Anim(float param):_anim(nullptr)
+	Anim::Anim(float param):_anim(nullptr),_loop(true)
 	{
 		this->_frameTime = sf::seconds(param);
 	}
@@ -59,6 +59,7 @@ namespace PROJECT::ANIMATION
 						this->_currentFrame = 0;
 					}
 				}
+
 				this->_object->set_texture_rect(this->_anim->get_frame(this->_currentFrame));
 			}
 		}
@@ -78,7 +79,6 @@ namespace PROJECT::ANIMATION
 	{
 		if(this->_anim)
 		{
-			std::cout<<"SIZE"<<this->_currentFrame<<":"<<this->_anim->get_frame_count()<<"\n";
 			return this->_currentFrame != (this->_anim->get_frame_count() - 1);
 		}
 

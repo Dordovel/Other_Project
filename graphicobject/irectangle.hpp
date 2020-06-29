@@ -3,11 +3,10 @@
 #include "../object/scalable.hpp"
 #include "../object/object.hpp"
 #include "../struct/color.hpp"
-#include "../object/textured.hpp"
 
 namespace PROJECT::BASE::GRAPHIC
 {
-	class IRectangle : public OBJECT, public SCALABLE, public TEXTURED
+	class IRectangle : public OBJECT, public SCALABLE
 	{
 		public:
             virtual void set_color(const Color& color) = 0;

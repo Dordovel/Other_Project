@@ -3,7 +3,7 @@
 
 namespace PROJECT::MOVE
 {
-	void Move::game_object_move(const std::shared_ptr<MOVABLE>& object , float posX , float posY) noexcept
+	void Move::object_move(const std::shared_ptr<MOVABLE>& object , float posX , float posY) noexcept
 	{
 		object->move ( posX , posY );
 	}
@@ -13,7 +13,7 @@ namespace PROJECT::MOVE
 		float posX = 0;
 		float posY = -(speed * clock);
 
-		game_object_move(object , posX , posY );
+		object_move(object , posX , posY );
 	}
 
 	void Move::moveDown(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
@@ -21,7 +21,7 @@ namespace PROJECT::MOVE
 		float posX = 0;
 		float posY = speed * clock;
 
-		game_object_move(object , posX , posY );
+		object_move(object , posX , posY );
 	}
 
 	void Move::moveLeft(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
@@ -29,7 +29,7 @@ namespace PROJECT::MOVE
 		float posX = -(speed * clock);
 		float posY = 0;
 
-		game_object_move(object , posX , posY );
+		object_move(object , posX , posY );
 	}
 
 	void Move::moveRight(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
@@ -37,7 +37,7 @@ namespace PROJECT::MOVE
 		float posX = speed * clock;
 		float posY = 0;
 
-		game_object_move(object, posX, posY);
+		object_move(object, posX, posY);
 	}
 
 

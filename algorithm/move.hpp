@@ -8,7 +8,7 @@ namespace PROJECT::MOVE
 	class Move : public IMove
 	{
 		private:
-			static void game_object_move(const std::shared_ptr<MOVABLE>& object , float posX , float posY) noexcept;
+			static void object_move(const std::shared_ptr<MOVABLE>& object , float posX , float posY) noexcept;
 
 			static void moveUp(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept;
 

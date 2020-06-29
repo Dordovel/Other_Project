@@ -27,6 +27,31 @@ float convert_value(int lv, int rv, float value)
 	return (rv * ((value / lv) * 100)) / 100;
 }
 
+MOVE::Side inversion_side(MOVE::Side side)
+{
+	if(side == MOVE::Side::UP)
+	{
+		return MOVE::Side::DOWN;
+	}
+
+	if(side == MOVE::Side::DOWN)
+	{
+		return MOVE::Side::UP;
+	}
+
+	if(side == MOVE::Side::LEFT)
+	{
+		return MOVE::Side::RIGHT;
+	}
+
+	if(side == MOVE::Side::RIGHT)
+	{
+		return MOVE::Side::LEFT;
+	}
+
+	return MOVE::Side::NONE;
+}
+
 std::array<std::pair<std::string, std::string>, 4>
 open_select_menu(std::string_view lastItem) noexcept
 {
@@ -218,7 +243,6 @@ int main()
 	CLOCK::Clock clock;
 
 	ANIMATION::Anim anim(0.2F);
-	anim.loop(true);
 
 	bool isOpen = true; 
 	bool isRun = true; 
@@ -249,6 +273,16 @@ int main()
 		personTest->set_health(personTest->get_max_health());
 		personTest->set_damage(10);
 
+
+
+		std::shared_ptr<PROJECT::NPC::Npc> personTest1 = nullptr;
+		personTest1 = change_person_type(NPC_MARTHA_GREEN, dataBase, "TEST");
+		personTest1->set_position(1300, 1300);
+		personTest1->set_scale(OBJECT_SCALE);
+		personTest1->set_max_health(200);
+		personTest1->set_health(personTest1->get_max_health());
+		personTest1->set_damage(10);
+
 		person->add_animation_walk(MOVE::Side::RIGHT, dataBase.get_animation_walk(MOVE::Side::RIGHT));
 		person->add_animation_walk(MOVE::Side::LEFT, dataBase.get_animation_walk(MOVE::Side::LEFT));
 		person->add_animation_walk(MOVE::Side::DOWN, dataBase.get_animation_walk(MOVE::Side::DOWN));
@@ -260,6 +294,31 @@ int main()
 		person->add_animation_attack(MOVE::Side::DOWN, dataBase.get_animation_attack(MOVE::Side::DOWN));
 		person->add_animation_attack(MOVE::Side::UP, dataBase.get_animation_attack(MOVE::Side::UP));
 
+
+		
+		personTest->add_animation_walk(MOVE::Side::RIGHT, dataBase.get_animation_walk(MOVE::Side::RIGHT));
+		personTest->add_animation_walk(MOVE::Side::LEFT, dataBase.get_animation_walk(MOVE::Side::LEFT));
+		personTest->add_animation_walk(MOVE::Side::DOWN, dataBase.get_animation_walk(MOVE::Side::DOWN));
+		personTest->add_animation_walk(MOVE::Side::UP, dataBase.get_animation_walk(MOVE::Side::UP));
+
+		personTest->add_animation_attack(MOVE::Side::RIGHT, dataBase.get_animation_attack(MOVE::Side::RIGHT));
+		personTest->add_animation_attack(MOVE::Side::LEFT, dataBase.get_animation_attack(MOVE::Side::LEFT));
+		personTest->add_animation_attack(MOVE::Side::DOWN, dataBase.get_animation_attack(MOVE::Side::DOWN));
+		personTest->add_animation_attack(MOVE::Side::UP, dataBase.get_animation_attack(MOVE::Side::UP));
+
+
+
+		personTest1->add_animation_walk(MOVE::Side::RIGHT, dataBase.get_animation_walk(MOVE::Side::RIGHT));
+		personTest1->add_animation_walk(MOVE::Side::LEFT, dataBase.get_animation_walk(MOVE::Side::LEFT));
+		personTest1->add_animation_walk(MOVE::Side::DOWN, dataBase.get_animation_walk(MOVE::Side::DOWN));
+		personTest1->add_animation_walk(MOVE::Side::UP, dataBase.get_animation_walk(MOVE::Side::UP));
+
+		personTest1->add_animation_attack(MOVE::Side::RIGHT, dataBase.get_animation_attack(MOVE::Side::RIGHT));
+		personTest1->add_animation_attack(MOVE::Side::LEFT, dataBase.get_animation_attack(MOVE::Side::LEFT));
+		personTest1->add_animation_attack(MOVE::Side::DOWN, dataBase.get_animation_attack(MOVE::Side::DOWN));
+		personTest1->add_animation_attack(MOVE::Side::UP, dataBase.get_animation_attack(MOVE::Side::UP));
+
+
 		anim.set_object(person);
 
 		view->set_position(person->get_position());
@@ -267,7 +326,7 @@ int main()
 		view->zoom(DEFAULT_VIEW_ZOOM);
 
 		MOVE::Side personMoveSide = MOVE::Side::NONE;
-		MOVE::Side personAttackSide = MOVE::Side::NONE;
+		MOVE::Side personLastMoveSide = MOVE::Side::DOWN;
 		bool personAttackStatus = false;
 
 		std::pair forest = MAP_PATH.at("forest");
@@ -405,24 +464,40 @@ int main()
 				});
 
 
-		const int PROGRESSBARWidth = 100;
-		const int PROGRESSBARBackgroundWidth = 120;
-		const int PROGRESSBARBackgroundHeight = 40;
-		const int PROGRESSBARHeight = 20;
+		const int PROGRESSBARWidth = 115;
+		const int PROGRESSBARHeight = 25;
+		const BASE::DATA::Vector2F SPRITEScale = {0.3, 0.3};
 
-		std::shared_ptr<BASE::GRAPHIC::IRectangle> personHealth = std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARWidth, PROGRESSBARHeight, "HEALTH");
+		std::shared_ptr<BASE::GRAPHIC::IRectangle> personHealth;
+		personHealth = std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARWidth, PROGRESSBARHeight, "HEALTH");
 		personHealth->set_color(BASE::GRAPHIC::Color::Red);
-		std::shared_ptr<BASE::GRAPHIC::IRectangle> personHealthBackground = std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARBackgroundWidth, PROGRESSBARBackgroundHeight, "HEALTHBackground");
-		personHealthBackground->set_texture(dataBase.get_resources("healthPanel.png", {0, 0, 450, 150}));
 
-		std::shared_ptr<BASE::GRAPHIC::IRectangle> enemyHealth = std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARWidth, PROGRESSBARHeight, "ENEMY_HEALTH");
+		std::shared_ptr<BASE::GRAPHIC::Sprite> personHealthBackground;
+		personHealthBackground = std::make_shared<BASE::GRAPHIC::Sprite>(dataBase.get_resources("healthPanel.png", {0, 0, 450, 150}),
+																			"ENEMY_HEALTHBackground");
+
+		personHealthBackground->set_scale(SPRITEScale);
+
+
+		std::shared_ptr<BASE::GRAPHIC::IRectangle> enemyHealth;
+		enemyHealth	= std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARWidth, PROGRESSBARHeight, "ENEMY_HEALTH");
 		enemyHealth->set_color(BASE::GRAPHIC::Color::Purple);
 		enemyHealth->visible(false);
-		std::shared_ptr<BASE::GRAPHIC::IRectangle> enemyHealthBackground = std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARBackgroundWidth, PROGRESSBARBackgroundHeight, "ENEMY_HEALTHBackground");
-		enemyHealthBackground->set_texture(dataBase.get_resources("healthPanel.png", {0, 0, 450, 150}));
+
+
+		std::shared_ptr<BASE::GRAPHIC::Sprite> enemyHealthBackground;
+		enemyHealthBackground = std::make_shared<BASE::GRAPHIC::Sprite>(dataBase.get_resources("healthPanel.png", {0, 0, 450, 150}),
+																			"ENEMY_HEALTHBackground");
+
+		enemyHealthBackground->set_scale(SPRITEScale);
 
 		auto text = std::make_shared<BASE::GRAPHIC::Text>(RESOURCES_PATH + "Font.otf", personTest->get_id());
-		text->set_text("Hello, World");
+		text->visible(true);
+		text->set_color(BASE::GRAPHIC::Color::Black);
+		text->set_font_size(20);
+
+
+		auto text1 = std::make_shared<BASE::GRAPHIC::Text>(RESOURCES_PATH + "Font.otf", personTest1->get_id());
 		text->visible(true);
 		text->set_color(BASE::GRAPHIC::Color::Black);
 		text->set_font_size(20);
@@ -439,35 +514,75 @@ int main()
 		std::pair interactionStaticObjectSide(MOVE::Side::NONE, ""s);
 		std::pair interactionDynamicObjectSide(MOVE::Side::NONE, ""s);
 		BASE::DATA::RectangleF loopRect = {};
-		BASE::DATA::RectangleF loopRectTemp = {};
 		BASE::DATA::Vector2F loopVec = {};
-		BASE::DATA::Vector2F loopVecTemp = {};
 		size_t loopContainerIter = 0;
 		size_t loopContainerSize = 0;
-		std::shared_ptr<NPC::Npc>* loopNpcElement = nullptr;
+		std::shared_ptr<NPC::Npc>* loopDynamicElement = nullptr;
+		std::shared_ptr<NPC::Npc>* loopDynamicElementCollision = nullptr;
+		ANIMATION::Anim* loopDynamicElementAnimation = nullptr;
 		std::shared_ptr<BASE::GRAPHIC::IText>* loopTextElement = nullptr;
 //}
 //END VARIABLE FOR USE IN LOOP
 
 //VISUAL OBJECT
 //{
-		std::vector<std::shared_ptr<NPC::Npc>> dynamicObjectList = {personTest};
-		dynamicObjectList.reserve(1);
+		std::vector<std::shared_ptr<NPC::Npc>> dynamicObjectList;
+		dynamicObjectList.reserve(2);
+		dynamicObjectList.emplace_back(std::move(personTest));
+		dynamicObjectList.emplace_back(std::move(personTest1));
 
 		std::vector<std::shared_ptr<NPC::QuestNpc>> questObjectList;
 		questObjectList.reserve(1);
 
-		std::vector<std::shared_ptr<BASE::GRAPHIC::IText>> dynamicElementStatus = {text};
-		dynamicElementStatus.reserve(1);
+		std::vector<std::shared_ptr<BASE::GRAPHIC::IText>> dynamicElementStatus;
+		dynamicElementStatus.reserve(2);
+		dynamicElementStatus.emplace_back(std::move(text));
+		dynamicElementStatus.emplace_back(std::move(text1));
+
+		std::array<ANIMATION::Anim, 2> dynamicElementAnimation = {0.2F, 0.2F};
+
+		loopContainerSize = dynamicObjectList.size();
+		for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
+		{
+			loopDynamicElementAnimation = &dynamicElementAnimation.at(loopContainerIter);
+			loopDynamicElementAnimation->set_object(dynamicObjectList.at(loopContainerIter));
+		}
+
+		std::random_device rand_device;
+		std::mt19937 mt(rand_device());
+		std::uniform_real_distribution<float> uid (0.1F, 1.F);
+
 //}
 //END VISUAL OBJECT
 
+
 		while (app->is_open() && isRun)
 		{
+//CLEAR ALL LOOP VARIABLE
+			
+			attackDamage = {-1, -1};
+			interactionStaticObjectSide = {MOVE::Side::NONE, ""s};
+			interactionDynamicObjectSide = {MOVE::Side::NONE, ""s};
+			loopRect = {};
+			loopVec = {};
+			loopContainerIter = 0;
+			loopContainerSize = 0;
+			loopDynamicElement = nullptr;
+			loopDynamicElementCollision = nullptr;
+			loopTextElement = nullptr;
+
+//END CLEAR LOOP VARIABLE
+
+
 			clock.restart();
 			time = clock.get_work_time();
 
 			anim.run(time * DELAY);
+
+			for(auto& value : dynamicElementAnimation)
+			{
+				value.run(time * DELAY);
+			}
 
 //EVENT HANDLER
 //{
@@ -480,22 +595,24 @@ int main()
 //END EVENT HANDLER
 
 
-//POSITIONING HEALTH BAR
+//POSITIONING HEALTH BAR AND UPDATE VALUE
 //{
 			loopRect = view->get_global_bounds();
 			personHealth->set_position((loopRect.left + PROGRESSBARHeight),
-										(loopRect.top + PROGRESSBARHeight));
+										((loopRect.top + loopRect.height) - (PROGRESSBARHeight * 2)));
 			personHealth->set_size(convert_value(person->get_max_health(),
 													PROGRESSBARWidth,
 													person->get_health()), 
 									PROGRESSBARHeight); 
-			personHealthBackground->set_position((loopRect.left + 10),
-													(loopRect.top + 10));
+			loopVec = personHealth->get_position();
+			personHealthBackground->set_position((loopVec.x - 10),
+													(loopVec.y - 10));
 
 			loopRect = view->get_global_bounds();
-			enemyHealth->set_position((((loopRect.left + loopRect.width) - PROGRESSBARWidth) - PROGRESSBARHeight),
+			enemyHealth->set_position((loopRect.left + (loopRect.width * 0.5) - (PROGRESSBARWidth * 0.5)),
 										(loopRect.top + PROGRESSBARHeight));
 			loopVec = enemyHealth->get_position();
+
 			enemyHealthBackground->set_position((loopVec.x - 10),
 												(loopVec.y - 10));
 //}
@@ -506,53 +623,43 @@ int main()
 
 //CHECK PERSON INTERACTIOIN WITH MAP OBJECT
 //{
-			if(const auto& value = collision.check_object_collision(*currentLayout, person); value.first != MOVE::Side::NONE)
+			if(const auto& value = collision.check_object_collision(*currentLayout, person); 
+					value.first != MOVE::Side::NONE)
 			{
 				person->block_side(value.first, true);
 				view->block_side(value.first, true);
+
+				interactionStaticObjectSide = value;
 			}
 //}
 //END CHECK PERSON INTERACTIOIN WITH MAP OBJECT
 
 //CHECK NPC INTERACTIOIN WITH MAP OBJECT
 //{
-			for(const auto& dynamicObject : dynamicObjectList)
+			loopContainerSize = dynamicObjectList.size();
+			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 			{
-				dynamicObject->unblock_all_side();
+				loopDynamicElement = &dynamicObjectList.at(loopContainerIter);
+				(*loopDynamicElement)->unblock_all_side();
 
-				if(auto value = collision.check_object_collision(*currentLayout, dynamicObject); value.first != MOVE::Side::NONE)
+				if(const auto& value = collision.check_object_collision(*currentLayout, (*loopDynamicElement)); 
+						value.first != MOVE::Side::NONE)
 				{
-					dynamicObject->block_side(value.first, true);
+					(*loopDynamicElement)->block_side(value.first, true);
 				}	
 
 	//CHECK PERSON INTERACTIOIN WITH NPC OBJECT
 	//{
-				if(auto value = collision.check_object_collision(person, dynamicObject); value.first != MOVE::Side::NONE)
+				if(const auto& value = collision.check_object_collision(person, (*loopDynamicElement));
+						value.first != MOVE::Side::NONE)
 				{
 					person->block_side(value.first, true);
 					view->block_side(value.first, true);
 
-					attackDamage = attack.attack(person,
-												dynamicObject,
-												personAttackStatus,
-												time * DELAY);
-					if(attackDamage.first != -1)
-					{
-						loopTextElement = &(*std::find_if(dynamicElementStatus.begin(), dynamicElementStatus.end(),
-								[&dynamicObject](auto value){return value->get_id() == dynamicObject->get_id();}));
+					loopDynamicElementCollision = loopDynamicElement;
+					interactionDynamicObjectSide = value;
 
-						(*loopTextElement)->set_text(std::to_string(attackDamage.first));
-					}
-
-					enemyHealth->set_size(convert_value(dynamicObject->get_max_health(),
-														PROGRESSBARWidth, 
-														dynamicObject->get_health()), 
-											PROGRESSBARHeight); 
-					enemyHealth->visible(true);
-				}
-				else
-				{
-					enemyHealth->visible(false);
+					(*loopDynamicElement)->block_all_side();
 				}
 	//}
 	//END CHECK PERSON INTERACTIOIN WITH NPC OBJECT
@@ -565,7 +672,8 @@ int main()
 //{
 			for(const auto& questNpc : questObjectList)
 			{
-				if(auto value = collision.check_object_collision(person, questNpc); value.first != MOVE::Side::NONE)
+				if(const auto& value = collision.check_object_collision(person, questNpc);
+						value.first != MOVE::Side::NONE)
 				{
 					person->block_side(value.first, true);
 					view->block_side(value.first, true);
@@ -578,7 +686,8 @@ int main()
 			{
 				mover->move(personMoveSide, person, time / DELAY , SPEED);
 				mover->move(personMoveSide, view, time / DELAY , SPEED);
-				personAttackSide = personMoveSide;
+
+				personLastMoveSide = personMoveSide;
 
 				anim.set_animation(&person->get_animation_walk(personMoveSide));
 				anim.stop(false);
@@ -586,9 +695,15 @@ int main()
 
 			if(personAttackStatus)
 			{
-				anim.set_animation(&person->get_animation_attack(personAttackSide));
+				if(interactionDynamicObjectSide.first != MOVE::Side::NONE)
+				{
+					anim.set_animation(&person->get_animation_attack(interactionDynamicObjectSide.first));
+				}
+				else
+				{
+					anim.set_animation(&person->get_animation_attack(personLastMoveSide));
+				}
 				anim.stop(false);
-
 			}
 
 			if(personMoveSide == MOVE::Side::NONE
@@ -599,6 +714,30 @@ int main()
 					anim.stop(true);
 				}
 			}
+
+
+//IF PERSON INTERSECTS DYNAMIC OBJECT, LOOPDYNAMICELEMENTCOLLISION != NULLPTR
+//DYNAMIC OBJECT ATTACK PERSON, AND UPDATE DYNAMIC OBJECT HEALTH BAR
+//{
+			if(loopDynamicElementCollision)
+			{
+				attackDamage = attack.attack(person,
+											(*loopDynamicElementCollision),
+											personAttackStatus,
+											time * DELAY);
+
+				enemyHealth->set_size(convert_value((*loopDynamicElementCollision)->get_max_health(),
+													PROGRESSBARWidth, 
+													(*loopDynamicElementCollision)->get_health()), 
+										PROGRESSBARHeight); 
+				enemyHealth->visible(true);
+			}
+			else
+			{
+				enemyHealth->visible(false);
+			}
+//}
+//END
 	
 //DRAW OBJECTS
 //{
@@ -612,21 +751,47 @@ int main()
 				app->draw(enemyHealth);
 			}
 
-			app->draw(person);
 
 			loopContainerSize = dynamicObjectList.size();
 			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 			{
-				loopNpcElement = &dynamicObjectList.at(loopContainerIter);
-				app->draw(*loopNpcElement);
+				loopDynamicElement = &dynamicObjectList.at(loopContainerIter);
+
+				mover->move(MOVE::Side::DOWN, *loopDynamicElement, time / DELAY, uid(mt));
+
+				loopDynamicElementAnimation = &dynamicElementAnimation.at(loopContainerIter);
+
+				if(interactionDynamicObjectSide.first == MOVE::Side::NONE)
+				{
+					loopDynamicElementAnimation->set_animation(&(*loopDynamicElement)->get_animation_walk(MOVE::Side::DOWN));
+				}
+				else
+				{
+					loopDynamicElementAnimation->set_animation(&(*loopDynamicElement)->get_animation_attack(
+											inversion_side(interactionDynamicObjectSide.first)));
+				}
+
+				loopDynamicElementAnimation->stop(false);
+			}
+
+
+			loopContainerSize = dynamicObjectList.size();
+			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
+			{
+				loopDynamicElement = &dynamicObjectList.at(loopContainerIter);
+				app->draw(*loopDynamicElement);
 
 				loopTextElement = &dynamicElementStatus.at(loopContainerIter);
 				loopRect = (*loopTextElement)->get_global_bounds();
-				loopVec = {0, loopRect.height * 2};
+				loopVec = {15, loopRect.height * 2};
 
-				(*loopTextElement)->set_position((*loopNpcElement)->get_position() - loopVec);
+				(*loopTextElement)->set_position((*loopDynamicElement)->get_position() - loopVec);
+				(*loopTextElement)->set_text(std::to_string((*loopDynamicElement)->get_health()) + "/" + std::to_string((*loopDynamicElement)->get_max_health()));
+
 				app->draw(*loopTextElement);
 			}
+
+			app->draw(person);
 //}
 //END DRAW OBJECTS
 
