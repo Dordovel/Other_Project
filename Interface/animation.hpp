@@ -28,6 +28,7 @@ namespace PROJECT::ANIMATION
 			virtual void run(unsigned int delta) noexcept = 0;
 			virtual void stop(bool stop) noexcept = 0;
 			virtual bool end() const noexcept = 0;
+			virtual void reset() noexcept = 0;
 			virtual void loop(bool loop) noexcept = 0;
 
 			virtual ~IAnim() = default;

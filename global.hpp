@@ -2,6 +2,7 @@
 #include "./struct/vectorobject.hpp"
 #include <map>
 
+inline constexpr float ANIMATION_FRAME = 0.2F;
 inline constexpr int SPEED = 2;
 inline constexpr float DELAY = 4;
 inline const static PROJECT::BASE::DATA::Vector2F OBJECT_SCALE = {1, 1.3f};

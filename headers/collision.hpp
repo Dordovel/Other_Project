@@ -1,7 +1,7 @@
 #pragma once
 #include "../Interface/icollision.hpp"
-#include "../graphicobject/circle.hpp"
 #include "./physics.hpp"
+#include "../object/object.hpp"
 
 namespace PROJECT::COLLISION
 {
@@ -10,19 +10,20 @@ namespace PROJECT::COLLISION
 		private:
 
 			PROJECT::PHYSICS::Physics _physics = {};
-			std::shared_ptr<DI> _circleRight;
-			std::shared_ptr<DI> _circleLeft;
-			std::shared_ptr<DI> _circleUp;
-			std::shared_ptr<DI> _circleDown;
+			std::shared_ptr<OBJECT> _circleRight;
+			std::shared_ptr<OBJECT> _circleLeft;
+			std::shared_ptr<OBJECT> _circleUp;
+			std::shared_ptr<OBJECT> _circleDown;
 
 
 		public:
 			std::pair<PROJECT::MOVE::Side, std::string> check_object_collision(const std::shared_ptr<PROJECT::COLLECTION::ILayout>& lv,
-																				const std::shared_ptr<DI>& rv ) noexcept override;
+																				const std::shared_ptr<INTERACTION>& rv ) noexcept override;
 
-			std::pair<PROJECT::MOVE::Side, std::string> check_object_collision(const std::shared_ptr<DI>& lv, const std::shared_ptr<DI>& rv) noexcept override;
+			std::pair<PROJECT::MOVE::Side, std::string> check_object_collision(const std::shared_ptr<INTERACTION>& lv,
+																				const std::shared_ptr<INTERACTION>& rv) noexcept override;
 
-			Collision();
+			Collision(std::shared_ptr<OBJECT>&& rail);
 			~Collision();
 	};
 };

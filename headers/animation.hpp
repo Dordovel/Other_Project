@@ -30,8 +30,6 @@ namespace PROJECT::ANIMATION
 
 			std::shared_ptr<ANIMATED> _object;
 
-			void reset() noexcept;
-
 		public:
 			void set_object(const std::shared_ptr<ANIMATED>& object) noexcept override;
 			void set_animation(IAnimation* anim) noexcept override;
@@ -39,6 +37,7 @@ namespace PROJECT::ANIMATION
 			void stop(bool stop) noexcept override;
 			void loop(bool loop) noexcept override;
 			bool end() const noexcept override;
+			void reset() noexcept override;
 
 			Anim(float param);
 	};

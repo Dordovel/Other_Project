@@ -3,16 +3,6 @@
 
 namespace PROJECT::EVENT
 {
-    Events::Events(std::string_view id):_id(id)
-    {
-        std::cout<<"Events(): "<< this->get_id()<< '\n';
-    }
-
-    Events::~Events()
-    {
-        std::cout<<"\t~Events(): "<< this->get_id()<< '\n';
-    }
-
     void Events::set_close_window_event(const std::function<void()>& closeWindowEvent) noexcept
     {
         this->_closeWindowEvent = closeWindowEvent;
@@ -189,10 +179,5 @@ namespace PROJECT::EVENT
         eventHandler.fun = fun;
 
         this->_eventMouseReleasedPool.push_back(eventHandler);
-    }
-
-    std::string Events::get_id() const noexcept
-    {
-        return this->_id;
     }
 };

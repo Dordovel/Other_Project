@@ -10,10 +10,9 @@
 
 namespace PROJECT::BASE::GRAPHIC
 {
-	Rectangle::Rectangle(float width, float height, std::string_view id):Rectangle(PROJECT::BASE::DATA::Vector2F{width, height}, id){}
+	Rectangle::Rectangle(float width, float height):Rectangle(PROJECT::BASE::DATA::Vector2F{width, height}){}
 
-	Rectangle::Rectangle(PROJECT::BASE::DATA::Vector2F size, std::string_view id):_rectangle(std::make_shared<sf::RectangleShape>(size)),
-													_id(id),
+	Rectangle::Rectangle(PROJECT::BASE::DATA::Vector2F size):_rectangle(std::make_shared<sf::RectangleShape>(size)),
 													_isVisible(false),
 													_up(false),
 													_down(false),
@@ -28,6 +27,14 @@ namespace PROJECT::BASE::GRAPHIC
 		std::cout<<"\t~Rectangle(): "<<this->get_id()<< '\n';
 	}
 
+	std::shared_ptr<OBJECT> Rectangle::clone() noexcept
+	{
+		std::shared_ptr<Rectangle> copy = std::make_shared<Rectangle>(*this);
+		copy->_rectangle = std::make_shared<sf::RectangleShape>(*(this->_rectangle.get()));
+
+		return copy;
+	}
+
 	PROJECT::BASE::DATA::DrawableObject Rectangle::draw() const noexcept
 	{
 		return {this->_rectangle};
@@ -37,6 +44,12 @@ namespace PROJECT::BASE::GRAPHIC
 	{
 		return this->_id;
 	}
+
+	void Rectangle::set_id(std::string_view id) noexcept
+	{
+		this->_id = id;
+	}
+
 
 	void Rectangle::set_position(const PROJECT::BASE::DATA::Vector2F& position) noexcept
 	{

@@ -10,10 +10,10 @@ namespace PROJECT::COLLISION
 	namespace 
 	{ 
 		void positioning(const PROJECT::BASE::DATA::RectangleF rect,
-							const std::shared_ptr<DI>& circleRight,
-							const std::shared_ptr<DI>& circleLeft,
-							const std::shared_ptr<DI>& circleUp,
-							const std::shared_ptr<DI>& circleDown)
+							const std::shared_ptr<DYNAMIC>& circleRight,
+							const std::shared_ptr<DYNAMIC>& circleLeft,
+							const std::shared_ptr<DYNAMIC>& circleUp,
+							const std::shared_ptr<DYNAMIC>& circleDown)
 		{
 			circleRight->set_position((rect.left + rect.width), (rect.top + (rect.height / 2)));
 			circleLeft->set_position(rect.left, (rect.top + (rect.height / 2)));
@@ -24,17 +24,20 @@ namespace PROJECT::COLLISION
 
 
 
-	Collision::Collision():_circleRight(std::make_shared<PROJECT::BASE::GRAPHIC::Circle>(4, "RIGHT")),
-							_circleLeft(std::make_shared<PROJECT::BASE::GRAPHIC::Circle>(4, "LEFT")),
-							_circleUp(std::make_shared<PROJECT::BASE::GRAPHIC::Circle>(4, "UP")),
-							_circleDown(std::make_shared<PROJECT::BASE::GRAPHIC::Circle>(4, "DOWN"))
-	{}
+	Collision::Collision(std::shared_ptr<OBJECT>&& rail)
+	{
+		this->_circleUp = rail->clone();
+		this->_circleLeft = rail->clone();
+		this->_circleRight = rail->clone();
+		this->_circleDown = rail->clone();
+	}
 
 	Collision::~Collision()
 	{
 	}
 
-	std::pair<PROJECT::MOVE::Side, std::string> Collision::check_object_collision(const std::shared_ptr<DI>& lv, const std::shared_ptr<DI>& rv) noexcept
+	std::pair<PROJECT::MOVE::Side, std::string> Collision::check_object_collision(const std::shared_ptr<INTERACTION>& lv,
+																					const std::shared_ptr<INTERACTION>& rv) noexcept
 	{	
 		BASE::DATA::RectangleF rect;
 		MOVE::Side side = MOVE::Side::NONE;
@@ -71,7 +74,7 @@ namespace PROJECT::COLLISION
 	}
 
 	std::pair<PROJECT::MOVE::Side, std::string> Collision::check_object_collision(const std::shared_ptr<PROJECT::COLLECTION::ILayout>& lv,
-																				const std::shared_ptr<DI>& rv ) noexcept
+																				const std::shared_ptr<INTERACTION>& rv ) noexcept
 	{
 		using namespace PROJECT;
 

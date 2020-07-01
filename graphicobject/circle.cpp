@@ -7,8 +7,7 @@
 
 namespace PROJECT::BASE::GRAPHIC
 {
-	Circle::Circle(float radius, std::string_view id):_circleShape(new sf::CircleShape(radius)),
-															_id(id),
+	Circle::Circle(float radius):_circleShape(new sf::CircleShape(radius)),
 															_isVisible(false),
 															_up(false),
 															_down(false),
@@ -27,6 +26,14 @@ namespace PROJECT::BASE::GRAPHIC
 		std::cout<<"\t~Circle(): "<< this->get_id()<< '\n';
 	}
 
+	std::shared_ptr<OBJECT> Circle::clone() noexcept
+	{
+		std::shared_ptr<Circle> copy = std::make_shared<Circle>(*this);
+		copy->_circleShape = std::make_shared<sf::CircleShape>(*(this->_circleShape.get()));
+
+		return copy;
+	}
+
 	PROJECT::BASE::DATA::DrawableObject Circle::draw() const noexcept
 	{
 		return {this->_circleShape};
@@ -35,6 +42,11 @@ namespace PROJECT::BASE::GRAPHIC
 	std::string Circle::get_id() const noexcept
 	{
 		return this->_id;
+	}
+
+	void Circle::set_id(std::string_view id) noexcept
+	{
+		this->_id = id;
 	}
 
 	void Circle::set_position(const PROJECT::BASE::DATA::Vector2F& position) noexcept

@@ -7,19 +7,16 @@
 
 namespace PROJECT::COLLECTION
 {
-    Layout::Layout(std::string_view pathToMap , std::string_view mapFileName, std::string_view id):
-                                                                                    _mapLoader(std::make_shared<tmx::MapLoader>(pathToMap.data())),
-                                                                                    _id(id),
-                                                                                    _isVisible(true)
+    Layout::Layout(std::string_view pathToMap , std::string_view mapFileName):_mapLoader(std::make_shared<tmx::MapLoader>(pathToMap.data())),
+                                                                                _isVisible(true)
     {
-        std::cout<<"Layout(): "<< this->get_id()<< '\n';
         std::cout<<pathToMap<< mapFileName<< '\n';
         this->load_map_from_file(mapFileName);
     }
 
     Layout::~Layout()
     {
-        std::cout<<"~Layout(): "<<this->get_id()<< '\n';
+        std::cout<<"\t~Layout(): \n";
     }
 
     void Layout::load_map_from_file(std::string_view pathToFile)
@@ -53,11 +50,6 @@ namespace PROJECT::COLLECTION
     PROJECT::BASE::DATA::DrawableObject Layout::draw() const noexcept
     {
         return PROJECT::BASE::DATA::DrawableObject{this->_mapLoader};
-    }
-
-    std::string Layout::get_id() const noexcept
-    {
-        return this->_id;
     }
 
     void Layout::visible(bool flag) noexcept

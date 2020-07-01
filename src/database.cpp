@@ -56,8 +56,8 @@ namespace PROJECT::DATABASE
 		this->_rectList.emplace(PersonProfession::MARTHA_BLONDE, "/hero/Martha/Martha_Blonde.png" );
 		this->_rectList.emplace(PersonProfession::JEREMY_GREEN, "/hero/Jeremy/Jeremy_Green.png" );
 		this->_rectList.emplace(PersonProfession::MARTHA_GREEN, "/hero/Martha/Martha_Green.png" );
-		this->_rectList.emplace(PersonProfession::JEREMY_PINK, "/hero/Jeremy/Jeremy Pink.png" );
-		this->_rectList.emplace(PersonProfession::MARTHA_PINK, "/hero/Jeremy/Jeremy Pink.png" );
+		this->_rectList.emplace(PersonProfession::JEREMY_PINK, "/hero/Jeremy/Jeremy_Pink.png" );
+		this->_rectList.emplace(PersonProfession::MARTHA_PINK, "/hero/Martha/Martha_Pink.png" );
 	}
 
 	DataBaseResult DataBase::get_resources(PersonProfession person, PROJECT::MOVE::Side side) const noexcept

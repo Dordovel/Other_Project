@@ -32,7 +32,7 @@ std::string menu_builder(const std::shared_ptr<PROJECT::APPLICATION::IApplicatio
 
 	bool isRun = true;
 
-    std::shared_ptr<PROJECT::EVENT::IEvents> events = std::make_shared<PROJECT::EVENT::Events>(EVENT_MENU);
+    std::shared_ptr<PROJECT::EVENT::IEvents> events = std::make_shared<PROJECT::EVENT::Events>();
 
 	std::string item_id;
 

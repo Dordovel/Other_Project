@@ -5,6 +5,33 @@
 
 namespace PROJECT::BASE::GRAPHIC
 {
+	Sprite::Sprite(const PROJECT::DATABASE::DataBaseResult& data):_isVisible(true),
+																	_up(false),
+																	_down(false),
+																	_left(false),
+																	_right(false)
+	{
+		this->_texture = std::make_shared<sf::Texture>();
+		this->_texture->loadFromFile(data.rv);
+		this->_sprite = std::make_shared<sf::Sprite>(*(_texture), data.rect);
+
+		std::cout<<"Sprite(): "<<this->get_id()<< '\n';
+	}
+
+	Sprite::~Sprite()
+	{
+		std::cout<<"\t~Sprite(): "<<this->get_id()<< '\n';
+	}
+
+	std::shared_ptr<OBJECT> Sprite::clone() noexcept
+	{
+		std::shared_ptr<Sprite> copy = std::make_shared<Sprite>(*this);
+		copy->_sprite = std::make_shared<sf::Sprite>(*(this->_sprite.get()));
+		copy->_texture = std::make_shared<sf::Texture>(*(this->_texture.get()));
+
+		return copy;
+	}
+
 	PROJECT::BASE::DATA::DrawableObject Sprite::draw() const noexcept
 	{
 		return {this->_sprite};
@@ -62,23 +89,9 @@ namespace PROJECT::BASE::GRAPHIC
 		return this->_id;
 	}
 
-	Sprite::Sprite(const PROJECT::DATABASE::DataBaseResult& data, std::string_view id):_id(id),
-												_isVisible(true),
-												_up(false),
-												_down(false),
-												_left(false),
-												_right(false)
+	void Sprite::set_id(std::string_view id) noexcept
 	{
-		this->_texture = std::make_shared<sf::Texture>();
-		this->_texture->loadFromFile(data.rv);
-		this->_sprite = std::make_shared<sf::Sprite>(*(_texture), data.rect);
-
-		std::cout<<"Sprite(): "<<this->get_id()<< '\n';
-	}
-
-	Sprite::~Sprite()
-	{
-		std::cout<<"\t~Sprite(): "<<this->get_id()<< '\n';
+		this->_id = id;
 	}
 
 	void Sprite::set_position(const PROJECT::BASE::DATA::Vector2F& position) noexcept

@@ -29,7 +29,7 @@ namespace PROJECT::NPC
 			int get_points() const noexcept override;
 			void set_points(int points) noexcept override;
 
-			explicit Npc(const PROJECT::DATABASE::DataBaseResult& data, std::string_view id);
+			explicit Npc(const PROJECT::DATABASE::DataBaseResult& data);
 
 			void add_animation_walk(PROJECT::MOVE::Side side, const std::array<PROJECT::BASE::DATA::RectangleI, 3>& rect) noexcept;
 

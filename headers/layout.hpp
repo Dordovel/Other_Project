@@ -11,7 +11,6 @@ namespace PROJECT::COLLECTION
     {   
         private:
             std::shared_ptr<tmx::MapLoader> _mapLoader;
-            std::string  _id;
             bool _isVisible;
             std::map<std::string, std::string> _mapStaticObjectInString = {
                     {CollectionObject::TREE, "Tree"}, {CollectionObject::BORDER, "Border"}
@@ -22,11 +21,9 @@ namespace PROJECT::COLLECTION
             void load_map_from_file(std::string_view pathToMap);
 
         public:
-            Layout(std::string_view pathToMap, std::string_view mapFileName, std::string_view id);
+            Layout(std::string_view pathToMap, std::string_view mapFileName);
 
             std::map<std::string, std::vector<PROJECT::BASE::DATA::RectangleF>> get_objects(const PROJECT::BASE::DATA::RectangleF &rectangleF) const noexcept override;
-
-            std::string get_id() const noexcept override;
 
             void visible(bool flag) noexcept override;
 

@@ -11,7 +11,7 @@ namespace PROJECT::NPC
 			int _points = {0};
 
 		public:
-			explicit QuestNpc(const PROJECT::DATABASE::DataBaseResult& data, std::string_view id);
+			explicit QuestNpc(const PROJECT::DATABASE::DataBaseResult& data);
 
 			int get_points() const noexcept override;
 			void set_points(int points) noexcept override;

@@ -13,7 +13,10 @@ namespace PROJECT::MOVE
 
 namespace PROJECT::NPC
 {
-	class INpc : public IDamage, public IHealth, public IPoints, public IArmor
+	class INpc : public IDamage,
+				public IHealth,
+				public IPoints,
+				public IArmor
 	{
 		public:
 

@@ -1,6 +1,5 @@
 #pragma once
 #include <functional>
-#include "../object/identifiable.hpp"
 
 namespace PROJECT::EVENT
 {
@@ -12,7 +11,7 @@ namespace PROJECT::EVENT
         NONE
     };
 
-    class IEvents : public IDENTIFIABLE
+    class IEvents
     {
         public:
             virtual void set_close_window_event(const std::function<void()>& closeWindowEvent) noexcept = 0;

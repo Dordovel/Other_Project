@@ -2,7 +2,6 @@
 #include <vector>
 #include "../object/drawable.hpp"
 #include "./icollection.hpp"
-#include "../object/identifiable.hpp"
 
 namespace PROJECT::BASE::DATA
 {
@@ -11,7 +10,7 @@ namespace PROJECT::BASE::DATA
 
 namespace PROJECT::COLLECTION
 {
-  class ILayout: public DRAWABLE, public PROJECT::COLLECTION::ICollection, public IDENTIFIABLE
+  class ILayout: public DRAWABLE, public PROJECT::COLLECTION::ICollection
   {
       public:
           virtual PROJECT::BASE::DATA::Vector2UI get_size() const noexcept = 0;

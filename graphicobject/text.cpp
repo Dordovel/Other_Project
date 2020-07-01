@@ -8,8 +8,7 @@
 
 namespace PROJECT::BASE::GRAPHIC
 {
-	Text::Text(std::string_view pathToFontFile, std::string_view id):_text(std::make_shared<sf::Text>()),
-																	_id(id),
+	Text::Text(std::string_view pathToFontFile):_text(std::make_shared<sf::Text>()),
 																	_isVisible(true),
 																	_up(false),
 																	_down(false),
@@ -26,6 +25,14 @@ namespace PROJECT::BASE::GRAPHIC
 		std::cout<<"\t~Text(): "<< this->get_id()<< '\n';
 	}
 
+	std::shared_ptr<OBJECT> Text::clone() noexcept
+	{
+		std::shared_ptr<Text> copy = std::make_shared<Text>(*this);
+		copy->_text = std::make_shared<sf::Text>(*(this->_text.get()));
+
+		return copy;
+	}
+
 	PROJECT::BASE::DATA::DrawableObject Text::draw() const noexcept
 	{
 		return {this->_text};
@@ -34,6 +41,11 @@ namespace PROJECT::BASE::GRAPHIC
 	std::string Text::get_id() const noexcept
 	{
 		return this->_id;
+	}
+
+	void Text::set_id(std::string_view id) noexcept
+	{
+		this->_id = id;
 	}
 
 	void Text::set_position(const PROJECT::BASE::DATA::Vector2F& position) noexcept

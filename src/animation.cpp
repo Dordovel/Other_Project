@@ -40,27 +40,30 @@ namespace PROJECT::ANIMATION
 	{
 		if (!this->_stop && this->_anim != nullptr)
 		{
-			this->_currentTime += sf::milliseconds(delta);
-
-			if (this->_currentTime >= this->_frameTime)
+			if(this->_anim->get_frame_count() > 0)
 			{
-				this->_currentTime = sf::microseconds(this->_currentTime.asMicroseconds() % this->_frameTime.asMicroseconds());
+				this->_currentTime += sf::milliseconds(delta);
 
-				if (this->_currentFrame + 1 < this->_anim->get_frame_count())
-					this->_currentFrame++;
-				else
+				if (this->_currentTime >= this->_frameTime)
 				{
-					if (!this->_loop)
-					{
-						this->_stop = true;
-					}
+					this->_currentTime = sf::microseconds(this->_currentTime.asMicroseconds() % this->_frameTime.asMicroseconds());
+
+					if (this->_currentFrame + 1 < this->_anim->get_frame_count())
+						this->_currentFrame++;
 					else
 					{
-						this->_currentFrame = 0;
+						if (!this->_loop)
+						{
+							this->_stop = true;
+						}
+						else
+						{
+							this->_currentFrame = 0;
+						}
 					}
-				}
 
-				this->_object->set_texture_rect(this->_anim->get_frame(this->_currentFrame));
+					this->_object->set_texture_rect(this->_anim->get_frame(this->_currentFrame));
+				}
 			}
 		}
 	}
@@ -68,11 +71,6 @@ namespace PROJECT::ANIMATION
 	void Anim::stop(bool stop) noexcept 
 	{
 		this->_stop = stop;
-
-		if(stop)
-		{
-			this->reset();
-		}
 	}
 
 	bool Anim::end() const noexcept

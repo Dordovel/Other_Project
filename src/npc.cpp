@@ -2,7 +2,7 @@
 
 namespace PROJECT::NPC
 {
-	Npc::Npc(const PROJECT::DATABASE::DataBaseResult& data, std::string_view id):PROJECT::BASE::GRAPHIC::Sprite(data, id){}
+	Npc::Npc(const PROJECT::DATABASE::DataBaseResult& data):PROJECT::BASE::GRAPHIC::Sprite(data){}
 
 	float Npc::get_armor() const noexcept
 	{

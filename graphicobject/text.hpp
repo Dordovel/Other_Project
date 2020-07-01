@@ -19,11 +19,13 @@ namespace PROJECT::BASE::GRAPHIC
             bool _right;
 
         public:
-            explicit Text(std::string_view pathToFontFile, std::string_view id);
+			std::shared_ptr<OBJECT> clone() noexcept override;	
 
             PROJECT::BASE::DATA::DrawableObject draw() const noexcept override;
 
             std::string get_id() const noexcept override;
+
+            void set_id(std::string_view id) noexcept override;
 
             void set_position(const PROJECT::BASE::DATA::Vector2F& position) noexcept override;
 
@@ -63,10 +65,8 @@ namespace PROJECT::BASE::GRAPHIC
 
             void unblock_all_side() noexcept override;
 
+            explicit Text(std::string_view pathToFontFile);
+
             ~Text();
-
-			Text(Text&&) = default;
-
-			Text& operator= (Text&&) = default;
     };
 };

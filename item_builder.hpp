@@ -13,8 +13,9 @@ std::array<std::shared_ptr<PROJECT::BASE::GRAPHIC::Text>, N> build_items(std::ar
 
 	for(const auto& var : listId)
 	{
-		std::shared_ptr<PROJECT::BASE::GRAPHIC::Text> temp = std::make_shared<PROJECT::BASE::GRAPHIC::Text>(resourcesPath, var.first);
+		std::shared_ptr<PROJECT::BASE::GRAPHIC::Text> temp = std::make_shared<PROJECT::BASE::GRAPHIC::Text>(resourcesPath);
 		temp->set_text(var.second);
+		temp->set_id(var.first);
 
 		result[index] = temp;
 		index ++;

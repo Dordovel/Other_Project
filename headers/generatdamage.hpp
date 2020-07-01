@@ -1,14 +1,13 @@
 #pragma once
 
-#include "../Interface/attack.hpp"
 #include <random>
 #include <SFML/System/Time.hpp>
+#include "../Interface/inpc.hpp"
 
 namespace PROJECT::NPC
 {
-	class Attack : public PROJECT::NPC::IAttack
+	class DamageGenerator
 	{
-
 		private:
 			std::random_device _randDevice;
 			std::mt19937 _mt;
@@ -17,13 +16,13 @@ namespace PROJECT::NPC
 			sf::Time _frameTime;
 
 		public:
-			std::pair<int, int> attack(const std::shared_ptr<INpc>& person,
+			std::pair<int, int> generate(const std::shared_ptr<INpc>& person,
 										const std::shared_ptr<INpc>& enemy,
-										const bool personAttack, float delta) noexcept override;
+										const bool personAttack, float delta) noexcept;
 
-			void set_param(float time) noexcept;
+			void set_frame_time(float frameTime) noexcept;
 
-			Attack();
-			~Attack() = default;
+			DamageGenerator();
+			~DamageGenerator() = default;
 	};
 };

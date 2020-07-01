@@ -15,10 +15,13 @@ namespace PROJECT::BASE::GRAPHIC
             bool _up, _down, _left, _right;
 
         public:
+			std::shared_ptr<OBJECT> clone() noexcept override;	
 
             PROJECT::BASE::DATA::DrawableObject draw() const noexcept override;
 
             std::string get_id() const noexcept override;
+
+            void set_id(std::string_view id) noexcept override;
 
             void set_position(const PROJECT::BASE::DATA::Vector2F& position) noexcept override;
 
@@ -62,12 +65,8 @@ namespace PROJECT::BASE::GRAPHIC
 
             ~Rectangle();
 
-            explicit Rectangle(float width, float height, std::string_view id);
+            explicit Rectangle(float width, float height);
 
-            explicit Rectangle(PROJECT::BASE::DATA::Vector2F size, std::string_view id);
-
-			Rectangle(Rectangle&&) = default;
-
-			Rectangle& operator= (Rectangle&&) = default;
+            explicit Rectangle(PROJECT::BASE::DATA::Vector2F size);
     };
 };

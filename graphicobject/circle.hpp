@@ -17,10 +17,13 @@ namespace PROJECT::BASE::GRAPHIC
             bool _right;
 
         public:
+			std::shared_ptr<OBJECT> clone() noexcept override;	
 
             PROJECT::BASE::DATA::DrawableObject draw() const noexcept override;
 
             std::string get_id() const noexcept override;
+
+            void set_id(std::string_view id) noexcept override;
 
             void set_position(const PROJECT::BASE::DATA::Vector2F& position) noexcept override;
 
@@ -58,12 +61,8 @@ namespace PROJECT::BASE::GRAPHIC
 
             void set_points_count(int points) override;
 
-            explicit Circle(float radius, std::string_view id);
+            explicit Circle(float radius);
 
             ~Circle();
-
-			Circle(Circle&&) = default;
-
-			Circle& operator= (Circle&&) = default;
     };
 };

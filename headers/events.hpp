@@ -48,8 +48,7 @@ namespace PROJECT::EVENT
                 std::function<void()> fun;
             };
 
-            EventObject _eventObject; 
-            std::string _id;
+            EventObject _eventObject;
 
             std::function<void()> _closeWindowEvent;
 
@@ -91,9 +90,7 @@ namespace PROJECT::EVENT
 
             EventObject& get_event_object() noexcept override;
 
-            std::string get_id() const noexcept override;
-
-            ~Events();
-            Events(std::string_view id);
+            ~Events() = default;
+            Events() = default;
     };
 };

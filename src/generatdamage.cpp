@@ -1,21 +1,21 @@
-#include "../headers/attack.hpp"
+#include "../headers/generatdamage.hpp"
 #include <random>
 
 namespace PROJECT::NPC
 {
 
-	Attack::Attack()
+	DamageGenerator::DamageGenerator()
 	{
 		this->_mt = std::mt19937(this->_randDevice());
 	}
 
 	
-	void Attack::set_param(float time) noexcept
+	void DamageGenerator::set_frame_time(float frameTime) noexcept
 	{
-		this->_frameTime = sf::seconds(time);
+		this->_frameTime = sf::seconds(frameTime);
 	}
 
-	std::pair<int, int> Attack::attack(const std::shared_ptr<INpc>& person,
+	std::pair<int, int> DamageGenerator::generate(const std::shared_ptr<INpc>& person,
 										const std::shared_ptr<INpc>& enemy,
 										const bool personAttack, float delta) noexcept
 	{	

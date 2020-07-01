@@ -2,7 +2,7 @@
 
 namespace PROJECT::NPC
 {
-	QuestNpc::QuestNpc(const PROJECT::DATABASE::DataBaseResult& data, std::string_view id):Sprite(data, id){}
+	QuestNpc::QuestNpc(const PROJECT::DATABASE::DataBaseResult& data):Sprite(data){}
 
 	int QuestNpc::get_points() const noexcept
 	{

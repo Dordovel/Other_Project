@@ -21,6 +21,7 @@ namespace PROJECT::BASE::GRAPHIC
 
 
         public:
+			std::shared_ptr<OBJECT> clone() noexcept override;	
 
             PROJECT::BASE::DATA::DrawableObject draw() const noexcept override;
 
@@ -52,6 +53,8 @@ namespace PROJECT::BASE::GRAPHIC
 
             std::string get_id() const noexcept override;
 
+            void set_id(std::string_view id) noexcept override;
+
             void block_side(PROJECT::MOVE::Side side, bool status) noexcept override;
 
             void block_all_side() noexcept override;
@@ -60,12 +63,8 @@ namespace PROJECT::BASE::GRAPHIC
 
             void set_texture_rect(const PROJECT::BASE::DATA::RectangleI& rect) override;
 			
-            explicit Sprite(const PROJECT::DATABASE::DataBaseResult& data, std::string_view id);
+            explicit Sprite(const PROJECT::DATABASE::DataBaseResult& data);
 
             ~Sprite();
-			
-			Sprite(Sprite&&) = default;
-
-			Sprite& operator= (Sprite&&) = default;
     };
 };
