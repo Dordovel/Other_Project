@@ -263,7 +263,7 @@ int main()
 
 		std::shared_ptr<NPC::Npc> personTest = nullptr;
 		personTest = change_person_type(NPC_JEREMY_GREEN, dataBase);
-		personTest->set_position(1400, 1400);
+		personTest->set_position(1230, 1200);
 		personTest->set_scale(OBJECT_SCALE);
 		personTest->set_max_health(200);
 		personTest->set_health(personTest->get_max_health());
@@ -271,7 +271,7 @@ int main()
 
 		std::shared_ptr<NPC::Npc> personTest1 = nullptr;
 		personTest1 = change_person_type(NPC_MARTHA_GREEN, dataBase);
-		personTest1->set_position(1300, 1300);
+		personTest1->set_position(1170, 1200);
 		personTest1->set_scale(OBJECT_SCALE);
 		personTest1->set_max_health(200);
 		personTest1->set_health(personTest1->get_max_health());
@@ -321,9 +321,7 @@ int main()
 		view->zoom(DEFAULT_VIEW_ZOOM);
 
 		MOVE::Side personMoveSide = MOVE::Side::NONE;
-		MOVE::Side personLastMoveSide = MOVE::Side::DOWN;
 		MOVE::Side randMoveSide = MOVE::Side::DOWN;
-		bool personAttackStatus = false;
 		bool mouseLeftPressed = false;
 
 		std::pair forest = MAP_PATH.at("forest");
@@ -362,14 +360,14 @@ int main()
 					}
 				}, UNIT::CONTROL::EventHandlerType::EVENT_LOOP);
 
-		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::E, [&personAttackStatus]()
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::E, [&person]()
 				{
-					personAttackStatus = true;
+					person->set_state(NPC::State::ATTACK);
 				}, UNIT::CONTROL::EventHandlerType::NONE);
 
-		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::E, [&personAttackStatus]()
+		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::E, [&person]()
 				{
-					personAttackStatus = false;
+					person->set_state(NPC::State::IDLE);
 				});
 
 
@@ -500,21 +498,19 @@ int main()
 
 //VARIABLE FOR USE IN LOOP
 //{
-		std::pair damageDamage = {-1, -1};
 		BASE::DATA::RectangleF loopRect = {};
 		BASE::DATA::Vector2F loopVec = {};
 		size_t loopContainerIter = 0;
-        size_t loopContainerIterSecond = 0;
 		size_t loopContainerSize = 0;
-        size_t loopContainerSizeSecond = 0;
 		std::shared_ptr<NPC::Npc>* loopDynamicElement = nullptr;
 		std::shared_ptr<NPC::Npc>* loopDynamicElementCollision = nullptr;
 		std::shared_ptr<BASE::GRAPHIC::IText>* loopTextElement = nullptr;
-        std::pair interactionStaticObjectSide = {MOVE::Side::NONE, ""s};
         std::pair interactionDynamicObjectSide = {MOVE::Side::NONE, ""s};
 		ANIMATION::Anim* loopDynamicElementAnimation = nullptr;
 		std::array<std::pair<MOVE::Side, std::string>, 4> loopCollisionObjectList = {};
         std::pair<MOVE::Side, std::string>* loopCollisionElement = nullptr;
+		std::vector<std::pair<MOVE::Side, decltype(loopDynamicElement)>> loopDynamicCollisionList;
+		MOVE::Side personLastSide = MOVE::Side::NONE;
 //}
 //END VARIABLE FOR USE IN LOOP
 
@@ -532,21 +528,9 @@ int main()
 
 		while (app->is_open() && isRun)
 		{
-//EVENT HANDLER
-//{
-			while (app->check_events())
-			{
-			    keyboard.catch_events(app->event_handler());
-				mouse.catch_events(app->event_handler());
-			}
-			keyboard.catch_events();
-//}
-//END EVENT HANDLER
 
-//CLEAR ALL LOOP VARIABLE
+//RESET ALL LOOP VARIABLE
 			
-			damageDamage = {-1, -1};
-			interactionStaticObjectSide = {MOVE::Side::NONE, ""s};
 			interactionDynamicObjectSide = {MOVE::Side::NONE, ""s};
 			loopRect = {};
 			loopVec = {};
@@ -558,9 +542,39 @@ int main()
 			loopDynamicElementAnimation = nullptr;
 			loopCollisionObjectList = {};
 			loopCollisionElement = nullptr;
+			loopDynamicCollisionList.clear();
 
+			person->unblock_all_side();
+			person->set_state(NPC::State::IDLE);
+			view->unblock_all_side();
 
-//END CLEAR LOOP VARIABLE
+			loopContainerSize = dynamicObjectDispatcher.size();
+			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
+			{
+				loopDynamicElement = &dynamicObjectDispatcher.object(loopContainerIter);
+				if((*loopDynamicElement)->get_health() <= 0)
+				{
+					dynamicObjectDispatcher.delete_object(loopContainerIter);
+					loopContainerSize = dynamicObjectDispatcher.size();
+				}
+				else
+				{
+					(*loopDynamicElement)->set_state(NPC::State::IDLE);
+				}
+			}
+
+//END RESET LOOP VARIABLE
+
+//EVENT HANDLER
+//{
+			while (app->check_events())
+			{
+			    keyboard.catch_events(app->event_handler());
+				mouse.catch_events(app->event_handler());
+			}
+			keyboard.catch_events();
+//}
+//END EVENT HANDLER
 
 			clock.restart();
 			time = clock.get_work_time();
@@ -577,15 +591,6 @@ int main()
 
 //CHECK LIFE NPC OBJECT
 
-			loopContainerSize = dynamicObjectDispatcher.size();
-			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
-			{
-				loopDynamicElement = &dynamicObjectDispatcher.object(loopContainerIter);
-				if((*loopDynamicElement)->get_health() <= 0)
-				{
-					dynamicObjectDispatcher.delete_object(loopContainerIter);
-				}
-			}
 
 			auto var = app->map_pixel_to_coords(mouse.get_position_in_desktop());
 			if(mouseLeftPressed)
@@ -622,8 +627,6 @@ int main()
 //}
 //END POSITIONING HEALTH BAR
 
-			person->unblock_all_side();
-			view->unblock_all_side();
 
 //CHECK PERSON INTERACTIOIN WITH MAP OBJECT
 //{
@@ -647,31 +650,27 @@ int main()
                 ( *loopDynamicElement )->unblock_all_side();
 
                 loopCollisionObjectList = collision.check_object_collision(*currentLayout, ( *loopDynamicElement ));
-                loopContainerSizeSecond = loopCollisionObjectList.size();
-                for ( loopContainerIterSecond = 0;
-                      loopContainerIterSecond < loopContainerSizeSecond; ++loopContainerIterSecond )
+
+				for(auto&& var : loopCollisionObjectList)
                 {
-                    ( *loopDynamicElement )->block_side(loopCollisionObjectList.at(loopContainerIterSecond).first,
-                                                        true);
+                    ( *loopDynamicElement )->block_side(var.first, true);
                 }
 
-                //CHECK PERSON INTERACTIOIN WITH NPC OBJECT
+                //CHECK NPC OBJECT INTERACTIOIN WITH PERSON
                 //{
                 loopCollisionObjectList = collision.check_object_collision(person, ( *loopDynamicElement ));
-                loopContainerSizeSecond = loopCollisionObjectList.size();
-                for ( loopContainerIterSecond = 0;
-                      loopContainerIterSecond < loopContainerSizeSecond; ++loopContainerIterSecond )
+
+				for(auto&& var : loopCollisionObjectList)
                 {
-                    loopCollisionElement = &loopCollisionObjectList.at(loopContainerIterSecond);
-                    if ( loopCollisionElement->first != MOVE::Side::NONE )
+					person->block_side(var.first, true);
+					view->block_side(var.first, true);
+
+                    if ( var.first != MOVE::Side::NONE )
                     {
-                        person->block_side(loopCollisionElement->first, true);
-                        view->block_side(loopCollisionElement->first, true);
+						(*loopDynamicElement)->set_state(NPC::State::ATTACK);
+						(*loopDynamicElement)->block_all_side();
 
-                        loopDynamicElementCollision = loopDynamicElement;
-                        interactionDynamicObjectSide = *loopCollisionElement;
-
-                        ( *loopDynamicElement )->block_all_side();
+                        loopDynamicCollisionList.emplace_back(var.first, loopDynamicElement);
                     }
                 }
                 //}
@@ -700,27 +699,20 @@ int main()
 				mover->move(personMoveSide, person, time / DELAY , SPEED);
 				mover->move(personMoveSide, view, time / DELAY , SPEED);
 
-				personLastMoveSide = personMoveSide;
-
+				personLastSide = personMoveSide;
 				anim.set_animation(&person->get_animation_walk(personMoveSide));
 				anim.stop(false);
+
+				person->set_state(NPC::State::WALK);
 			}
 
-			if(personAttackStatus)
+			if(person->get_state() == NPC::State::ATTACK)
 			{
-				if(interactionDynamicObjectSide.first != MOVE::Side::NONE)
-				{
-					anim.set_animation(&person->get_animation_attack(interactionDynamicObjectSide.first));
-				}
-				else
-				{
-					anim.set_animation(&person->get_animation_attack(personLastMoveSide));
-				}
+				anim.set_animation(&person->get_animation_attack(personLastSide));
 				anim.stop(false);
 			}
 
-			if(personMoveSide == MOVE::Side::NONE
-					&& !personAttackStatus)
+			if(person->get_state() == NPC::State::IDLE)
 			{
 				if(anim.end())
 				{
@@ -733,18 +725,31 @@ int main()
 //IF PERSON INTERSECTS DYNAMIC OBJECT, LOOPDYNAMICELEMENTCOLLISION != NULLPTR
 //DYNAMIC OBJECT ATTACK PERSON, AND UPDATE DYNAMIC OBJECT HEALTH BAR
 //{
-			if(loopDynamicElementCollision)
+			if(!loopDynamicCollisionList.empty())
 			{
-				damageDamage = damage.generate(person,
-											(*loopDynamicElementCollision),
-											personAttackStatus,
-											time * DELAY);
+				for(auto&& var : loopDynamicCollisionList)
+				{
+					damage.generate((*var.second),
+										person,
+										time * DELAY);
 
-				enemyHealth->set_size(convert_value((*loopDynamicElementCollision)->get_max_health(),
-													PROGRESSBARWidth, 
-												(*loopDynamicElementCollision)->get_health()), 
-										PROGRESSBARHeight); 
-				enemyHealth->visible(true);
+					if(var.first == personLastSide)
+					{
+						if(person->get_state() == NPC::State::ATTACK)
+						{
+							auto t = damage.generate(person,
+											(*var.second),
+											time * DELAY);
+						}
+
+						enemyHealth->set_size(convert_value((*var.second)->get_max_health(),
+															PROGRESSBARWidth, 
+														(*var.second)->get_health()), 
+												PROGRESSBARHeight); 
+
+						enemyHealth->visible(true);
+					}
+				}
 			}
 			else
 			{
@@ -762,32 +767,37 @@ int main()
 
 				randMoveSide = dynamicObjectDispatcher.side(loopContainerIter, time * DELAY);
 
-				mover->move(randMoveSide, *loopDynamicElement, time / DELAY, SPEED);
+				//mover->move(randMoveSide, *loopDynamicElement, time / DELAY, SPEED);
 
 				loopDynamicElementAnimation = &dynamicObjectDispatcher.animation(loopContainerIter);
 
-				if(interactionDynamicObjectSide.first == MOVE::Side::NONE)
+				if((*loopDynamicElement)->get_state() != NPC::State::ATTACK)
 				{
 					if(randMoveSide == MOVE::Side::NONE)
 					{
+						(*loopDynamicElement)->set_state(NPC::State::IDLE);
 						loopDynamicElementAnimation->reset();
 						loopDynamicElementAnimation->stop(true);
 					}
 					else
 					{
+						(*loopDynamicElement)->set_state(NPC::State::WALK);
 						loopDynamicElementAnimation->set_animation(&(*loopDynamicElement)->get_animation_walk(randMoveSide));
 						loopDynamicElementAnimation->stop(false);
 					}
 				}
 				else
 				{
-					if(loopDynamicElement == loopDynamicElementCollision)
+					for(auto&& object : loopDynamicCollisionList)
 					{
-						loopDynamicElementAnimation->set_animation(&(*loopDynamicElement)->get_animation_attack(
-												inversion_side(interactionDynamicObjectSide.first)));
-
-						loopDynamicElementAnimation->stop(false);
+						if(object.second == loopDynamicElement)
+						{
+							loopDynamicElementAnimation->set_animation(&(*loopDynamicElement)->get_animation_attack(
+													inversion_side(object.first)));
+						}
 					}
+
+					loopDynamicElementAnimation->stop(false);
 				}
 			}
 //}

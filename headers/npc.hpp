@@ -19,6 +19,8 @@ namespace PROJECT::NPC
 			std::map<PROJECT::MOVE::Side, PROJECT::ANIMATION::Animation> _animWalk;
 			std::map<PROJECT::MOVE::Side, PROJECT::ANIMATION::Animation> _animAttack;
 
+			State _state;
+
 		public:
 			float get_armor() const noexcept override;
 			void set_armor(float armor) noexcept override;
@@ -30,6 +32,9 @@ namespace PROJECT::NPC
 			void set_health(int health) noexcept override;
 			int get_points() const noexcept override;
 			void set_points(int points) noexcept override;
+
+			State get_state() noexcept override;
+			void set_state(State state) noexcept override;
 
 			explicit Npc(const PROJECT::DATABASE::DataBaseResult& data);
 

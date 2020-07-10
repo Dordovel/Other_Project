@@ -54,6 +54,16 @@ namespace PROJECT::NPC
 		this->_points = points;
 	}
 
+	State Npc::get_state() noexcept
+	{
+		return this->_state;
+	}
+
+	void Npc::set_state(State state) noexcept
+	{
+		this->_state = state;
+	}
+
 	PROJECT::ANIMATION::IAnimation& Npc::get_animation_attack(PROJECT::MOVE::Side side) noexcept
 	{
 		return this->_animAttack[side]; //&(*value).second;	
