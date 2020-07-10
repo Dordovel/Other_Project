@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_CIRCLE_HPP
+#define SFMLPROJECT_REBUILD_CIRCLE_HPP
+
 #include <SFML/Graphics/CircleShape.hpp>
 #include <memory>
 #include "./icircle.hpp"
@@ -17,7 +19,20 @@ namespace PROJECT::BASE::GRAPHIC
             bool _right;
 
         public:
-			std::shared_ptr<OBJECT> clone() noexcept override;	
+
+            explicit Circle(float radius);
+
+            Circle(Circle&& circle) = default;
+
+            Circle& operator= (Circle&& circle) = default;
+
+            Circle(const Circle& circle) = default;
+
+            Circle& operator= (const Circle& circle) = default;
+
+            ~Circle();
+
+			std::shared_ptr<OBJECT> clone() noexcept override;
 
             PROJECT::BASE::DATA::DrawableObject draw() const noexcept override;
 
@@ -60,9 +75,6 @@ namespace PROJECT::BASE::GRAPHIC
             void set_color(const Color& color) override;
 
             void set_points_count(int points) override;
-
-            explicit Circle(float radius);
-
-            ~Circle();
     };
 };
+#endif //SFMLPROJECT_REBUILD_CIRCLE_HPP

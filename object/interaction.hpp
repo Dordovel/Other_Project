@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_OBJECT_INTERACTION_HPP
+#define SFMLPROJECT_REBUILD_OBJECT_INTERACTION_HPP
 
 #include "./static.hpp"
 #include <memory>
@@ -11,3 +12,4 @@ class INTERACTION : public STATIC
         virtual bool collision(const PROJECT::BASE::DATA::RectangleF& rect) noexcept = 0;
         virtual ~INTERACTION() = default;
 };
+#endif //SFMLPROJECT_REBUILD_OBJECT_INTERACTION_HPP

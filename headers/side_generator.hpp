@@ -1,3 +1,6 @@
+#ifndef SFMLPROJECT_REBUILD_SIDE_GENERATOR_HPP
+#define SFMLPROJECT_REBUILD_SIDE_GENERATOR_HPP
+
 #include "../struct/side.hpp"
 #include <SFML/System/Time.hpp>
 
@@ -19,3 +22,4 @@ namespace PROJECT::NPC
 			~SideGenerator() = default;	
 	};
 };
+#endif //SFMLPROJECT_REBUILD_SIDE_GENERATOR_HPP

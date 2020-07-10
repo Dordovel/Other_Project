@@ -1,4 +1,5 @@
-#pragma once 
+#ifndef SFMLPROJECT_REBUILD_ANIMATION_INTERFACE_HPP
+#define SFMLPROJECT_REBUILD_ANIMATION_INTERFACE_HPP
 
 #include "../object/animated.hpp"
 #include <memory>
@@ -34,3 +35,4 @@ namespace PROJECT::ANIMATION
 			virtual ~IAnim() = default;
 	};
 };
+#endif //SFMLPROJECT_REBUILD_ANIMATION_INTERFACE_HPP

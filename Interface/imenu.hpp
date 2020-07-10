@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_MENU_INTERFACE_HPP
+#define SFMLPROJECT_REBUILD_MENU_INTERFACE_HPP
+
 #include <map>
 #include <memory>
 #include "../object/object.hpp"
@@ -28,3 +30,4 @@ namespace PROJECT::MENU
 			virtual ~IMenu() = default;
 	};
 };
+#endif //SFMLPROJECT_REBUILD_MENU_INTERFACE_HPP

@@ -1,5 +1,5 @@
 #pragma once
-#include "./struct/vectorobject.hpp"
+#include "struct/vector_object.hpp"
 #include <map>
 
 inline constexpr float ANIMATION_FRAME = 0.2F;

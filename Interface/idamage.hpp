@@ -1,4 +1,5 @@
-#pragma once 
+#ifndef SFMLPROJECT_REBUILD_DAMAGE_INTERFACE_HPP
+#define SFMLPROJECT_REBUILD_DAMAGE_INTERFACE_HPP
 
 namespace PROJECT::NPC
 {
@@ -11,3 +12,5 @@ namespace PROJECT::NPC
 			virtual ~IDamage() = default;
 	};
 };
+
+#endif //SFMLPROJECT_REBUILD_DAMAGE_INTERFACE_HPP

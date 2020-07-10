@@ -1,20 +1,19 @@
 #include "./headers/application.hpp"
 #include "./headers/layout.hpp"
-#include "./headers/events.hpp"
+#include "./headers/keyboard_unit.hpp"
+#include "./headers/mouse_unit.hpp"
 #include "./headers/database.hpp"
 #include "./headers/clock.hpp"
 #include "./graphicobject/sprite.hpp"
 #include "./headers/view.hpp"
 #include "./graphicobject/circle.hpp"
 #include "./algorithm/move.hpp"
-#include "./struct/side.hpp"
 #include "./menu_builder.hpp"
-#include "./id.hpp"
 #include "./graphicobject/rectangle.hpp"
 #include "./headers/collision.hpp"
-#include "./headers/questnpc.hpp"
-#include "./headers/generatdamage.hpp"
-#include "./headers/dynamicobejctdispatcher.hpp"
+#include "./headers/quest_npc.hpp"
+#include "./headers/damage_generator.hpp"
+#include "./headers/dynamic_obejct_dispatcher.hpp"
 
 using namespace PROJECT;
 using namespace std::literals;
@@ -106,39 +105,39 @@ open_pause_menu() noexcept
 	return generateItem;
 }
 
-std::shared_ptr<PROJECT::NPC::Npc> change_person_type(std::string_view type, const DATABASE::IDataBase& dataBase) noexcept
+std::shared_ptr<NPC::Npc> change_person_type(std::string_view type, const DATABASE::IDataBase& dataBase) noexcept
 
 {
-	std::shared_ptr<PROJECT::NPC::Npc> result = nullptr;
+	std::shared_ptr<NPC::Npc> result = nullptr;
 
 	if(type == NPC_JEREMY_PINK)
 	{
-		result = std::make_shared<PROJECT::NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::JEREMY_PINK, MOVE::Side::DOWN));
+		result = std::make_shared<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::JEREMY_PINK, MOVE::Side::DOWN));
 	}
 
 	else if(type == NPC_MARTHA_PINK)
 	{
-		result = std::make_shared<PROJECT::NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_PINK, MOVE::Side::DOWN));
+		result = std::make_shared<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_PINK, MOVE::Side::DOWN));
 	}
 
 	else if(type == NPC_JEREMY_GREEN)
 	{
-		result = std::make_shared<PROJECT::NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::JEREMY_GREEN, MOVE::Side::DOWN));
+		result = std::make_shared<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::JEREMY_GREEN, MOVE::Side::DOWN));
 	}
 
 	else if(type == NPC_MARTHA_GREEN)
 	{
-		result = std::make_shared<PROJECT::NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_GREEN, MOVE::Side::DOWN));
+		result = std::make_shared<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_GREEN, MOVE::Side::DOWN));
 	}
 
 	else if(type == NPC_JEREMY_BLONDE)
 	{
-		result = std::make_shared<PROJECT::NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::JEREMY_BLONDE, MOVE::Side::DOWN));
+		result = std::make_shared<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::JEREMY_BLONDE, MOVE::Side::DOWN));
 	}
 
 	else if(type == NPC_MARTHA_BLONDE)
 	{
-		result = std::make_shared<PROJECT::NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_BLONDE, MOVE::Side::DOWN));
+		result = std::make_shared<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_BLONDE, MOVE::Side::DOWN));
 	}
 
 	return result;
@@ -253,16 +252,16 @@ int main()
 		// 	break;
 		// }
 
-		std::shared_ptr<PROJECT::NPC::Npc> person = nullptr;
+		std::shared_ptr<NPC::Npc> person = nullptr;
 		// person = change_person_type(result, dataBase);
-		person = std::make_shared<PROJECT::NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_PINK, MOVE::Side::DOWN));
-		person->set_position(1300, 1300);
+		person = std::make_shared<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_PINK, MOVE::Side::DOWN));
+		person->set_position(1200, 1200);
 		person->set_scale(OBJECT_SCALE);
 		person->set_max_health(200);
 		person->set_health(person->get_max_health());
 		person->set_damage(100);
 
-		std::shared_ptr<PROJECT::NPC::Npc> personTest = nullptr;
+		std::shared_ptr<NPC::Npc> personTest = nullptr;
 		personTest = change_person_type(NPC_JEREMY_GREEN, dataBase);
 		personTest->set_position(1400, 1400);
 		personTest->set_scale(OBJECT_SCALE);
@@ -270,7 +269,7 @@ int main()
 		personTest->set_health(personTest->get_max_health());
 		personTest->set_damage(10);
 
-		std::shared_ptr<PROJECT::NPC::Npc> personTest1 = nullptr;
+		std::shared_ptr<NPC::Npc> personTest1 = nullptr;
 		personTest1 = change_person_type(NPC_MARTHA_GREEN, dataBase);
 		personTest1->set_position(1300, 1300);
 		personTest1->set_scale(OBJECT_SCALE);
@@ -325,24 +324,26 @@ int main()
 		MOVE::Side personLastMoveSide = MOVE::Side::DOWN;
 		MOVE::Side randMoveSide = MOVE::Side::DOWN;
 		bool personAttackStatus = false;
+		bool mouseLeftPressed = false;
 
 		std::pair forest = MAP_PATH.at("forest");
 		std::shared_ptr<COLLECTION::Layout> mapForest = std::make_shared<COLLECTION::Layout>(forest.first, forest.second);
 
 		MOVE::Move* mover = new MOVE::Move;
 
-		std::shared_ptr<EVENT::Events> events = std::make_shared<EVENT::Events>();
+		UNIT::CONTROL::KEYBOARD::KeyboardUnit keyboard;
+		UNIT::CONTROL::MOUSE::MouseUnit mouse;
 
 		COLLISION::Collision collision(std::make_shared<BASE::GRAPHIC::Circle>(4));
 
-		events->set_close_window_event([&app, &isRun, &isOpen]()
+		keyboard.set_close_window_event([&app, &isRun, &isOpen]()
 				{
 					app->window_close();
 					isRun = false;
 					isOpen = false;
 				});
 
-		events->key_pressed_event(EVENT::Keyboard_Key::Escape, [&app,
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Escape, [&app,
 													&view,
 													&person,
 													&isRun]()
@@ -359,107 +360,111 @@ int main()
 					{
 						isRun = false;
 					}
-				}, EVENT::EventHandlerType::EVENT_LOOP);
+				}, UNIT::CONTROL::EventHandlerType::EVENT_LOOP);
 
-		events->key_pressed_event(EVENT::Keyboard_Key::E, [&personAttackStatus]()
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::E, [&personAttackStatus]()
 				{
 					personAttackStatus = true;
-				}, EVENT::EventHandlerType::NONE);
+				}, UNIT::CONTROL::EventHandlerType::NONE);
 
-		events->key_released_event(EVENT::Keyboard_Key::E, [&personAttackStatus]()
+		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::E, [&personAttackStatus]()
 				{
 					personAttackStatus = false;
 				});
 
 
 
-		events->key_pressed_event(EVENT::Keyboard_Key::D, [&personMoveSide]()
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::D, [&personMoveSide]()
 				{
 					personMoveSide = MOVE::Side::RIGHT;
-				}, EVENT::EventHandlerType::NONE);
+				}, UNIT::CONTROL::EventHandlerType::NONE);
 
-		events->key_pressed_event(EVENT::Keyboard_Key::A, [&personMoveSide]()
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::A, [&personMoveSide]()
 				{
 					personMoveSide = MOVE::Side::LEFT;
-				}, EVENT::EventHandlerType::NONE);
+				}, UNIT::CONTROL::EventHandlerType::NONE);
 
 
-		events->key_pressed_event(EVENT::Keyboard_Key::S, [&personMoveSide]()
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::S, [&personMoveSide]()
 				{
 					personMoveSide = MOVE::Side::DOWN;
-				}, EVENT::EventHandlerType::NONE);
+				}, UNIT::CONTROL::EventHandlerType::NONE);
 
 
-		events->key_pressed_event(EVENT::Keyboard_Key::W, [&personMoveSide]()
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::W, [&personMoveSide]()
 				{
 					personMoveSide = MOVE::Side::UP;
-				}, EVENT::EventHandlerType::NONE);
+				}, UNIT::CONTROL::EventHandlerType::NONE);
 
 
-		events->key_pressed_event(EVENT::Keyboard_Key::Right, [&personMoveSide]() 
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Right, [&personMoveSide]()
 				{
 					personMoveSide = MOVE::Side::RIGHT;
-				}, EVENT::EventHandlerType::NONE);
+				}, UNIT::CONTROL::EventHandlerType::NONE);
 
 
-		events->key_pressed_event(EVENT::Keyboard_Key::Left, [&personMoveSide]()
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Left, [&personMoveSide]()
 				{
 					personMoveSide = MOVE::Side::LEFT;
-				}, EVENT::EventHandlerType::NONE);
+				}, UNIT::CONTROL::EventHandlerType::NONE);
 
 
-		events->key_pressed_event(EVENT::Keyboard_Key::Down, [&personMoveSide]()
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Down, [&personMoveSide]()
 				{
 					personMoveSide = MOVE::Side::DOWN;
-				}, EVENT::EventHandlerType::NONE);
+				}, UNIT::CONTROL::EventHandlerType::NONE);
 
 
-		events->key_pressed_event(EVENT::Keyboard_Key::Up, [&personMoveSide]()
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Up, [&personMoveSide]()
 				{
 					personMoveSide = MOVE::Side::UP;
-				}, EVENT::EventHandlerType::NONE);
+				}, UNIT::CONTROL::EventHandlerType::NONE);
 
 
-		events->key_released_event(EVENT::Keyboard_Key::D, [&personMoveSide]()
+		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::D, [&personMoveSide]()
 				{
 					personMoveSide = MOVE::Side::NONE;
 				});
 
-		events->key_released_event(EVENT::Keyboard_Key::A, [&personMoveSide]()
+		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::A, [&personMoveSide]()
 				{
 					personMoveSide = MOVE::Side::NONE;
 				});
 
-		events->key_released_event(EVENT::Keyboard_Key::S, [&personMoveSide]()
+		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::S, [&personMoveSide]()
 				{
 					personMoveSide = MOVE::Side::NONE;
 				});
 
-		events->key_released_event(EVENT::Keyboard_Key::W, [&personMoveSide]()
+		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::W, [&personMoveSide]()
 				{
 					personMoveSide = MOVE::Side::NONE;
 				});
 
-		events->key_released_event(EVENT::Keyboard_Key::Right, [&personMoveSide]() 
+		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Right, [&personMoveSide]()
 				{
 					personMoveSide = MOVE::Side::NONE;
 				});
 
-		events->key_released_event(EVENT::Keyboard_Key::Left, [&personMoveSide]()
+		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Left, [&personMoveSide]()
 				{
 					personMoveSide = MOVE::Side::NONE;
 				});
 
-		events->key_released_event(EVENT::Keyboard_Key::Down, [&personMoveSide]()
+		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Down, [&personMoveSide]()
 				{
 					personMoveSide = MOVE::Side::NONE;
 				});
 
-		events->key_released_event(EVENT::Keyboard_Key::Up, [&personMoveSide]()
+		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Up, [&personMoveSide]()
 				{
 					personMoveSide = MOVE::Side::NONE;
 				});
 
+		mouse.button_pressed(UNIT::CONTROL::MOUSE::Mouse_Key::Left, [&mouseLeftPressed](int X, int Y)
+				{
+					mouseLeftPressed = true;
+				});
 
 		const int PROGRESSBARWidth = 115;
 		const int PROGRESSBARHeight = 25;
@@ -496,33 +501,48 @@ int main()
 //VARIABLE FOR USE IN LOOP
 //{
 		std::pair damageDamage = {-1, -1};
-		std::pair interactionStaticObjectSide(MOVE::Side::NONE, ""s);
-		std::pair interactionDynamicObjectSide(MOVE::Side::NONE, ""s);
 		BASE::DATA::RectangleF loopRect = {};
 		BASE::DATA::Vector2F loopVec = {};
 		size_t loopContainerIter = 0;
+        size_t loopContainerIterSecond = 0;
 		size_t loopContainerSize = 0;
+        size_t loopContainerSizeSecond = 0;
 		std::shared_ptr<NPC::Npc>* loopDynamicElement = nullptr;
 		std::shared_ptr<NPC::Npc>* loopDynamicElementCollision = nullptr;
 		std::shared_ptr<BASE::GRAPHIC::IText>* loopTextElement = nullptr;
+        std::pair interactionStaticObjectSide = {MOVE::Side::NONE, ""s};
+        std::pair interactionDynamicObjectSide = {MOVE::Side::NONE, ""s};
 		ANIMATION::Anim* loopDynamicElementAnimation = nullptr;
+		std::array<std::pair<MOVE::Side, std::string>, 4> loopCollisionObjectList = {};
+        std::pair<MOVE::Side, std::string>* loopCollisionElement = nullptr;
 //}
 //END VARIABLE FOR USE IN LOOP
 
 //VISUAL OBJECT
 //{
 
-	DISPATCHER::DynamicObjectDispatcher dynamicObjectDispatcher;
-	dynamicObjectDispatcher.add_object(std::move(personTest));
-	dynamicObjectDispatcher.add_object(std::move(personTest1));
+        DISPATCHER::DynamicObjectDispatcher dynamicObjectDispatcher;
+        dynamicObjectDispatcher.add_object(std::move(personTest));
+        dynamicObjectDispatcher.add_object(std::move(personTest1));
 
-	std::vector<std::shared_ptr<NPC::QuestNpc>> questObjectList;
-	questObjectList.reserve(1);
+        std::vector<std::shared_ptr<NPC::QuestNpc>> questObjectList;
+        questObjectList.reserve(1);
 //}
 //END VISUAL OBJECT
 
 		while (app->is_open() && isRun)
 		{
+//EVENT HANDLER
+//{
+			while (app->check_events())
+			{
+			    keyboard.catch_events(app->event_handler());
+				mouse.catch_events(app->event_handler());
+			}
+			keyboard.catch_events();
+//}
+//END EVENT HANDLER
+
 //CLEAR ALL LOOP VARIABLE
 			
 			damageDamage = {-1, -1};
@@ -536,10 +556,11 @@ int main()
 			loopDynamicElementCollision = nullptr;
 			loopTextElement = nullptr;
 			loopDynamicElementAnimation = nullptr;
+			loopCollisionObjectList = {};
+			loopCollisionElement = nullptr;
 
 
 //END CLEAR LOOP VARIABLE
-
 
 			clock.restart();
 			time = clock.get_work_time();
@@ -554,16 +575,6 @@ int main()
 			}
 //END RUN ANIMATION
 
-//EVENT HANDLER
-//{
-			while (app->event_handler(events->get_event_object()))
-			{
-				events->catch_events_loop();
-			}
-			events->catch_events_none();
-//}
-//END EVENT HANDLER
-
 //CHECK LIFE NPC OBJECT
 
 			loopContainerSize = dynamicObjectDispatcher.size();
@@ -574,6 +585,16 @@ int main()
 				{
 					dynamicObjectDispatcher.delete_object(loopContainerIter);
 				}
+			}
+
+			auto var = app->map_pixel_to_coords(mouse.get_position_in_desktop());
+			if(mouseLeftPressed)
+			{
+				if(person->collision(var))
+				{
+					std::cout<<"Enter Person\n";
+				}
+				mouseLeftPressed = false;
 			}
 
 //END CHECK LIFE NPC OBJECT
@@ -593,7 +614,7 @@ int main()
 			personHealthBackground->set_position((loopVec.x - 10), (loopVec.y - 10));
 
 			loopRect = view->get_global_bounds();
-			enemyHealth->set_position((loopRect.left + (loopRect.width * 0.5) - (PROGRESSBARWidth * 0.5)),
+			enemyHealth->set_position((loopRect.left + (loopRect.width * 0.5F) - (PROGRESSBARWidth * 0.5F)),
 										(loopRect.top + PROGRESSBARHeight));
 			loopVec = enemyHealth->get_position();
 
@@ -606,13 +627,13 @@ int main()
 
 //CHECK PERSON INTERACTIOIN WITH MAP OBJECT
 //{
-			if(const auto& value = collision.check_object_collision(*currentLayout, person); 
-					value.first != MOVE::Side::NONE)
-			{
-				person->block_side(value.first, true);
-				view->block_side(value.first, true);
-
-				interactionStaticObjectSide = value;
+            loopCollisionObjectList = collision.check_object_collision(*currentLayout, person);
+            loopContainerSize = loopCollisionObjectList.size();
+            for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
+            {
+                loopCollisionElement = &loopCollisionObjectList.at(loopContainerIter);
+				person->block_side(loopCollisionElement->first, true);
+				view->block_side(loopCollisionElement->first, true);
 			}
 //}
 //END CHECK PERSON INTERACTIOIN WITH MAP OBJECT
@@ -622,46 +643,55 @@ int main()
 			loopContainerSize = dynamicObjectDispatcher.size();
 			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 			{
-				loopDynamicElement = &dynamicObjectDispatcher.object(loopContainerIter);
-				(*loopDynamicElement)->unblock_all_side();
+                loopDynamicElement = &dynamicObjectDispatcher.object(loopContainerIter);
+                ( *loopDynamicElement )->unblock_all_side();
 
-				if(const auto& value = collision.check_object_collision(*currentLayout, (*loopDynamicElement)); 
-						value.first != MOVE::Side::NONE)
-				{
-					(*loopDynamicElement)->block_side(value.first, true);
-				}	
+                loopCollisionObjectList = collision.check_object_collision(*currentLayout, ( *loopDynamicElement ));
+                loopContainerSizeSecond = loopCollisionObjectList.size();
+                for ( loopContainerIterSecond = 0;
+                      loopContainerIterSecond < loopContainerSizeSecond; ++loopContainerIterSecond )
+                {
+                    ( *loopDynamicElement )->block_side(loopCollisionObjectList.at(loopContainerIterSecond).first,
+                                                        true);
+                }
 
-	//CHECK PERSON INTERACTIOIN WITH NPC OBJECT
-	//{
-				if(const auto& value = collision.check_object_collision(person, (*loopDynamicElement));
-						value.first != MOVE::Side::NONE)
-				{
-					person->block_side(value.first, true);
-					view->block_side(value.first, true);
+                //CHECK PERSON INTERACTIOIN WITH NPC OBJECT
+                //{
+                loopCollisionObjectList = collision.check_object_collision(person, ( *loopDynamicElement ));
+                loopContainerSizeSecond = loopCollisionObjectList.size();
+                for ( loopContainerIterSecond = 0;
+                      loopContainerIterSecond < loopContainerSizeSecond; ++loopContainerIterSecond )
+                {
+                    loopCollisionElement = &loopCollisionObjectList.at(loopContainerIterSecond);
+                    if ( loopCollisionElement->first != MOVE::Side::NONE )
+                    {
+                        person->block_side(loopCollisionElement->first, true);
+                        view->block_side(loopCollisionElement->first, true);
 
-					loopDynamicElementCollision = loopDynamicElement;
-					interactionDynamicObjectSide = value;
+                        loopDynamicElementCollision = loopDynamicElement;
+                        interactionDynamicObjectSide = *loopCollisionElement;
 
-					(*loopDynamicElement)->block_all_side();
-				}
-	//}
-	//END CHECK PERSON INTERACTIOIN WITH NPC OBJECT
-			}
+                        ( *loopDynamicElement )->block_all_side();
+                    }
+                }
+                //}
+                //END CHECK PERSON INTERACTIOIN WITH NPC OBJECT
+            }
 //}
 //END CHECK NPC INTERACTIOIN WITH MAP OBJECT
 
 
 //CHECK PERSON INTERACTIOIN WITH QUEST NPC OBJECT
 //{
-			for(const auto& questNpc : questObjectList)
-			{
-				if(const auto& value = collision.check_object_collision(person, questNpc);
-						value.first != MOVE::Side::NONE)
-				{
-					person->block_side(value.first, true);
-					view->block_side(value.first, true);
-				}
-			}
+			//for(const auto& questNpc : questObjectList)
+			//{
+				//if(const auto& value = collision.check_object_collision(person, questNpc);
+						//value.first != MOVE::Side::NONE)
+				//{
+					//person->block_side(value.first, true);
+					//view->block_side(value.first, true);
+				//}
+			//}
 //}
 //END CHECK PERSON INTERACTIOIN WITH QUEST NPC OBJECT
 
@@ -796,13 +826,16 @@ int main()
 			}
 
 			app->draw(person);
+            app->draw(collision._circleDown);
+            app->draw(collision._circleLeft);
+            app->draw(collision._circleRight);
+            app->draw(collision._circleUp);
 //}
 //END DRAW OBJECTS
 
 			app->display();
 
 		}
-
 		delete mover;
 	}
 

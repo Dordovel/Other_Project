@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_STRUCT_RECT_OBJECT_HPP
+#define SFMLPROJECT_REBUILD_STRUCT_RECT_OBJECT_HPP
 
 #include <SFML/Graphics/Rect.hpp>
 #include <ostream>
@@ -47,3 +48,4 @@ namespace PROJECT::BASE::DATA
             }
     };
 };
+#endif //SFMLPROJECT_REBUILD_STRUCT_RECT_OBJECT_HPP

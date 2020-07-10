@@ -1,6 +1,6 @@
 #pragma once
 
-#include "./headers/events.hpp"
+#include "headers/keyboard_unit.hpp"
 #include "./item_builder.hpp"
 #include "./headers/menu.hpp"
 #include "./global.hpp"
@@ -10,8 +10,8 @@
 
 template <size_t N>
 std::string menu_builder(const std::shared_ptr<PROJECT::APPLICATION::IApplication>& app, 
-						std::shared_ptr<OBJECT> menuSelectedPointer,
-						std::shared_ptr<PROJECT::COLLECTION::ILayout> layout,
+						const std::shared_ptr<OBJECT>& menuSelectedPointer,
+						const std::shared_ptr<PROJECT::COLLECTION::ILayout>& layout,
 						std::array<std::pair<std::string, std::string>, N>&& generateItem) noexcept
 {
 	std::shared_ptr<PROJECT::MENU::IMenu> menu = std::make_shared<PROJECT::MENU::Menu>();
@@ -32,44 +32,44 @@ std::string menu_builder(const std::shared_ptr<PROJECT::APPLICATION::IApplicatio
 
 	bool isRun = true;
 
-    std::shared_ptr<PROJECT::EVENT::IEvents> events = std::make_shared<PROJECT::EVENT::Events>();
+    PROJECT::UNIT::CONTROL::KEYBOARD::KeyboardUnit keyboard;
 
 	std::string item_id;
 
-	events->set_close_window_event([&selectedItem, &isRun]()
+	keyboard.set_close_window_event([&selectedItem, &isRun]()
 			{
 				selectedItem = EXIT;
 				isRun = false;
 			});
 
-	events->key_pressed_event(PROJECT::EVENT::Keyboard_Key::Up, [&menu]()
+	keyboard.button_pressed(PROJECT::UNIT::CONTROL::KEYBOARD::Keyboard_Key::Up, [&menu]()
 			{
 				menu->step_back();
-			}, PROJECT::EVENT::EventHandlerType::EVENT_LOOP);
+			}, PROJECT::UNIT::CONTROL::EventHandlerType::EVENT_LOOP);
 
 
-	events->key_pressed_event(PROJECT::EVENT::Keyboard_Key::Down, [&menu]()
+	keyboard.button_pressed(PROJECT::UNIT::CONTROL::KEYBOARD::Keyboard_Key::Down, [&menu]()
 			{
 				menu->step_forward();
-			}, PROJECT::EVENT::EventHandlerType::EVENT_LOOP);
+			}, PROJECT::UNIT::CONTROL::EventHandlerType::EVENT_LOOP);
 
 
-	events->key_pressed_event(PROJECT::EVENT::Keyboard_Key::Enter, [&menu,
+	keyboard.button_pressed(PROJECT::UNIT::CONTROL::KEYBOARD::Keyboard_Key::Enter, [&menu,
 														&isRun,
 														&selectedItem]()
 			{
 				selectedItem = menu->selected_item();
 				isRun = false;
-			}, PROJECT::EVENT::EventHandlerType::EVENT_LOOP);
+			}, PROJECT::UNIT::CONTROL::EventHandlerType::EVENT_LOOP);
 
 	while (app->is_open() && isRun)
 	{
-		while (app->event_handler(events->get_event_object()))
-		{
-			events->catch_events_loop();
+		while (app->check_events())
+        {
+			keyboard.catch_events(app->event_handler());
 		}
 		
-		events->catch_events_none();
+		keyboard.catch_events();
 
 		for(const auto& item : menuItems)
 		{

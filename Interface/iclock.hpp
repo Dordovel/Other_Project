@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_CLOCK_INTERFACE_HPP
+#define SFMLPROJECT_REBUILD_CLOCK_INTERFACE_HPP
 
 namespace PROJECT::CLOCK
 {
@@ -11,3 +12,4 @@ namespace PROJECT::CLOCK
             virtual ~IClock() = default;;
     };
 };
+#endif //SFMLPROJECT_REBUILD_CLOCK_INTERFACE_HPP

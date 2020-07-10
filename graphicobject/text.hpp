@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_TEXT_HPP
+#define SFMLPROJECT_REBUILD_TEXT_HPP
 
 #include <SFML/Graphics/Text.hpp>
 #include "./itext.hpp"
@@ -19,7 +20,20 @@ namespace PROJECT::BASE::GRAPHIC
             bool _right;
 
         public:
-			std::shared_ptr<OBJECT> clone() noexcept override;	
+
+            explicit Text(std::string_view pathToFontFile);
+
+            Text(Text&& rectangle) = default;
+
+            Text& operator= (Text&& rectangle) = default;
+
+            Text(const Text& rectangle) = default;
+
+            Text& operator= (const Text& rectangle) = default;
+
+            ~Text();
+
+			std::shared_ptr<OBJECT> clone() noexcept override;
 
             PROJECT::BASE::DATA::DrawableObject draw() const noexcept override;
 
@@ -64,9 +78,6 @@ namespace PROJECT::BASE::GRAPHIC
             void block_all_side() noexcept override;
 
             void unblock_all_side() noexcept override;
-
-            explicit Text(std::string_view pathToFontFile);
-
-            ~Text();
     };
 };
+#endif //SFMLPROJECT_REBUILD_TEXT_HPP

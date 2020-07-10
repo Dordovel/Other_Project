@@ -1,8 +1,8 @@
 #include "./text.hpp"
-#include "../struct/drawableobject.hpp"
-#include "../struct/vectorobject.hpp"
+#include "struct/drawable_object.hpp"
+#include "struct/vector_object.hpp"
 #include "./circle.hpp"
-#include "../struct/rectobject.hpp"
+#include "struct/rect_object.hpp"
 #include "../struct/side.hpp"
 #include "../struct/rgb.hpp"
 

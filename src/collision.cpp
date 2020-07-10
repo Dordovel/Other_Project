@@ -1,8 +1,7 @@
 #include "../headers/collision.hpp"
-#include "../struct/collectionobject.hpp"
-#include "../struct/rectobject.hpp"
+#include "struct/static_object_collection.hpp"
+#include "struct/rect_object.hpp"
 #include "../struct/side.hpp"
-#include "../graphicobject/circle.hpp"
 
 namespace PROJECT::COLLISION
 {
@@ -36,11 +35,15 @@ namespace PROJECT::COLLISION
 	{
 	}
 
-	std::pair<PROJECT::MOVE::Side, std::string> Collision::check_object_collision(const std::shared_ptr<INTERACTION>& lv,
-																					const std::shared_ptr<INTERACTION>& rv) noexcept
-	{	
+	std::array<std::pair<PROJECT::MOVE::Side, std::string>, 4>
+	    Collision::check_object_collision(const std::shared_ptr<INTERACTION>& lv,
+                                            const std::shared_ptr<INTERACTION>& rv) noexcept
+	{
 		BASE::DATA::RectangleF rect;
-		MOVE::Side side = MOVE::Side::NONE;
+        std::array<std::pair<PROJECT::MOVE::Side, std::string>, 4> result = {{{MOVE::Side::NONE, ""},
+                                                                             {MOVE::Side::NONE, ""},
+                                                                             {MOVE::Side::NONE, ""},
+                                                                             {MOVE::Side::NONE, ""}}};
 
 		if(this->_physics.check_intersection(lv, rv))
 		{
@@ -50,67 +53,77 @@ namespace PROJECT::COLLISION
 
 			if(this->_physics.check_intersection(rv, this->_circleRight))
 			{
-				side = MOVE::Side::RIGHT;
+				result[0] = std::pair(MOVE::Side::RIGHT, "");
 			}
 			
 			if(this->_physics.check_intersection(rv, this->_circleLeft))
 			{
-				side = MOVE::Side::LEFT;
+				result[1] = std::pair(MOVE::Side::LEFT, "");
 			}
 
 			if(this->_physics.check_intersection(rv, this->_circleUp))
 			{
-				side = MOVE::Side::UP;
+				result[2] = std::pair(MOVE::Side::UP, "");
 			}
 
 			if(this->_physics.check_intersection(rv, this->_circleDown))
 			{
-				side = MOVE::Side::DOWN;
+			    result[3] = std::pair(MOVE::Side::DOWN, "");
 			}
 
 		}
 
-		return {side, ""};
+		return result;
 	}
 
-	std::pair<PROJECT::MOVE::Side, std::string> Collision::check_object_collision(const std::shared_ptr<PROJECT::COLLECTION::ILayout>& lv,
-																				const std::shared_ptr<INTERACTION>& rv ) noexcept
+	std::array<std::pair<PROJECT::MOVE::Side, std::string>,4>
+	    Collision::check_object_collision(const std::shared_ptr<PROJECT::COLLECTION::ILayout>& lv,
+	                                        const std::shared_ptr<INTERACTION>& rv ) noexcept
 	{
-		using namespace PROJECT;
-
 		BASE::DATA::RectangleF rect;
-		MOVE::Side side = MOVE::Side::NONE;
+        std::array<std::pair<PROJECT::MOVE::Side, std::string>, 4> result = {{{MOVE::Side::NONE, ""},
+                                                                                 {MOVE::Side::NONE, ""},
+                                                                                 {MOVE::Side::NONE, ""},
+                                                                                 {MOVE::Side::NONE, ""}}};
 
-		std::string value;
+		auto&& collisionObjectList = this->_physics.get_collision_object(lv, rv);
 
-		if(value = this->_physics.check_collision(lv, rv); value != COLLECTION::CollectionObject::NONE)
-		{
-			rect = rv->get_global_bounds();
+        if (!collisionObjectList.empty())
+        {
+            rect = rv->get_global_bounds();
 
-			positioning(rect, this->_circleRight, this->_circleLeft, this->_circleUp, this->_circleDown);
+            positioning(rect,
+                this->_circleRight,
+                this->_circleLeft,
+                this->_circleUp,
+                this->_circleDown);
 
-			if(this->_physics.check_collision(lv, this->_circleRight) != COLLECTION::CollectionObject::NONE)
-			{
-				side = MOVE::Side::RIGHT;
-			}
-			
-			if(this->_physics.check_collision(lv, this->_circleLeft) != COLLECTION::CollectionObject::NONE)
-			{
-				side = MOVE::Side::LEFT;
-			}
 
-			if(this->_physics.check_collision(lv, this->_circleUp) != COLLECTION::CollectionObject::NONE)
-			{
-				side = MOVE::Side::UP;
-			}
+			auto&& collection = this->_physics.get_collision_object(lv, this->_circleRight);
+            if (!collection.empty())
+            {
+                result[0] = std::pair(MOVE::Side::RIGHT, collection.at(0));
+            }
 
-			if(this->_physics.check_collision(lv, this->_circleDown) != COLLECTION::CollectionObject::NONE)
-			{
-				side = MOVE::Side::DOWN;
-			}
+			collection = this->_physics.get_collision_object(lv, this->_circleLeft);
+            if (!collection.empty())
+            {
+                result[1] = std::pair(MOVE::Side::LEFT, collection.at(0));
+            }
 
-		}	
+			collection = this->_physics.get_collision_object(lv, this->_circleUp);
+            if (!collection.empty())
+            {
+                result[2] = std::pair(MOVE::Side::UP, collection.at(0));
+            }
 
-		return {side, value};
+			collection = this->_physics.get_collision_object(lv, this->_circleDown);
+            if (!collection.empty())
+            {
+                result[3] = std::pair(MOVE::Side::DOWN, collection.at(0));
+            }
+        }
+
+		return result;
 	}
 };

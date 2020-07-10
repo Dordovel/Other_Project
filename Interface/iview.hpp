@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_VIEW_INTERFACE_HPP
+#define SFMLPROJECT_REBUILD_VIEW_INTERFACE_HPP
 
 #include "../object/movable.hpp"
 #include "../object/dynamic.hpp"
@@ -18,3 +19,4 @@ namespace PROJECT::APPLICATION
             virtual ~IView() = default;
     };
 };
+#endif //SFMLPROJECT_REBUILD_VIEW_INTERFACE_HPP

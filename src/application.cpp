@@ -1,10 +1,12 @@
 #include "../headers/application.hpp"
-#include "../struct/drawableobject.hpp"
-#include "../struct/eventobject.hpp"
-#include "../struct/vectorobject.hpp"
+#include "struct/drawable_object.hpp"
+#include "struct/event_object.hpp"
+#include "struct/vector_object.hpp"
 
 namespace PROJECT::APPLICATION
 {
+    const int ANTIALIASINGLEVEL = 8;
+
     Application::Application(const std::string& windowName, int width, int height): _windowName(windowName),
                                                                         _width(width),
                                                                         _height(height)
@@ -29,13 +31,13 @@ namespace PROJECT::APPLICATION
     void Application::init()
     {
         sf::ContextSettings setting;
-        setting.antialiasingLevel = 8;
+        setting.antialiasingLevel = ANTIALIASINGLEVEL;
         sf::RenderWindow::create(sf::VideoMode(this->_width , this->_height) , this->_windowName, sf::Style::Default, setting);
     }
 
-    bool Application::event_handler(PROJECT::EVENT::EventObject& eventObject )
+    PROJECT::EVENT::EventObject Application::event_handler()
     {
-        return sf::RenderWindow::pollEvent(eventObject);
+        return this->_eventPool;
     }
 
     void Application::draw(const std::shared_ptr<DRAWABLE>& object)
@@ -126,11 +128,16 @@ namespace PROJECT::APPLICATION
 
     PROJECT::BASE::DATA::Vector2F Application::map_pixel_to_coords(const PROJECT::BASE::DATA::Vector2I& position)
     {
-        return sf::RenderWindow::mapPixelToCoords(position);
+        return sf::RenderWindow::mapPixelToCoords(position - this->getPosition());
     }
 
     PROJECT::BASE::DATA::Vector2F Application::map_pixel_to_coords(int X, int Y)
     {
-        return sf::RenderWindow::mapPixelToCoords({X, Y});
+		return this->map_pixel_to_coords({X, Y});
+    }
+
+    bool Application::check_events()
+    {
+        return sf::RenderWindow::pollEvent(this->_eventPool);
     }
 };

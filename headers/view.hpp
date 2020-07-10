@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_VIEW_HPP
+#define SFMLPROJECT_REBUILD_VIEW_HPP
 
 #include "../Interface/iview.hpp"
 #include <SFML/Graphics/View.hpp>
@@ -60,3 +61,4 @@ namespace PROJECT::APPLICATION
         ~View() = default;
   };
 };
+#endif //SFMLPROJECT_REBUILD_VIEW_HPP

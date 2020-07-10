@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_DATABASE_INTERFACE_HPP
+#define SFMLPROJECT_REBUILD_DATABASE_INTERFACE_HPP
+
 #include <string>
 #include <array>
 
@@ -38,3 +40,4 @@ namespace PROJECT::DATABASE
 			virtual  ~IDataBase() = default;
 	};
 };
+#endif //SFMLPROJECT_REBUILD_DATABASE_INTERFACE_HPP

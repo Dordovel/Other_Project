@@ -1,5 +1,5 @@
 #include "../headers/animation.hpp"
-#include "../struct/rectobject.hpp"
+#include "struct/rect_object.hpp"
 #include <iostream>
 
 namespace PROJECT::ANIMATION
@@ -75,7 +75,7 @@ namespace PROJECT::ANIMATION
 
 	bool Anim::end() const noexcept
 	{
-		if(this->_anim)
+		if(this->_anim != nullptr)
 		{
 			return this->_currentFrame != (this->_anim->get_frame_count() - 1);
 		}

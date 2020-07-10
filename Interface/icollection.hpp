@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_COLLECTION_INTERFACE_HPP
+#define SFMLPROJECT_REBUILD_COLLECTION_INTERFACE_HPP
 
 #include <vector>
 #include <map>
@@ -18,3 +19,5 @@ namespace PROJECT::COLLECTION
             virtual ~ICollection() = default;
     };
 };
+
+#endif //SFMLPROJECT_REBUILD_COLLECTION_INTERFACE_HPP

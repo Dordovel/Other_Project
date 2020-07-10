@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_APPLICATION_INTERFACE_HPP
+#define SFMLPROJECT_REBUILD_APPLICATION_INTERFACE_HPP
+
 #include <memory>
 #include "../object/drawable.hpp"
 #include "./iview.hpp"
@@ -27,7 +29,8 @@ namespace PROJECT
                 virtual bool is_open() =  0;
                 virtual void draw(const std::shared_ptr<DRAWABLE>& object) = 0;
                 virtual void window_close() = 0;
-                virtual bool event_handler(PROJECT::EVENT::EventObject& eventObject ) = 0;
+                virtual PROJECT::EVENT::EventObject event_handler() = 0;
+                virtual bool check_events() = 0;
                 virtual PROJECT::BASE::DATA::Vector2F map_pixel_to_coords(const PROJECT::BASE::DATA::Vector2I& position) = 0;
                 virtual PROJECT::BASE::DATA::Vector2F map_pixel_to_coords(int X, int Y) = 0;
                 virtual PROJECT::BASE::DATA::Vector2UI get_desktop_size() const = 0;
@@ -40,3 +43,5 @@ namespace PROJECT
         };
     };
 };
+
+#endif //SFMLPROJECT_REBUILD_APPLICATION_INTERFACE_HPP

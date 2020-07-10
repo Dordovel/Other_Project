@@ -1,6 +1,6 @@
 #include "../headers/menu.hpp"
-#include "../struct/rectobject.hpp"
-#include "../struct/vectorobject.hpp"
+#include "struct/rect_object.hpp"
+#include "struct/vector_object.hpp"
 #include "../id.hpp"
 
 namespace PROJECT::MENU

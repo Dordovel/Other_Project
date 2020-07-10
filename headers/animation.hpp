@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_ANIMATION_HPP
+#define SFMLPROJECT_REBUILD_ANIMATION_HPP
+
 #include "../Interface/animation.hpp"
 #include <vector>
 #include <SFML/System/Time.hpp>
@@ -42,3 +44,4 @@ namespace PROJECT::ANIMATION
 			Anim(float param);
 	};
 };
+#endif //SFMLPROJECT_REBUILD_ANIMATION_HPP

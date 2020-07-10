@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_RECTANGLE_HPP
+#define SFMLPROJECT_REBUILD_RECTANGLE_HPP
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include "./irectangle.hpp"
@@ -15,7 +16,22 @@ namespace PROJECT::BASE::GRAPHIC
             bool _up, _down, _left, _right;
 
         public:
-			std::shared_ptr<OBJECT> clone() noexcept override;	
+
+            explicit Rectangle(float width, float height);
+
+            explicit Rectangle(PROJECT::BASE::DATA::Vector2F size);
+
+            Rectangle(Rectangle&& rectangle) = default;
+
+            Rectangle& operator= (Rectangle&& rectangle) = default;
+
+            Rectangle(const Rectangle& rectangle) = default;
+
+            Rectangle& operator= (const Rectangle& rectangle) = default;
+
+            ~Rectangle();
+
+			std::shared_ptr<OBJECT> clone() noexcept override;
 
             PROJECT::BASE::DATA::DrawableObject draw() const noexcept override;
 
@@ -62,11 +78,6 @@ namespace PROJECT::BASE::GRAPHIC
             void set_size(float width, float height) noexcept override;
 
             BASE::DATA::Vector2F get_size() const noexcept override;
-
-            ~Rectangle();
-
-            explicit Rectangle(float width, float height);
-
-            explicit Rectangle(PROJECT::BASE::DATA::Vector2F size);
     };
 };
+#endif // SFMLPROJECT_REBUILD_RECTANGLE_HPP

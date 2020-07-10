@@ -1,6 +1,6 @@
 #include "../headers/view.hpp"
-#include "../struct/vectorobject.hpp"
-#include "../struct/rectobject.hpp"
+#include "struct/vector_object.hpp"
+#include "struct/rect_object.hpp"
 #include "../struct/side.hpp"
 
 namespace PROJECT::APPLICATION

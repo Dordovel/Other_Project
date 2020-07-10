@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_ARMOR_INTERFACE_HPP
+#define SFMLPROJECT_REBUILD_ARMOR_INTERFACE_HPP
 
 namespace PROJECT::NPC
 {
@@ -10,3 +11,4 @@ namespace PROJECT::NPC
 			virtual void set_armor(float damage) noexcept = 0;
 	};
 };
+#endif //SFMLPROJECT_REBUILD_ARMOR_INTERFACE_HPP

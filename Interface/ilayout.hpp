@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_LAYOUT_INTERFACE_HPP
+#define SFMLPROJECT_REBUILD_LAYOUT_INTERFACE_HPP
+
 #include <vector>
 #include "../object/drawable.hpp"
 #include "./icollection.hpp"
@@ -18,3 +20,4 @@ namespace PROJECT::COLLECTION
           virtual ~ILayout() = default;
   };
 };
+#endif //SFMLPROJECT_REBUILD_LAYOUT_INTERFACE_HPP

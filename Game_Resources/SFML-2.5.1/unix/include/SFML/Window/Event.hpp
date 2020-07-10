@@ -246,7 +246,7 @@ public:
 /// \ingroup window
 ///
 /// sf::Event holds all the informations about a system event
-/// that just happened. Events are retrieved using the
+/// that just happened. KeyboardUnit are retrieved using the
 /// sf::Window::pollEvent and sf::Window::waitEvent functions.
 ///
 /// A sf::Event instance contains the type of the event

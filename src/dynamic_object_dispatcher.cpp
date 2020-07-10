@@ -1,4 +1,4 @@
-#include "../headers/dynamicobejctdispatcher.hpp"
+#include "headers/dynamic_obejct_dispatcher.hpp"
 
 namespace PROJECT::DISPATCHER
 {

@@ -1,4 +1,5 @@
-#pragma once 
+#ifndef SFMLPROJECT_REBUILD_NPC_INTERFACE_HPP
+#define SFMLPROJECT_REBUILD_NPC_INTERFACE_HPP
 
 #include "./iarmor.hpp"
 #include "./ipoints.hpp"
@@ -25,3 +26,4 @@ namespace PROJECT::NPC
 			virtual ~INpc() = default;
 	};
 };
+#endif //SFMLPROJECT_REBUILD_NPC_INTERFACE_HPP

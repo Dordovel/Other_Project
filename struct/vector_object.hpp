@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_STRUCT_VECTOR_OBJECT_HPP
+#define SFMLPROJECT_REBUILD_STRUCT_VECTOR_OBJECT_HPP
 
 #include <SFML/System/Vector2.hpp>
 #include <iostream>
@@ -68,3 +69,4 @@ namespace PROJECT::BASE::DATA
             }
     };
 };
+#endif //SFMLPROJECT_REBUILD_STRUCT_VECTOR_OBJECT_HPP

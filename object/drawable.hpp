@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_OBJECT_DRAWABLE_HPP
+#define SFMLPROJECT_REBUILD_OBJECT_DRAWABLE_HPP
 
 #include <string>
 
@@ -16,3 +17,4 @@ class DRAWABLE
 		
 		virtual ~DRAWABLE() = default;
 };
+#endif //SFMLPROJECT_REBUILD_OBJECT_DRAWABLE_HPP

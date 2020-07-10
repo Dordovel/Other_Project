@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_OBJECT_STATIC_HPP
+#define SFMLPROJECT_REBUILD_OBJECT_STATIC_HPP
 
 namespace PROJECT::BASE::DATA
 {
@@ -15,3 +16,5 @@ class STATIC
 
         virtual ~STATIC() = default;
 };
+
+#endif //SFMLPROJECT_REBUILD_OBJECT_STATIC_HPP

@@ -1,4 +1,6 @@
-#pragma once 
+#ifndef SFMLPROJECT_REBUILD_STRUCT_RGB_OBJECT_HPP
+#define SFMLPROJECT_REBUILD_STRUCT_RGB_OBJECT_HPP
+
 #include <SFML/Graphics/Color.hpp>
 #include "./color.hpp"
 
@@ -46,3 +48,4 @@ namespace PROJECT::BASE::GRAPHIC
 			}
     };
 };
+#endif //SFMLPROJECT_REBUILD_STRUCT_RGB_OBJECT_HPP

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_POINTS_INTERFACE_HPP
+#define SFMLPROJECT_REBUILD_POINTS_INTERFACE_HPP
 
 namespace PROJECT::NPC
 {
@@ -9,3 +10,4 @@ namespace PROJECT::NPC
 			virtual void set_points(int points) noexcept = 0;
 	};
 };
+#endif //SFMLPROJECT_REBUILD_POINTS_INTERFACE_HPP

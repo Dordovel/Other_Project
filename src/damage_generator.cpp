@@ -1,4 +1,4 @@
-#include "../headers/generatdamage.hpp"
+#include "headers/damage_generator.hpp"
 #include <random>
 
 namespace PROJECT::NPC

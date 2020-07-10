@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_CLOCK_HPP
+#define SFMLPROJECT_REBUILD_CLOCK_HPP
+
 #include "../Interface/iclock.hpp"
 #include <SFML/System/Clock.hpp>
 
@@ -19,3 +21,5 @@ namespace PROJECT::CLOCK
 			~Clock() = default;
 	};
 };
+
+#endif //SFMLPROJECT_REBUILD_CLOCK_HPP

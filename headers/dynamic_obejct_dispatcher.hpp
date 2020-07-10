@@ -1,8 +1,10 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_DYNAMIC_OBEJCT_DISPATCHER_HPP
+#define SFMLPROJECT_REBUILD_DYNAMIC_OBEJCT_DISPATCHER_HPP
+
 #include "../graphicobject/text.hpp"
 #include "./npc.hpp"
 #include "../global.hpp"
-#include "./generatside.hpp"
+#include "side_generator.hpp"
 
 namespace PROJECT::DISPATCHER
 {
@@ -30,3 +32,4 @@ namespace PROJECT::DISPATCHER
 			size_t size() const noexcept;
 	};
 };
+#endif //SFMLPROJECT_REBUILD_DYNAMIC_OBEJCT_DISPATCHER_HPP

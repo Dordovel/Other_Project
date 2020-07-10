@@ -1,9 +1,11 @@
-#pragma once 
+#ifndef SFMLPROJECT_REBUILD_LAYOUT_HPP
+#define SFMLPROJECT_REBUILD_LAYOUT_HPP
+
 #include "../Game_Resources/map_loader/include/tmx/MapLoader.hpp"
 #include "../Interface/ilayout.hpp"
 #include <cstring>
 #include <memory>
-#include "../struct/collectionobject.hpp"
+#include "struct/static_object_collection.hpp"
 
 namespace PROJECT::COLLECTION
 {
@@ -13,12 +15,12 @@ namespace PROJECT::COLLECTION
             std::shared_ptr<tmx::MapLoader> _mapLoader;
             bool _isVisible;
             std::map<std::string, std::string> _mapStaticObjectInString = {
-                    {CollectionObject::TREE, "Tree"}, {CollectionObject::BORDER, "Border"}
+                    {StaticObjectCollection::TREE, "Tree"}, {StaticObjectCollection::BORDER, "Border"}
                 };
 
             bool check_map_static_object_with_string(std::string object, std::string_view objectName);
 
-            void load_map_from_file(std::string_view pathToMap);
+            void load_map_from_file(std::string_view pathToFile);
 
         public:
             Layout(std::string_view pathToMap, std::string_view mapFileName);
@@ -41,3 +43,4 @@ namespace PROJECT::COLLECTION
 
     };
 };
+#endif //SFMLPROJECT_REBUILD_LAYOUT_HPP

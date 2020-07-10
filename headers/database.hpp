@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_DATABASE_HPP
+#define SFMLPROJECT_REBUILD_DATABASE_HPP
+
 #include "../Interface/idatabase.hpp"
 #include <map>
 #include "../struct/side.hpp"
@@ -28,3 +30,4 @@ namespace PROJECT::DATABASE
             ~DataBase() = default;
     };
 };
+#endif //SFMLPROJECT_REBUILD_DATABASE_HPP

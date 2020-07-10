@@ -1,4 +1,5 @@
-#pragma once 
+#ifndef SFMLPROJECT_REBUILD_QUEST_NPC_HPP
+#define SFMLPROJECT_REBUILD_QUEST_NPC_HPP
 
 #include "../Interface/iquestnpc.hpp"
 #include "../graphicobject/sprite.hpp"
@@ -19,3 +20,4 @@ namespace PROJECT::NPC
 			~QuestNpc() = default;
 	};
 };
+#endif //SFMLPROJECT_REBUILD_QUEST_NPC_HPP

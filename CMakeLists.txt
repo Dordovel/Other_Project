@@ -1,8 +1,11 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.12)
 project(SFMLProject_rebuild)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "-Wall -g")
+
+set(CMAKE_CXX_COMPILER clang++)
+set(CMAKE_C_COMPILER clang)
 
 #set(CMAKE_CXX_CLANG_TIDY clang-tidy-10 -checks=-*,readability-avoid-const-params-in-decls,readability-const-return-type,readability-container-size-empty,readability-convert-member-functions-to-static,readability-delete-null-pointer,readability-deleted-default,readability-else-after-return,readability-function-size,readability-identifier-naming,readability-implicit-bool-conversion,readability-inconsistent-declaration-parameter-name,readability-isolate-declaration,readability-magic-numbers,readability-make-member-function-const,readability-misleading-indentation,readability-misplaced-array-index,readability-named-parameter,readability-non-const-parameter,readability-qualified-auto,readability-redundant-access-specifiers,readability-redundant-control-flow,readability-redundant-declaration,readability-redundant-function-ptr-dereference,readability-redundant-member-init,readability-redundant-preprocessor,readability-redundant-smartptr-get,readability-redundant-string-cstr,readability-redundant-string-init,readability-simplify-boolean-expr,readability-simplify-subscript-expr,readability-static-accessed-through-instance,readability-static-definition-in-anonymous-namespace,readability-string-compare,readability-uniqueptr-delete-release,readability-uppercase-literal-suffix,readability-use-anyofallof)
 
@@ -146,7 +149,7 @@ add_executable(SFMLProject_rebuild
         Game_Resources/map_loader/MapLoader/QuadTreeNode.cpp
         Game_Resources/map_loader/MapLoader/tmx2box2d.cpp 
  		${SOURCE_FILES}
-		${CMAKE_SOURCE_DIR}/struct/collectionobject.cpp
+		${CMAKE_SOURCE_DIR}/struct/static_object_collection.cpp
         ${SOURCE_FILES_ALGORITHM}
         ${SOURCE_FILES_OBJECT}
         main.cpp)

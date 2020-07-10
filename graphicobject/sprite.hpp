@@ -1,7 +1,9 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_SPRITE_HPP
+#define SFMLPROJECT_REBUILD_SPRITE_HPP
+
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
-#include "../struct/databaseresult.hpp"
+#include "struct/database_result.hpp"
 #include "./isprite.hpp"
 
 namespace PROJECT::BASE::GRAPHIC
@@ -21,7 +23,20 @@ namespace PROJECT::BASE::GRAPHIC
 
 
         public:
-			std::shared_ptr<OBJECT> clone() noexcept override;	
+
+            explicit Sprite(const PROJECT::DATABASE::DataBaseResult& data);
+
+            ~Sprite();
+
+            Sprite(Sprite&& rectangle) = default;
+
+            Sprite& operator= (Sprite&& rectangle) = default;
+
+            Sprite(const Sprite& rectangle) = default;
+
+            Sprite& operator= (const Sprite& rectangle) = default;
+
+            std::shared_ptr<OBJECT> clone() noexcept override;
 
             PROJECT::BASE::DATA::DrawableObject draw() const noexcept override;
 
@@ -62,9 +77,6 @@ namespace PROJECT::BASE::GRAPHIC
             void unblock_all_side() noexcept override;
 
             void set_texture_rect(const PROJECT::BASE::DATA::RectangleI& rect) override;
-			
-            explicit Sprite(const PROJECT::DATABASE::DataBaseResult& data);
-
-            ~Sprite();
     };
 };
+#endif //SFMLPROJECT_REBUILD_SPRITE_HPP

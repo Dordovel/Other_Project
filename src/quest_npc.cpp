@@ -1,4 +1,4 @@
-#include "../headers/questnpc.hpp"
+#include "headers/quest_npc.hpp"
 
 namespace PROJECT::NPC
 {

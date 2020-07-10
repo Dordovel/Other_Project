@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_DAMAGE_GENERATOR_HPP
+#define SFMLPROJECT_REBUILD_DAMAGE_GENERATOR_HPP
 
 #include <random>
 #include <SFML/System/Time.hpp>
@@ -26,3 +27,5 @@ namespace PROJECT::NPC
 			~DamageGenerator() = default;
 	};
 };
+
+#endif //SFMLPROJECT_REBUILD_DAMAGE_GENERATOR_HPP

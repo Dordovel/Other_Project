@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SFMLPROJECT_REBUILD_NPC_HPP
+#define SFMLPROJECT_REBUILD_NPC_HPP
+
 #include "../Interface/inpc.hpp"
 #include "../graphicobject/sprite.hpp"
 #include "./animation.hpp"
@@ -43,3 +45,4 @@ namespace PROJECT::NPC
 			~Npc() = default;
 	};
 };
+#endif //SFMLPROJECT_REBUILD_NPC_HPP

@@ -1,4 +1,5 @@
-#pragma once 
+#ifndef SFMLPROJECT_REBUILD_MENU_HPP
+#define SFMLPROJECT_REBUILD_MENU_HPP
 
 #include "../Interface/imenu.hpp"
 #include <vector>
@@ -33,3 +34,5 @@ namespace PROJECT::MENU
 			~Menu() = default;
 	};
 };
+
+#endif //SFMLPROJECT_REBUILD_MENU_HPP

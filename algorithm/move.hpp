@@ -1,7 +1,7 @@
 #pragma once
 
 #include "./imove.hpp"
-#include "../struct/vectorobject.hpp"
+#include "struct/vector_object.hpp"
 
 namespace PROJECT::MOVE
 {
