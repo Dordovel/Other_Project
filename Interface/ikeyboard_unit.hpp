@@ -1,7 +1,7 @@
 #ifndef SFMLPROJECT_REBUILD_KEYBOARD_UNIT_INTERFACE_HPP
 #define SFMLPROJECT_REBUILD_KEYBOARD_UNIT_INTERFACE_HPP
 
-#include <struct/event_object.hpp>
+#include "../struct/event_object.hpp"
 #include "./icontrol_unit.hpp"
 
 namespace PROJECT::UNIT::CONTROL::KEYBOARD

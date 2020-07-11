@@ -2,7 +2,7 @@
 #define SFMLPROJECT_REBUILD_APPLICATION_HPP
 
 #include <SFML/Graphics.hpp>
-#include <struct/event_object.hpp>
+#include "../struct/event_object.hpp"
 #include "../Interface/iapplication.hpp"
 
 namespace PROJECT::APPLICATION

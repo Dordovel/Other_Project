@@ -5,7 +5,7 @@
 #include "../Interface/ilayout.hpp"
 #include <cstring>
 #include <memory>
-#include "struct/static_object_collection.hpp"
+#include "../struct/static_object_collection.hpp"
 
 namespace PROJECT::COLLECTION
 {

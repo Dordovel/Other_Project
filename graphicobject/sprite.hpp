@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
-#include "struct/database_result.hpp"
+#include "../struct/database_result.hpp"
 #include "./isprite.hpp"
 
 namespace PROJECT::BASE::GRAPHIC
