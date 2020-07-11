@@ -28,6 +28,10 @@ namespace PROJECT::MOVE
 
 			void block_side(PROJECT::MOVE::Side side, bool status) noexcept override;
 
+			void block_all_side() noexcept override;
+
+			void unblock_all_side() noexcept override;
+
 			~Move() = default;
 	};
 };

@@ -4,7 +4,8 @@
 
 inline constexpr float ANIMATION_FRAME = 0.2F;
 inline constexpr int SPEED = 2;
-inline constexpr float DELAY = 4;
+inline constexpr float DELAY = 4.F;
+inline constexpr int ATTACK_SPEED  = 6.F;
 inline const static PROJECT::BASE::DATA::Vector2F OBJECT_SCALE = {1, 1.3f};
 inline const static PROJECT::BASE::DATA::Vector2F DEFAULT_VIEW_SIZE = {300, 300};
 inline constexpr float DEFAULT_VIEW_ZOOM = 2;

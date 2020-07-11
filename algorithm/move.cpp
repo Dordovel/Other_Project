@@ -86,4 +86,14 @@ namespace PROJECT::MOVE
 			this->_right = status;
 		}
 	}
+
+	void Move::block_all_side() noexcept
+	{
+		this->_up = this->_down = this->_left = this->_right = true;
+	}
+
+	void Move::unblock_all_side() noexcept
+	{
+		this->_up = this->_down = this->_left = this->_right = false;
+	}
 };

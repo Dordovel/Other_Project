@@ -268,6 +268,7 @@ int main()
 		personTest->set_max_health(200);
 		personTest->set_health(personTest->get_max_health());
 		personTest->set_damage(10);
+		personTest->set_id("TEST");
 
 		std::shared_ptr<NPC::Npc> personTest1 = nullptr;
 		personTest1 = change_person_type(NPC_MARTHA_GREEN, dataBase);
@@ -276,7 +277,7 @@ int main()
 		personTest1->set_max_health(200);
 		personTest1->set_health(personTest1->get_max_health());
 		personTest1->set_damage(10);
-
+		personTest1->set_id("TEST1");
 
 		person->add_animation_walk(MOVE::Side::RIGHT, dataBase.get_animation_walk(MOVE::Side::RIGHT));
 		person->add_animation_walk(MOVE::Side::LEFT, dataBase.get_animation_walk(MOVE::Side::LEFT));
@@ -322,7 +323,6 @@ int main()
 
 		MOVE::Side personMoveSide = MOVE::Side::NONE;
 		MOVE::Side randMoveSide = MOVE::Side::DOWN;
-		bool mouseLeftPressed = false;
 
 		std::pair forest = MAP_PATH.at("forest");
 		std::shared_ptr<COLLECTION::Layout> mapForest = std::make_shared<COLLECTION::Layout>(forest.first, forest.second);
@@ -459,11 +459,6 @@ int main()
 					personMoveSide = MOVE::Side::NONE;
 				});
 
-		mouse.button_pressed(UNIT::CONTROL::MOUSE::Mouse_Key::Left, [&mouseLeftPressed](int X, int Y)
-				{
-					mouseLeftPressed = true;
-				});
-
 		const int PROGRESSBARWidth = 115;
 		const int PROGRESSBARHeight = 25;
 		const BASE::DATA::Vector2F SPRITEScale = {0.3, 0.3};
@@ -471,10 +466,13 @@ int main()
 		std::shared_ptr<BASE::GRAPHIC::IRectangle> personHealth;
 		personHealth = std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARWidth, PROGRESSBARHeight);
 		personHealth->set_color(BASE::GRAPHIC::Color::Red);
+		std::shared_ptr<BASE::GRAPHIC::Text> health = std::make_shared<BASE::GRAPHIC::Text>(RESOURCES_PATH + "Font.otf");
+		health->visible(false);
+		health->set_font_size(15);
+		health->set_color(BASE::GRAPHIC::Color::Black);
 
 		std::shared_ptr<BASE::GRAPHIC::Sprite> personHealthBackground;
 		personHealthBackground = std::make_shared<BASE::GRAPHIC::Sprite>(dataBase.get_resources("healthPanel.png", {0, 0, 450, 150}));
-
 		personHealthBackground->set_scale(SPRITEScale);
 
 
@@ -544,6 +542,7 @@ int main()
 			loopCollisionElement = nullptr;
 			loopDynamicCollisionList.clear();
 
+
 			person->unblock_all_side();
 			person->set_state(NPC::State::IDLE);
 			view->unblock_all_side();
@@ -593,13 +592,13 @@ int main()
 
 
 			auto var = app->map_pixel_to_coords(mouse.get_position_in_desktop());
-			if(mouseLeftPressed)
+			if(personHealthBackground->collision(var))
 			{
-				if(person->collision(var))
-				{
-					std::cout<<"Enter Person\n";
-				}
-				mouseLeftPressed = false;
+				health->visible(true);
+			}
+			else
+			{
+				health->visible(false);
 			}
 
 //END CHECK LIFE NPC OBJECT
@@ -617,6 +616,11 @@ int main()
 									PROGRESSBARHeight); 
 			loopVec = personHealth->get_position();
 			personHealthBackground->set_position((loopVec.x - 10), (loopVec.y - 10));
+
+			loopRect = personHealth->get_global_bounds();
+			health->set_position(personHealth->get_position() + BASE::DATA::Vector2F{loopRect.width / 2, 0});
+			health->set_text(std::to_string(person->get_health()));
+
 
 			loopRect = view->get_global_bounds();
 			enemyHealth->set_position((loopRect.left + (loopRect.width * 0.5F) - (PROGRESSBARWidth * 0.5F)),
@@ -729,17 +733,21 @@ int main()
 			{
 				for(auto&& var : loopDynamicCollisionList)
 				{
-					damage.generate((*var.second),
+					auto d = damage.generate((*var.second),
 										person,
-										time * DELAY);
-
-					if(var.first == personLastSide)
+										time * ATTACK_SPEED);
+                    
+                    if(d != -1)
+                        std::cout<<"DAMAGE: "<<(*var.second)->get_id()<<"->"<<d<<"\n";
+					
+                    if(var.first == personLastSide)
 					{
 						if(person->get_state() == NPC::State::ATTACK)
 						{
 							auto t = damage.generate(person,
 											(*var.second),
-											time * DELAY);
+											time * ATTACK_SPEED);
+							std::cout<<"DAMAGE: "<<t<<"\n";
 						}
 
 						enemyHealth->set_size(convert_value((*var.second)->get_max_health(),
@@ -767,7 +775,7 @@ int main()
 
 				randMoveSide = dynamicObjectDispatcher.side(loopContainerIter, time * DELAY);
 
-				//mover->move(randMoveSide, *loopDynamicElement, time / DELAY, SPEED);
+				mover->move(randMoveSide, *loopDynamicElement, time / DELAY, SPEED);
 
 				loopDynamicElementAnimation = &dynamicObjectDispatcher.animation(loopContainerIter);
 
@@ -808,6 +816,8 @@ int main()
 			app->draw(*currentLayout);
 			app->draw(personHealthBackground);
 			app->draw(personHealth);
+			if( health->is_visible())
+				app->draw(health);
 			
 			if(enemyHealth->is_visible())
 			{

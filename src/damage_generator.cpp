@@ -27,7 +27,7 @@ namespace PROJECT::NPC
 		{
 			this->_currentTime = sf::microseconds(this->_currentTime.asMicroseconds() % this->_frameTime.asMicroseconds());
 
-			this->_uid = std::uniform_int_distribution<int>(0, person->get_damage());
+			this->_uid = std::uniform_int_distribution<int>(10, person->get_damage());
 			result = this->_uid(this->_mt);
 			enemy->set_health(enemy->get_health() - result);
 		}
