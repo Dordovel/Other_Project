@@ -5,7 +5,6 @@ namespace PROJECT::DISPATCHER
 	void DynamicObjectDispatcher::delete_object(size_t index) noexcept
 	{
 		this->_object.erase(this->_object.begin() + index);
-		this->_objectStatus.erase(this->_objectStatus.begin() + index);
 		this->_objectAnimation.erase(this->_objectAnimation.begin() + index);
 		this->_sideGenerator.erase(this->_sideGenerator.begin() + index);
 	}
@@ -15,18 +14,12 @@ namespace PROJECT::DISPATCHER
 		this->_object.emplace_back(std::forward<decltype(object)>(object));
 		this->_objectAnimation.emplace_back(ANIMATION_FRAME);
 		this->_objectAnimation.back().set_object(this->_object.back());
-		this->_objectStatus.emplace_back(std::make_shared<BASE::GRAPHIC::Text>(RESOURCES_PATH + "Font.otf"));
 		this->_sideGenerator.emplace_back(10.F);
 	}
 
 	std::shared_ptr<NPC::Npc>& DynamicObjectDispatcher::object(int index) noexcept
 	{
 		return this->_object.at(index);
-	}
-
-	std::shared_ptr<BASE::GRAPHIC::IText>& DynamicObjectDispatcher::status(int index) noexcept
-	{
-		return this->_objectStatus.at(index);
 	}
 
 	ANIMATION::Anim& DynamicObjectDispatcher::animation(int index) noexcept

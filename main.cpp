@@ -466,10 +466,10 @@ int main()
 		std::shared_ptr<BASE::GRAPHIC::IRectangle> personHealth;
 		personHealth = std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARWidth, PROGRESSBARHeight);
 		personHealth->set_color(BASE::GRAPHIC::Color::Red);
-		std::shared_ptr<BASE::GRAPHIC::Text> health = std::make_shared<BASE::GRAPHIC::Text>(RESOURCES_PATH + "Font.otf");
-		health->visible(false);
-		health->set_font_size(15);
-		health->set_color(BASE::GRAPHIC::Color::Black);
+		std::shared_ptr<BASE::GRAPHIC::Text> personHealthStatus = std::make_shared<BASE::GRAPHIC::Text>(RESOURCES_PATH + "Font.otf");
+		personHealthStatus->visible(false);
+		personHealthStatus->set_font_size(15);
+		personHealthStatus->set_color(BASE::GRAPHIC::Color::Black);
 
 		std::shared_ptr<BASE::GRAPHIC::Sprite> personHealthBackground;
 		personHealthBackground = std::make_shared<BASE::GRAPHIC::Sprite>(dataBase.get_resources("healthPanel.png", {0, 0, 450, 150}));
@@ -481,6 +481,10 @@ int main()
 		enemyHealth->set_color(BASE::GRAPHIC::Color::Purple);
 		enemyHealth->visible(false);
 
+		std::shared_ptr<BASE::GRAPHIC::Text> enemyHealthStatus = std::make_shared<BASE::GRAPHIC::Text>(RESOURCES_PATH + "Font.otf");
+		enemyHealthStatus->visible(false);
+		enemyHealthStatus->set_font_size(15);
+		enemyHealthStatus->set_color(BASE::GRAPHIC::Color::Black);
 
 		std::shared_ptr<BASE::GRAPHIC::Sprite> enemyHealthBackground;
 		enemyHealthBackground = std::make_shared<BASE::GRAPHIC::Sprite>(dataBase.get_resources("healthPanel.png", {0, 0, 450, 150}));
@@ -590,15 +594,14 @@ int main()
 
 //CHECK LIFE NPC OBJECT
 
-
 			auto var = app->map_pixel_to_coords(mouse.get_position_in_desktop());
 			if(personHealthBackground->collision(var))
 			{
-				health->visible(true);
+				personHealthStatus->visible(true);
 			}
 			else
 			{
-				health->visible(false);
+				personHealthStatus->visible(false);
 			}
 
 //END CHECK LIFE NPC OBJECT
@@ -617,17 +620,22 @@ int main()
 			loopVec = personHealth->get_position();
 			personHealthBackground->set_position((loopVec.x - 10), (loopVec.y - 10));
 
-			loopRect = personHealth->get_global_bounds();
-			health->set_position(personHealth->get_position() + BASE::DATA::Vector2F{loopRect.width / 2, 0});
-			health->set_text(std::to_string(person->get_health()));
+			personHealthStatus->set_position(personHealth->get_position()
+                                                + BASE::DATA::Vector2F(10, 0));
+            
+			personHealthStatus->set_text(std::to_string(person->get_health()) + "/"
+                                            + std::to_string(person->get_max_health()));
 
 
 			loopRect = view->get_global_bounds();
 			enemyHealth->set_position((loopRect.left + (loopRect.width * 0.5F) - (PROGRESSBARWidth * 0.5F)),
 										(loopRect.top + PROGRESSBARHeight));
 			loopVec = enemyHealth->get_position();
-
 			enemyHealthBackground->set_position((loopVec.x - 10), (loopVec.y - 10));
+            
+			enemyHealthStatus->set_position(enemyHealth->get_position()
+                                                + BASE::DATA::Vector2F(10, 0));
+            
 //}
 //END POSITIONING HEALTH BAR
 
@@ -754,13 +762,17 @@ int main()
 															PROGRESSBARWidth, 
 														(*var.second)->get_health()), 
 												PROGRESSBARHeight); 
+                        enemyHealthStatus->set_text(std::to_string((*var.second)->get_health()) + "/"
+                                                        + std::to_string((*var.second)->get_max_health()));
 
 						enemyHealth->visible(true);
+                        enemyHealthStatus->visible(true);
 					}
 				}
 			}
 			else
 			{
+                enemyHealthStatus->visible(false);
 				enemyHealth->visible(false);
 			}
 //}
@@ -814,35 +826,12 @@ int main()
 //DRAW OBJECTS
 //{
 			app->draw(*currentLayout);
-			app->draw(personHealthBackground);
-			app->draw(personHealth);
-			if( health->is_visible())
-				app->draw(health);
-			
-			if(enemyHealth->is_visible())
-			{
-				app->draw(enemyHealthBackground);
-				app->draw(enemyHealth);
-			}
-
 
 
 			loopContainerSize = dynamicObjectDispatcher.size();
 			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 			{
-				loopDynamicElement = &dynamicObjectDispatcher.object(loopContainerIter);
-				app->draw(*loopDynamicElement);
-
-				loopTextElement = &dynamicObjectDispatcher.status(loopContainerIter);
-				loopRect = (*loopTextElement)->get_global_bounds();
-				loopVec = {15, loopRect.height * 2};
-
-				(*loopTextElement)->set_position((*loopDynamicElement)->get_position() - loopVec);
-				(*loopTextElement)->set_text(std::to_string((*loopDynamicElement)->get_health())
-												+ "/"
-											   	+ std::to_string((*loopDynamicElement)->get_max_health()));
-
-				app->draw(*loopTextElement);
+				app->draw(dynamicObjectDispatcher.object(loopContainerIter));
 			}
 
 			app->draw(person);
@@ -850,6 +839,18 @@ int main()
             app->draw(collision._circleLeft);
             app->draw(collision._circleRight);
             app->draw(collision._circleUp);
+            
+			app->draw(personHealthBackground);
+			app->draw(personHealth);
+			if( personHealthStatus->is_visible())
+				app->draw(personHealthStatus);
+			
+			if(enemyHealth->is_visible())
+			{
+				app->draw(enemyHealthBackground);
+				app->draw(enemyHealth);
+                app->draw(enemyHealthStatus);
+			}
 //}
 //END DRAW OBJECTS
 
