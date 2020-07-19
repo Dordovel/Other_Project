@@ -1,9 +1,9 @@
 #include "../headers/layout.hpp"
 
 #include <utility>
-#include "struct/rect_object.hpp"
-#include "struct/vector_object.hpp"
-#include "struct/drawable_object.hpp"
+#include "../struct/rect_object.hpp"
+#include "../struct/vector_object.hpp"
+#include "../struct/drawable_object.hpp"
 
 namespace PROJECT::COLLECTION
 {

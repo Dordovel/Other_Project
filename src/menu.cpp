@@ -1,50 +1,52 @@
 #include "../headers/menu.hpp"
-#include "struct/rect_object.hpp"
-#include "struct/vector_object.hpp"
+#include "../struct/rect_object.hpp"
+#include "../struct/vector_object.hpp"
 #include "../id.hpp"
+
+namespace
+{
+	using namespace PROJECT::BASE::DATA;
+
+	Vector2F get_object_size(const std::shared_ptr<STATIC>& layout) noexcept
+	{
+		RectangleF layoutRect = layout->get_global_bounds();
+		return {layoutRect.width, layoutRect.height};
+	}
+};
+
 
 namespace PROJECT::MENU
 {
-	bool Menu::menu_configure() noexcept
+	bool Menu::menu_configure(float X, float Y, float Width, float Height) noexcept
 	{
-		PROJECT::BASE::DATA::Vector2UI layoutSize = this->_layout->get_size();
-		
 		size_t size = 0;
 
 		for(const auto& object : this->_item)
 		{
-			size += object->get_global_bounds().height;
+			size += get_object_size(object).y;
 		}
 
-		if(size < layoutSize.y)
+		if(size < Height)
 		{
-			this->item_step = (layoutSize.y - size) / this->_item.size();
-
-			PROJECT::BASE::DATA::Vector2UI layoutCenter = { (layoutSize.x / 2), (layoutSize.y / 2) };
-			float x_center = layoutCenter.x;
-			float y_pos = layoutCenter.y / 2;
-			PROJECT::BASE::DATA::Vector2F pos{x_center, y_pos};
+			this->item_step = ((Height - size) / this->_item.size());
+			float pointerX = X + (Width / 2);
+			float pointerY = Y + this->item_offset;
 
 			for(const auto& object : this->_item)
 			{
-				object->set_position(pos);
-				pos.y += this->item_step;
+				object->set_position(pointerX, pointerY);
+				pointerY += this->item_step;
 			}
 
 			PROJECT::BASE::DATA::Vector2F firstElementPosition = (*this->_item.begin())->get_position();
 			PROJECT::BASE::DATA::RectangleF pointerBounds = this->_pointer->get_global_bounds();
-			this->_pointer->set_position(x_center - (pointerBounds.width * 2), firstElementPosition.y + (pointerBounds.height / 2));
+			this->_pointer->set_position(pointerX - (pointerBounds.width * 2), 
+											firstElementPosition.y + (pointerBounds.height / 2));
 
 			return true;
 		}
 
 		return false;
-	}
-
-	void Menu::set_layout(const std::shared_ptr<PROJECT::COLLECTION::ILayout>& layout) noexcept
-	{
-		this->reset();
-		this->_layout = layout;
 	}
 
 	void Menu::set_pointer(const std::shared_ptr<OBJECT>& pointer) noexcept

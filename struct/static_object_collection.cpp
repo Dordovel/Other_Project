@@ -1,4 +1,4 @@
-#include "static_object_collection.hpp"
+#include "./static_object_collection.hpp"
 
 namespace PROJECT::COLLECTION
 {

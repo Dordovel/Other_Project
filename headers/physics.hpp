@@ -18,8 +18,6 @@ namespace PROJECT::PHYSICS
 			Physics() = default;
 			~Physics() = default;
 
-			bool check_collision(const std::shared_ptr <PROJECT::COLLECTION::ICollection>& lv,
-								 const std::shared_ptr <INTERACTION>& rv) noexcept override;
 	};
 
 };

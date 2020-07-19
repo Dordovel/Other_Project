@@ -1,6 +1,6 @@
 #include "./sprite.hpp"
-#include "struct/drawable_object.hpp"
-#include "struct/vector_object.hpp"
+#include "../struct/drawable_object.hpp"
+#include "../struct/vector_object.hpp"
 #include "../struct/side.hpp"
 
 namespace PROJECT::BASE::GRAPHIC

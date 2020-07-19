@@ -1,5 +1,5 @@
 #include "../headers/animation.hpp"
-#include "struct/rect_object.hpp"
+#include "../struct/rect_object.hpp"
 #include <iostream>
 
 namespace PROJECT::ANIMATION

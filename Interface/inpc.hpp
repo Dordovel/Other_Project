@@ -6,6 +6,7 @@
 #include "./ihealth.hpp"
 #include "./idamage.hpp"
 #include "./animation.hpp"
+#include "../graphicobject/isprite.hpp"
 
 namespace PROJECT::MOVE
 {
@@ -25,7 +26,8 @@ namespace PROJECT::NPC
 	class INpc : public IDamage,
 				public IHealth,
 				public IPoints,
-				public IArmor
+				public IArmor,
+				virtual public PROJECT::BASE::GRAPHIC::ISprite
 	{
 		public:
 

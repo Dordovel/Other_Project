@@ -8,7 +8,7 @@
 
 namespace PROJECT::BASE::GRAPHIC
 {
-    class Sprite : public PROJECT::BASE::GRAPHIC::ISprite
+    class Sprite : virtual public PROJECT::BASE::GRAPHIC::ISprite
     {
         private:
             std::shared_ptr<sf::Sprite> _sprite;

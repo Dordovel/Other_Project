@@ -14,8 +14,6 @@ namespace PROJECT::PHYSICS
             virtual std::vector<std::string> get_collision_object(const std::shared_ptr<PROJECT::COLLECTION::ICollection>& lv,
                                                                   const std::shared_ptr<INTERACTION>& rv) noexcept = 0;
 
-            virtual bool check_collision(const std::shared_ptr<PROJECT::COLLECTION::ICollection>& lv,
-                                          const std::shared_ptr<INTERACTION>& rv) noexcept = 0;
             virtual ~IPhysics() = default;
     };
 };

@@ -34,25 +34,4 @@ namespace PROJECT::PHYSICS
 
 		return result;
 	}
-
-    bool Physics::check_collision(const std::shared_ptr <PROJECT::COLLECTION::ICollection>& lv,
-                                  const std::shared_ptr <INTERACTION>& rv) noexcept
-    {
-        PROJECT::BASE::DATA::RectangleF bounds = rv->get_global_bounds();
-
-        auto collisionPoint = lv->get_objects(rv->get_global_bounds());
-
-        for(auto&& [key, points] : collisionPoint)
-        {
-            for(auto var : points)
-            {
-                if (var.intersects(bounds))
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
 };

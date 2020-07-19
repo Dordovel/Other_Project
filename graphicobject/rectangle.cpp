@@ -1,12 +1,11 @@
 #include "./rectangle.hpp"
 
-#include "struct/drawable_object.hpp"
-#include "struct/vector_object.hpp"
-#include "struct/rect_object.hpp"
+#include "../struct/drawable_object.hpp"
+#include "../struct/vector_object.hpp"
+#include "../struct/rect_object.hpp"
 #include "../struct/side.hpp"
 #include "../struct/rgb.hpp"
-#include "struct/database_result.hpp"
-#include <cassert>
+#include "../struct/database_result.hpp"
 
 namespace PROJECT::BASE::GRAPHIC
 {

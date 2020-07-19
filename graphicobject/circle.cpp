@@ -1,7 +1,7 @@
-#include "struct/drawable_object.hpp"
-#include "struct/vector_object.hpp"
+#include "../struct/drawable_object.hpp"
+#include "../struct/vector_object.hpp"
 #include "./circle.hpp"
-#include "struct/rect_object.hpp"
+#include "../struct/rect_object.hpp"
 #include "../struct/side.hpp"
 #include "../struct/rgb.hpp"
 
@@ -14,8 +14,6 @@ namespace PROJECT::BASE::GRAPHIC
 															_left(false),
 															_right(false)
 	{
-		this->_circleShape->setFillColor(sf::Color::Green);
-		this->_circleShape->setOutlineColor(sf::Color::Black);
 		this->_circleShape->setOutlineThickness(radius / 10);
 
 		std::cout<<"Circle(): "<<this->get_id()<< '\n';

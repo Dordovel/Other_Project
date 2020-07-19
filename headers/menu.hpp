@@ -10,14 +10,13 @@ namespace PROJECT::MENU
 	{
 		private:
 			std::vector<std::shared_ptr<OBJECT>> _item;
-			std::shared_ptr<PROJECT::COLLECTION::ILayout> _layout;
+			std::shared_ptr<OBJECT> _layout;
 			std::shared_ptr<OBJECT> _pointer;
 			float item_step;
+			float item_offset = 20;
 
 		public:
-			bool menu_configure() noexcept override;
-
-			void set_layout(const std::shared_ptr<PROJECT::COLLECTION::ILayout>& layout) noexcept override;
+			bool menu_configure(float X, float Y, float Width, float Height) noexcept override;
 
 			void set_pointer(const std::shared_ptr<OBJECT>& pointer) noexcept override;
 

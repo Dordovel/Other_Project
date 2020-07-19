@@ -1,7 +1,7 @@
 #include "../headers/application.hpp"
-#include "struct/drawable_object.hpp"
-#include "struct/event_object.hpp"
-#include "struct/vector_object.hpp"
+#include "../struct/drawable_object.hpp"
+#include "../struct/event_object.hpp"
+#include "../struct/vector_object.hpp"
 
 namespace PROJECT::APPLICATION
 {

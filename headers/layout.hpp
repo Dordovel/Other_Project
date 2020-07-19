@@ -25,7 +25,8 @@ namespace PROJECT::COLLECTION
         public:
             Layout(std::string_view pathToMap, std::string_view mapFileName);
 
-            std::map<std::string, std::vector<PROJECT::BASE::DATA::RectangleF>> get_objects(const PROJECT::BASE::DATA::RectangleF &rectangleF) const noexcept override;
+            std::map<std::string, std::vector<PROJECT::BASE::DATA::RectangleF>> 
+				get_objects(const PROJECT::BASE::DATA::RectangleF &rectangleF) const noexcept override;
 
             void visible(bool flag) noexcept override;
 

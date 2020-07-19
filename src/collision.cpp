@@ -1,6 +1,6 @@
 #include "../headers/collision.hpp"
-#include "struct/static_object_collection.hpp"
-#include "struct/rect_object.hpp"
+#include "../struct/static_object_collection.hpp"
+#include "../struct/rect_object.hpp"
 #include "../struct/side.hpp"
 
 namespace PROJECT::COLLISION
@@ -40,10 +40,14 @@ namespace PROJECT::COLLISION
                                             const std::shared_ptr<INTERACTION>& rv) noexcept
 	{
 		BASE::DATA::RectangleF rect;
-        std::array<std::pair<PROJECT::MOVE::Side, std::string>, 4> result = {{{MOVE::Side::NONE, ""},
-                                                                             {MOVE::Side::NONE, ""},
-                                                                             {MOVE::Side::NONE, ""},
-                                                                             {MOVE::Side::NONE, ""}}};
+        std::array<std::pair<PROJECT::MOVE::Side, std::string>, 4> result = {
+																				{
+																					{MOVE::Side::NONE, ""},
+																					{MOVE::Side::NONE, ""},
+																					{MOVE::Side::NONE, ""},
+																					{MOVE::Side::NONE, ""}
+																				}
+																			};
 
 		if(this->_physics.check_intersection(lv, rv))
 		{
@@ -81,10 +85,14 @@ namespace PROJECT::COLLISION
 	                                        const std::shared_ptr<INTERACTION>& rv ) noexcept
 	{
 		BASE::DATA::RectangleF rect;
-        std::array<std::pair<PROJECT::MOVE::Side, std::string>, 4> result = {{{MOVE::Side::NONE, ""},
-                                                                                 {MOVE::Side::NONE, ""},
-                                                                                 {MOVE::Side::NONE, ""},
-                                                                                 {MOVE::Side::NONE, ""}}};
+        std::array<std::pair<PROJECT::MOVE::Side, std::string>, 4> result = {
+																				{
+																					{MOVE::Side::NONE, ""},
+																					{MOVE::Side::NONE, ""},
+																					{MOVE::Side::NONE, ""},
+																					{MOVE::Side::NONE, ""}
+																				}
+																			};
 
 		auto&& collisionObjectList = this->_physics.get_collision_object(lv, rv);
 

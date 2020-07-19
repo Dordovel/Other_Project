@@ -1,6 +1,6 @@
 #include "../headers/database.hpp"
-#include "struct/rect_object.hpp"
-#include "struct/database_result.hpp"
+#include "../struct/rect_object.hpp"
+#include "../struct/database_result.hpp"
 
 namespace PROJECT::DATABASE
 {

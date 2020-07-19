@@ -150,26 +150,42 @@ enum class MenuType
 };
 
 
+PROJECT::BASE::DATA::Vector2F get_object_center_position(const std::shared_ptr<STATIC>& object)
+{
+	PROJECT::BASE::DATA::RectangleF rect = object->get_global_bounds();
+	
+	return {rect.left + (rect.width / 2), rect.top + (rect.height / 2)};
+}
+
+PROJECT::BASE::DATA::Vector2F 
+	adapt_view_position(const PROJECT::BASE::DATA::Vector2F& viewCenterPointer,
+							const PROJECT::BASE::DATA::Vector2F& viewSize)
+{
+
+	float viewCenterX = viewSize.x / 2;
+	float viewCenterY = viewSize.y / 2;
+
+	return {viewCenterPointer.x - viewCenterX, viewCenterPointer.y - viewCenterY};
+}
+
 std::string menu(MenuType type,
 				const std::shared_ptr<APPLICATION::IApplication>& app,
 				const std::shared_ptr<APPLICATION::IView>& view) noexcept
 {	
-	std::shared_ptr<BASE::GRAPHIC::Circle> menuSelectedPointer = std::make_shared<BASE::GRAPHIC::Circle>(8);
+	std::shared_ptr<BASE::GRAPHIC::Rectangle> menuSelectedPointer =
+			std::make_shared<BASE::GRAPHIC::Rectangle>(8, 20);
 	menuSelectedPointer->visible(true);
-	menuSelectedPointer->set_points_count(4);
+	menuSelectedPointer->set_color(PROJECT::BASE::GRAPHIC::Color::Purple);
 	
-	std::pair menu_bg = MAP_PATH.at("menu");
-
 	std::string result;
 
-	std::shared_ptr<COLLECTION::Layout> layout = std::make_shared<COLLECTION::Layout>(menu_bg.first, menu_bg.second);
+	std::shared_ptr<PROJECT::BASE::GRAPHIC::IRectangle> layout = 
+			std::make_shared<PROJECT::BASE::GRAPHIC::Rectangle>(view->get_size());
+	layout->set_position(adapt_view_position(view->get_position(), view->get_size()));
+	layout->set_color(PROJECT::BASE::GRAPHIC::Color::Black);
 
 	if(type == MenuType::MAIN)
 	{
-		BASE::DATA::Vector2UI layoutSize = layout->get_size();
-		view->set_position((layoutSize.x / 2), (layoutSize.y / 2));
-		view->set_size(layoutSize.x, layoutSize.y);
-
 		bool isMainMenu = true;
 		bool isSecondMenu = true;
 
@@ -215,10 +231,6 @@ std::string menu(MenuType type,
 	}
 	else
 	{
-		BASE::DATA::Vector2UI layoutSize = layout->get_size();
-		view->set_position((layoutSize.x / 2), (layoutSize.y / 2));
-		view->set_size(layoutSize.x, layoutSize.y);
-
 		result = menu_builder(app, menuSelectedPointer, layout, open_pause_menu());
 	}
 
@@ -228,11 +240,15 @@ std::string menu(MenuType type,
 int main()
 {
     std::shared_ptr<APPLICATION::View> view = std::make_shared<APPLICATION::View>();
+	view->set_position(DEFAULT_POSITION);
+	view->set_size(DEFAULT_VIEW_SIZE);
+	view->zoom(DEFAULT_VIEW_ZOOM);
 
-    std::shared_ptr<APPLICATION::Application> app = std::make_shared<APPLICATION::Application>("Test_Game", 700, 500);
+    std::shared_ptr<APPLICATION::Application> app =
+			std::make_shared<APPLICATION::Application>("Test_Game", 700, 500);
     app->init();
     app->set_position(500, 500);
-	app->set_view(view);	
+	app->set_view(view);
 
     DATABASE::DataBase dataBase(RESOURCES_PATH);
 
@@ -243,19 +259,20 @@ int main()
 	bool isOpen = true; 
 	bool isRun = true; 
 
+
 	while(isOpen)
 	{
-		// std::string result = menu(MenuType::MAIN, app, view);
-		// if(result == MENU_EXIT_ITEM || result == EXIT)
-		// {
-		// 	app->close();
-		// 	break;
-		// }
+		 std::string result = menu(MenuType::MAIN, app, view);
+		 if(result == MENU_EXIT_ITEM || result == EXIT)
+		 {
+		 	app->close();
+		 	break;
+		}
 
 		std::shared_ptr<NPC::Npc> person = nullptr;
-		// person = change_person_type(result, dataBase);
+		//person = change_person_type(result, dataBase);
 		person = std::make_shared<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_PINK, MOVE::Side::DOWN));
-		person->set_position(1200, 1200);
+		person->set_position(DEFAULT_POSITION);
 		person->set_scale(OBJECT_SCALE);
 		person->set_max_health(200);
 		person->set_health(person->get_max_health());
@@ -317,15 +334,12 @@ int main()
 
 		anim.set_object(person);
 
-		view->set_position(person->get_position());
-		view->set_size(DEFAULT_VIEW_SIZE);
-		view->zoom(DEFAULT_VIEW_ZOOM);
-
 		MOVE::Side personMoveSide = MOVE::Side::NONE;
 		MOVE::Side randMoveSide = MOVE::Side::DOWN;
 
 		std::pair forest = MAP_PATH.at("forest");
-		std::shared_ptr<COLLECTION::Layout> mapForest = std::make_shared<COLLECTION::Layout>(forest.first, forest.second);
+		std::shared_ptr<COLLECTION::Layout> mapForest =
+				std::make_shared<COLLECTION::Layout>(forest.first, forest.second);
 
 		MOVE::Move* mover = new MOVE::Move;
 
@@ -466,13 +480,15 @@ int main()
 		std::shared_ptr<BASE::GRAPHIC::IRectangle> personHealth;
 		personHealth = std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARWidth, PROGRESSBARHeight);
 		personHealth->set_color(BASE::GRAPHIC::Color::Red);
-		std::shared_ptr<BASE::GRAPHIC::Text> personHealthStatus = std::make_shared<BASE::GRAPHIC::Text>(RESOURCES_PATH + "Font.otf");
+		std::shared_ptr<BASE::GRAPHIC::Text> personHealthStatus = 
+				std::make_shared<BASE::GRAPHIC::Text>(RESOURCES_PATH + "Font.otf");
 		personHealthStatus->visible(false);
 		personHealthStatus->set_font_size(15);
 		personHealthStatus->set_color(BASE::GRAPHIC::Color::Black);
 
-		std::shared_ptr<BASE::GRAPHIC::Sprite> personHealthBackground;
-		personHealthBackground = std::make_shared<BASE::GRAPHIC::Sprite>(dataBase.get_resources("healthPanel.png", {0, 0, 450, 150}));
+		std::shared_ptr<BASE::GRAPHIC::Sprite> personHealthBackground =
+				std::make_shared<BASE::GRAPHIC::Sprite>(dataBase.get_resources("healthPanel.png", 
+																				{0, 0, 450, 150}));
 		personHealthBackground->set_scale(SPRITEScale);
 
 
@@ -481,13 +497,14 @@ int main()
 		enemyHealth->set_color(BASE::GRAPHIC::Color::Purple);
 		enemyHealth->visible(false);
 
-		std::shared_ptr<BASE::GRAPHIC::Text> enemyHealthStatus = std::make_shared<BASE::GRAPHIC::Text>(RESOURCES_PATH + "Font.otf");
+		std::shared_ptr<BASE::GRAPHIC::Text> enemyHealthStatus =
+				std::make_shared<BASE::GRAPHIC::Text>(RESOURCES_PATH + "Font.otf");
 		enemyHealthStatus->visible(false);
 		enemyHealthStatus->set_font_size(15);
 		enemyHealthStatus->set_color(BASE::GRAPHIC::Color::Black);
 
-		std::shared_ptr<BASE::GRAPHIC::Sprite> enemyHealthBackground;
-		enemyHealthBackground = std::make_shared<BASE::GRAPHIC::Sprite>(dataBase.get_resources("healthPanel.png", {0, 0, 450, 150}));
+		std::shared_ptr<BASE::GRAPHIC::Sprite> enemyHealthBackground = 
+				std::make_shared<BASE::GRAPHIC::Sprite>(dataBase.get_resources("healthPanel.png", {0, 0, 450, 150}));
 
 		enemyHealthBackground->set_scale(SPRITEScale);
 
@@ -504,10 +521,8 @@ int main()
 		BASE::DATA::Vector2F loopVec = {};
 		size_t loopContainerIter = 0;
 		size_t loopContainerSize = 0;
-		std::shared_ptr<NPC::Npc>* loopDynamicElement = nullptr;
-		std::shared_ptr<NPC::Npc>* loopDynamicElementCollision = nullptr;
+		std::shared_ptr<NPC::INpc>* loopDynamicElement = nullptr;
 		std::shared_ptr<BASE::GRAPHIC::IText>* loopTextElement = nullptr;
-        std::pair interactionDynamicObjectSide = {MOVE::Side::NONE, ""s};
 		ANIMATION::Anim* loopDynamicElementAnimation = nullptr;
 		std::array<std::pair<MOVE::Side, std::string>, 4> loopCollisionObjectList = {};
         std::pair<MOVE::Side, std::string>* loopCollisionElement = nullptr;
@@ -533,13 +548,11 @@ int main()
 
 //RESET ALL LOOP VARIABLE
 			
-			interactionDynamicObjectSide = {MOVE::Side::NONE, ""s};
 			loopRect = {};
 			loopVec = {};
 			loopContainerIter = 0;
 			loopContainerSize = 0;
 			loopDynamicElement = nullptr;
-			loopDynamicElementCollision = nullptr;
 			loopTextElement = nullptr;
 			loopDynamicElementAnimation = nullptr;
 			loopCollisionObjectList = {};

@@ -2,7 +2,7 @@
 #define SFMLPROJECT_REBUILD_STRUCT_DATABASE_RESULT_HPP
 
 #include <string>
-#include "rect_object.hpp"
+#include "./rect_object.hpp"
 
 namespace PROJECT::DATABASE
 {

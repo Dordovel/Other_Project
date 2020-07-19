@@ -1,4 +1,4 @@
-#include "headers/side_generator.hpp"
+#include "../headers/side_generator.hpp"
 #include <random>
 
 namespace PROJECT::NPC
