@@ -13,7 +13,6 @@ namespace PROJECT::DISPATCHER
 	{
 		this->_object.emplace_back(std::forward<decltype(object)>(object));
 		this->_objectAnimation.emplace_back(ANIMATION_FRAME);
-		this->_objectAnimation.back().set_object(this->_object.back());
 		this->_sideGenerator.emplace_back(10.F);
 	}
 

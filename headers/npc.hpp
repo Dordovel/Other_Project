@@ -8,7 +8,9 @@
 
 namespace PROJECT::NPC
 {
-	class Npc : public INpc, public PROJECT::BASE::GRAPHIC::Sprite
+	class Npc : public INpc,
+				public PROJECT::BASE::GRAPHIC::Sprite
+
 	{
 		private:
 			float _armor = {0};
@@ -52,9 +54,9 @@ namespace PROJECT::NPC
 
 			void add_animation_attack(PROJECT::MOVE::Side side, const std::array<PROJECT::BASE::DATA::RectangleI, 3>& rect) noexcept;
 
-			PROJECT::ANIMATION::IAnimation& get_animation_attack(PROJECT::MOVE::Side side) noexcept override;
+			PROJECT::ANIMATION::IAnimation* get_animation_attack(PROJECT::MOVE::Side side) noexcept override;
 
-			PROJECT::ANIMATION::IAnimation& get_animation_walk(PROJECT::MOVE::Side side) noexcept override;
+			PROJECT::ANIMATION::IAnimation* get_animation_walk(PROJECT::MOVE::Side side) noexcept override;
 
             ~Npc() = default;
 	};

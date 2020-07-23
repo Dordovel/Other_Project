@@ -331,9 +331,6 @@ int main()
 		personTest1->add_animation_attack(MOVE::Side::DOWN, dataBase.get_animation_attack(MOVE::Side::DOWN));
 		personTest1->add_animation_attack(MOVE::Side::UP, dataBase.get_animation_attack(MOVE::Side::UP));
 
-
-		anim.set_object(person);
-
 		MOVE::Side personMoveSide = MOVE::Side::NONE;
 		MOVE::Side randMoveSide = MOVE::Side::DOWN;
 
@@ -725,7 +722,7 @@ int main()
 				mover->move(personMoveSide, view, time / DELAY , SPEED);
 
 				personLastSide = personMoveSide;
-				anim.set_animation(&person->get_animation_walk(personMoveSide));
+				anim.set_animation(person->get_animation_walk(personMoveSide));
 				anim.stop(false);
 
 				person->set_state(NPC::State::WALK);
@@ -733,7 +730,7 @@ int main()
 
 			if(person->get_state() == NPC::State::ATTACK)
 			{
-				anim.set_animation(&person->get_animation_attack(personLastSide));
+				anim.set_animation(person->get_animation_attack(personLastSide));
 				anim.stop(false);
 			}
 
@@ -815,7 +812,7 @@ int main()
 					else
 					{
 						(*loopDynamicElement)->set_state(NPC::State::WALK);
-						loopDynamicElementAnimation->set_animation(&(*loopDynamicElement)->get_animation_walk(randMoveSide));
+						loopDynamicElementAnimation->set_animation((*loopDynamicElement)->get_animation_walk(randMoveSide));
 						loopDynamicElementAnimation->stop(false);
 					}
 				}
@@ -825,7 +822,7 @@ int main()
 					{
 						if(object.second == loopDynamicElement)
 						{
-							loopDynamicElementAnimation->set_animation(&(*loopDynamicElement)->get_animation_attack(
+							loopDynamicElementAnimation->set_animation((*loopDynamicElement)->get_animation_attack(
 													inversion_side(object.first)));
 						}
 					}

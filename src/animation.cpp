@@ -19,16 +19,21 @@ namespace PROJECT::ANIMATION
 		return this->_frames.size();
 	}
 
+	void Animation::set_object(ANIMATED* object) noexcept
+	{
+		this->_object = object;
+	}
+
+	ANIMATED* Animation::get_object() noexcept
+	{
+		return this->_object;
+	}
+
 
 
 	Anim::Anim(float param):_anim(nullptr),_loop(true)
 	{
 		this->_frameTime = sf::seconds(param);
-	}
-
-	void Anim::set_object(const std::shared_ptr<ANIMATED>& object) noexcept
-	{
-		this->_object = object;
 	}
 
 	void Anim::set_animation(IAnimation* anim) noexcept 
@@ -40,30 +45,27 @@ namespace PROJECT::ANIMATION
 	{
 		if (!this->_stop && this->_anim != nullptr)
 		{
-			if(this->_anim->get_frame_count() > 0)
+			this->_currentTime += sf::milliseconds(delta);
+
+			if (this->_currentTime >= this->_frameTime)
 			{
-				this->_currentTime += sf::milliseconds(delta);
+				this->_currentTime = sf::microseconds(this->_currentTime.asMicroseconds() % this->_frameTime.asMicroseconds());
 
-				if (this->_currentTime >= this->_frameTime)
+				if (this->_currentFrame + 1 < this->_anim->get_frame_count())
+					this->_currentFrame++;
+				else
 				{
-					this->_currentTime = sf::microseconds(this->_currentTime.asMicroseconds() % this->_frameTime.asMicroseconds());
-
-					if (this->_currentFrame + 1 < this->_anim->get_frame_count())
-						this->_currentFrame++;
+					if (!this->_loop)
+					{
+						this->_stop = true;
+					}
 					else
 					{
-						if (!this->_loop)
-						{
-							this->_stop = true;
-						}
-						else
-						{
-							this->_currentFrame = 0;
-						}
+						this->_currentFrame = 0;
 					}
-
-					this->_object->set_texture_rect(this->_anim->get_frame(this->_currentFrame));
 				}
+
+				this->_anim->get_object()->set_texture_rect(this->_anim->get_frame(this->_currentFrame));
 			}
 		}
 	}
@@ -94,7 +96,7 @@ namespace PROJECT::ANIMATION
 		{
 			if(this->_anim->get_frame_count() > 0)
 			{
-				this->_object->set_texture_rect(this->_anim->get_frame(0));
+				this->_anim->get_object()->set_texture_rect(this->_anim->get_frame(0));
 			}
 		}
 	}

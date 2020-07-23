@@ -64,19 +64,28 @@ namespace PROJECT::NPC
 		this->_state = state;
 	}
 
-	PROJECT::ANIMATION::IAnimation& Npc::get_animation_attack(PROJECT::MOVE::Side side) noexcept
+	PROJECT::ANIMATION::IAnimation* Npc::get_animation_attack(PROJECT::MOVE::Side side) noexcept
 	{
-		return this->_animAttack[side]; //&(*value).second;	
+		auto&& result = this->_animAttack.find(side);
+		if(result != this->_animAttack.end())
+				return &result->second;
+		else
+			return nullptr;
 	}
 
-	PROJECT::ANIMATION::IAnimation& Npc::get_animation_walk(PROJECT::MOVE::Side side) noexcept
+	PROJECT::ANIMATION::IAnimation* Npc::get_animation_walk(PROJECT::MOVE::Side side) noexcept
 	{
-		return this->_animWalk[side]; //&(*value).second;	
+		auto&& result = this->_animWalk.find(side);
+		if(result != this->_animWalk.end())
+				return &result->second;
+		else
+			return nullptr;
 	}
 
 	void Npc::add_animation_walk(PROJECT::MOVE::Side side, const std::array<PROJECT::BASE::DATA::RectangleI, 3>& rect) noexcept
 	{
 		ANIMATION::Animation animation;
+		animation.set_object(this);
 		for(const auto& var : rect)
 			animation.add_frame(var);
 
@@ -86,6 +95,7 @@ namespace PROJECT::NPC
 	void Npc::add_animation_attack(PROJECT::MOVE::Side side, const std::array<PROJECT::BASE::DATA::RectangleI, 3>& rect) noexcept
 	{
 		ANIMATION::Animation animation;
+		animation.set_object(this);
 		for(const auto& var : rect)
 			animation.add_frame(var);
 

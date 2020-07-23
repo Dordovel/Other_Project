@@ -11,12 +11,14 @@ namespace PROJECT::ANIMATION
 	{
 		private:
 			std::vector<PROJECT::BASE::DATA::RectangleI> _frames;
+			ANIMATED* _object;
 
 		public:
-			void add_frame(const PROJECT::BASE::DATA::RectangleI& frame);
-			const PROJECT::BASE::DATA::RectangleI& get_frame(std::size_t index);
-			std::size_t get_frame_count() const;
-
+			void add_frame(const PROJECT::BASE::DATA::RectangleI& frame) override;
+			const PROJECT::BASE::DATA::RectangleI& get_frame(std::size_t index) override;
+			std::size_t get_frame_count() const override;
+			void set_object(ANIMATED* object) noexcept override;
+			ANIMATED* get_object() noexcept override;
 			Animation() = default;
 	};
 
@@ -30,10 +32,8 @@ namespace PROJECT::ANIMATION
 			sf::Time _currentTime;
 			sf::Time _frameTime;
 
-			std::shared_ptr<ANIMATED> _object;
 
 		public:
-			void set_object(const std::shared_ptr<ANIMATED>& object) noexcept override;
 			void set_animation(IAnimation* anim) noexcept override;
 			void run(unsigned int delta) noexcept override;
 			void stop(bool stop) noexcept override;
