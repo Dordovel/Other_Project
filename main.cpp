@@ -262,12 +262,12 @@ int main()
 
 	while(isOpen)
 	{
-		 std::string result = menu(MenuType::MAIN, app, view);
-		 if(result == MENU_EXIT_ITEM || result == EXIT)
-		 {
-		 	app->close();
-		 	break;
-		}
+//		 std::string result = menu(MenuType::MAIN, app, view);
+//		 if(result == MENU_EXIT_ITEM || result == EXIT)
+//		 {
+//		 	app->close();
+//		 	break;
+//		}
 
 		std::shared_ptr<NPC::Npc> person = nullptr;
 		//person = change_person_type(result, dataBase);
@@ -537,47 +537,15 @@ int main()
 
         std::vector<std::shared_ptr<NPC::QuestNpc>> questObjectList;
         questObjectList.reserve(1);
+
+
+		std::shared_ptr<BASE::GRAPHIC::Rectangle> inventory = std::make_shared<BASE::GRAPHIC::Rectangle>(300, 300);
 //}
 //END VISUAL OBJECT
 
 		while (app->is_open() && isRun)
 		{
-
-//RESET ALL LOOP VARIABLE
-			
-			loopRect = {};
-			loopVec = {};
-			loopContainerIter = 0;
-			loopContainerSize = 0;
-			loopDynamicElement = nullptr;
-			loopTextElement = nullptr;
-			loopDynamicElementAnimation = nullptr;
-			loopCollisionObjectList = {};
-			loopCollisionElement = nullptr;
-			loopDynamicCollisionList.clear();
-
-
-			person->unblock_all_side();
-			person->set_state(NPC::State::IDLE);
-			view->unblock_all_side();
-
-			loopContainerSize = dynamicObjectDispatcher.size();
-			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
-			{
-				loopDynamicElement = &dynamicObjectDispatcher.object(loopContainerIter);
-				if((*loopDynamicElement)->get_health() <= 0)
-				{
-					dynamicObjectDispatcher.delete_object(loopContainerIter);
-					loopContainerSize = dynamicObjectDispatcher.size();
-				}
-				else
-				{
-					(*loopDynamicElement)->set_state(NPC::State::IDLE);
-				}
-			}
-
-//END RESET LOOP VARIABLE
-
+		
 //EVENT HANDLER
 //{
 			while (app->check_events())
@@ -591,6 +559,8 @@ int main()
 
 			clock.restart();
 			time = clock.get_work_time();
+
+
 
 //RUN ANIMATION
 			anim.run(time * DELAY);
@@ -621,13 +591,17 @@ int main()
 //POSITIONING HEALTH BAR AND UPDATE VALUE
 //{
 			loopRect = view->get_global_bounds();
+
 			personHealth->set_position((loopRect.left + PROGRESSBARHeight),
 										((loopRect.top + loopRect.height) - (PROGRESSBARHeight * 2)));
+
 			personHealth->set_size(convert_value(person->get_max_health(),
 													PROGRESSBARWidth,
 													person->get_health()), 
 									PROGRESSBARHeight); 
+
 			loopVec = personHealth->get_position();
+
 			personHealthBackground->set_position((loopVec.x - 10), (loopVec.y - 10));
 
 			personHealthStatus->set_position(personHealth->get_position()
@@ -638,9 +612,12 @@ int main()
 
 
 			loopRect = view->get_global_bounds();
+
 			enemyHealth->set_position((loopRect.left + (loopRect.width * 0.5F) - (PROGRESSBARWidth * 0.5F)),
 										(loopRect.top + PROGRESSBARHeight));
+
 			loopVec = enemyHealth->get_position();
+
 			enemyHealthBackground->set_position((loopVec.x - 10), (loopVec.y - 10));
             
 			enemyHealthStatus->set_position(enemyHealth->get_position()
@@ -652,6 +629,9 @@ int main()
 
 //CHECK PERSON INTERACTIOIN WITH MAP OBJECT
 //{
+			person->unblock_all_side();
+			view->unblock_all_side();
+
             loopCollisionObjectList = collision.check_object_collision(*currentLayout, person);
             loopContainerSize = loopCollisionObjectList.size();
             for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
@@ -670,7 +650,6 @@ int main()
 			{
                 loopDynamicElement = &dynamicObjectDispatcher.object(loopContainerIter);
                 ( *loopDynamicElement )->unblock_all_side();
-
                 loopCollisionObjectList = collision.check_object_collision(*currentLayout, ( *loopDynamicElement ));
 
 				for(auto&& var : loopCollisionObjectList)
@@ -678,9 +657,10 @@ int main()
                     ( *loopDynamicElement )->block_side(var.first, true);
                 }
 
-                //CHECK NPC OBJECT INTERACTIOIN WITH PERSON
-                //{
+//CHECK NPC OBJECT INTERACTIOIN WITH PERSON
+//{
                 loopCollisionObjectList = collision.check_object_collision(person, ( *loopDynamicElement ));
+				(*loopDynamicElement)->set_state(NPC::State::IDLE);
 
 				for(auto&& var : loopCollisionObjectList)
                 {
@@ -695,8 +675,8 @@ int main()
                         loopDynamicCollisionList.emplace_back(var.first, loopDynamicElement);
                     }
                 }
-                //}
-                //END CHECK PERSON INTERACTIOIN WITH NPC OBJECT
+//}
+//END CHECK PERSON INTERACTIOIN WITH NPC OBJECT
             }
 //}
 //END CHECK NPC INTERACTIOIN WITH MAP OBJECT
@@ -727,14 +707,12 @@ int main()
 
 				person->set_state(NPC::State::WALK);
 			}
-
-			if(person->get_state() == NPC::State::ATTACK)
+			else if(person->get_state() == NPC::State::ATTACK)
 			{
 				anim.set_animation(person->get_animation_attack(personLastSide));
 				anim.stop(false);
 			}
-
-			if(person->get_state() == NPC::State::IDLE)
+			else
 			{
 				if(anim.end())
 				{
@@ -751,27 +729,25 @@ int main()
 			{
 				for(auto&& var : loopDynamicCollisionList)
 				{
-					auto d = damage.generate((*var.second),
-										person,
-										time * ATTACK_SPEED);
+					person->set_health(person->get_health() - 
+										damage.generate((*var.second)->get_damage(),
+															time * ATTACK_SPEED));
                     
-                    if(d != -1)
-                        std::cout<<"DAMAGE: "<<(*var.second)->get_id()<<"->"<<d<<"\n";
 					
                     if(var.first == personLastSide)
 					{
 						if(person->get_state() == NPC::State::ATTACK)
 						{
-							auto t = damage.generate(person,
-											(*var.second),
-											time * ATTACK_SPEED);
-							std::cout<<"DAMAGE: "<<t<<"\n";
+							(*var.second)->set_health((*var.second)->get_health() -
+														damage.generate(person->get_damage(),
+																			time * ATTACK_SPEED));
 						}
 
 						enemyHealth->set_size(convert_value((*var.second)->get_max_health(),
-															PROGRESSBARWidth, 
-														(*var.second)->get_health()), 
+																PROGRESSBARWidth, 
+																(*var.second)->get_health()), 
 												PROGRESSBARHeight); 
+
                         enemyHealthStatus->set_text(std::to_string((*var.second)->get_health()) + "/"
                                                         + std::to_string((*var.second)->get_max_health()));
 
@@ -788,11 +764,22 @@ int main()
 //}
 //END
 			
-//SET RANDOM NPC MOVE SIDE AND ANIMATION
-//{
 			loopContainerSize = dynamicObjectDispatcher.size();
 			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 			{
+//CHECK LIFE DYNAMIC OBJECT
+				loopDynamicElement = &dynamicObjectDispatcher.object(loopContainerIter);
+				if((*loopDynamicElement)->get_health() <= 0)
+				{
+					dynamicObjectDispatcher.delete_object(loopContainerIter);
+					loopContainerSize = dynamicObjectDispatcher.size();
+					continue;
+				}
+//END CHECK LIFE DYNAMIC OBJECT
+
+
+//SET RANDOM NPC MOVE SIDE AND ANIMATION
+//{
 				loopDynamicElement = &dynamicObjectDispatcher.object(loopContainerIter);
 
 				randMoveSide = dynamicObjectDispatcher.side(loopContainerIter, time * DELAY);
@@ -833,6 +820,7 @@ int main()
 //}
 //END SET RANDOM NPC MOVE SIDE AND ANIMATION
 
+
 //DRAW OBJECTS
 //{
 			app->draw(*currentLayout);
@@ -866,6 +854,22 @@ int main()
 
 			app->display();
 
+
+
+//RESET ALL LOOP VARIABLE
+
+			loopRect = {};
+			loopVec = {};
+			loopContainerIter = 0;
+			loopContainerSize = 0;
+			loopDynamicElement = nullptr;
+			loopTextElement = nullptr;
+			loopDynamicElementAnimation = nullptr;
+			loopCollisionObjectList = {};
+			loopCollisionElement = nullptr;
+			loopDynamicCollisionList.clear();
+
+//END RESET LOOP VARIABLE
 		}
 		delete mover;
 	}

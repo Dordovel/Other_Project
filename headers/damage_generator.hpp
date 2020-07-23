@@ -17,9 +17,7 @@ namespace PROJECT::NPC
 			sf::Time _frameTime;
 
 		public:
-			int generate(const std::shared_ptr<INpc>& person,
-										const std::shared_ptr<INpc>& enemy,
-										float delta) noexcept;
+			int generate(int damage, float delta) noexcept;
 
 			void set_frame_time(float frameTime) noexcept;
 

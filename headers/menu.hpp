@@ -10,7 +10,6 @@ namespace PROJECT::MENU
 	{
 		private:
 			std::vector<std::shared_ptr<OBJECT>> _item;
-			std::shared_ptr<OBJECT> _layout;
 			std::shared_ptr<OBJECT> _pointer;
 			float item_step;
 			float item_offset = 20;
@@ -18,13 +17,17 @@ namespace PROJECT::MENU
 		public:
 			bool menu_configure(float X, float Y, float Width, float Height) noexcept override;
 
-			void set_pointer(const std::shared_ptr<OBJECT>& pointer) noexcept override;
+			void set_pointer(const std::shared_ptr<OBJECT>& pointer) noexcept;
 
 			void add_item(const std::shared_ptr<OBJECT>& object) noexcept override;
 
 			void step_forward() noexcept override;
 
 			void step_back() noexcept override;
+
+			void page_back() noexcept override;
+
+			void page_forward() noexcept override;
 
 			std::string selected_item() noexcept override;
 

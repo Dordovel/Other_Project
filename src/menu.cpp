@@ -59,6 +59,16 @@ namespace PROJECT::MENU
 		this->_item.emplace_back(object);
 	}
 
+	void Menu::page_forward() noexcept
+	{
+		this->step_forward();
+	}
+
+	void Menu::page_back() noexcept
+	{
+		this->step_back();
+	}
+
 	void Menu::step_forward() noexcept
 	{
 		std::string selected_item_id = this->selected_item();
@@ -106,6 +116,5 @@ namespace PROJECT::MENU
 	void Menu::reset() noexcept
 	{
 		this->_item.clear();
-		this->_layout = nullptr;
 	}
 };

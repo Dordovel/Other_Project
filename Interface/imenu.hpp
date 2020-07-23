@@ -11,13 +11,15 @@ namespace PROJECT::MENU
 		public:
 			virtual bool menu_configure(float X, float Y, float Width, float Height) noexcept = 0;
 
-			virtual void set_pointer(const std::shared_ptr<OBJECT>& pointer) noexcept = 0;
-
 			virtual void add_item(const std::shared_ptr<OBJECT>& object) noexcept = 0;
 
 			virtual void step_forward() noexcept = 0;
 
 			virtual void step_back() noexcept = 0;
+
+			virtual void page_forward() noexcept = 0;
+
+			virtual void page_back() noexcept = 0;
 
 			virtual std::string selected_item() noexcept = 0;
 

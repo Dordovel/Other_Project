@@ -15,11 +15,9 @@ namespace PROJECT::NPC
 		this->_frameTime = sf::seconds(frameTime);
 	}
 
-	int DamageGenerator::generate(const std::shared_ptr<INpc>& person,
-										const std::shared_ptr<INpc>& enemy,
-										float delta) noexcept
+	int DamageGenerator::generate(int damage, float delta) noexcept
 	{
-		int result = -1;
+		int result = 0;
 
 		this->_currentTime += sf::milliseconds(delta);
 
@@ -27,9 +25,8 @@ namespace PROJECT::NPC
 		{
 			this->_currentTime = sf::microseconds(this->_currentTime.asMicroseconds() % this->_frameTime.asMicroseconds());
 
-			this->_uid = std::uniform_int_distribution<int>(10, person->get_damage());
+			this->_uid = std::uniform_int_distribution<int>(10, damage);
 			result = this->_uid(this->_mt);
-			enemy->set_health(enemy->get_health() - result);
 		}
 
 		return result;
