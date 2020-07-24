@@ -48,15 +48,25 @@ namespace PROJECT::NPC
 
 			void set_state(State state) noexcept override;
 
-			explicit Npc(const PROJECT::DATABASE::DataBaseResult& data);
+			void add_animation_walk(PROJECT::MOVE::Side side,
+									const std::array<PROJECT::BASE::DATA::RectangleI, 3>& rect) noexcept;
 
-			void add_animation_walk(PROJECT::MOVE::Side side, const std::array<PROJECT::BASE::DATA::RectangleI, 3>& rect) noexcept;
-
-			void add_animation_attack(PROJECT::MOVE::Side side, const std::array<PROJECT::BASE::DATA::RectangleI, 3>& rect) noexcept;
+			void add_animation_attack(PROJECT::MOVE::Side side,
+										const std::array<PROJECT::BASE::DATA::RectangleI, 3>& rect) noexcept;
 
 			PROJECT::ANIMATION::IAnimation* get_animation_attack(PROJECT::MOVE::Side side) noexcept override;
 
 			PROJECT::ANIMATION::IAnimation* get_animation_walk(PROJECT::MOVE::Side side) noexcept override;
+
+			explicit Npc(const PROJECT::DATABASE::DataBaseResult& data);
+
+			Npc(const Npc&) = default;
+
+			Npc(Npc&&) = default;
+			
+			Npc& operator= (const Npc&) = default;
+
+			Npc& operator= (Npc&&) = default;
 
             ~Npc() = default;
 	};

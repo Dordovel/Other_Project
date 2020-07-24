@@ -13,7 +13,10 @@
 #include "./headers/collision.hpp"
 #include "./headers/quest_npc.hpp"
 #include "./headers/damage_generator.hpp"
-#include "./headers/dynamic_obejct_dispatcher.hpp"
+#include "./headers/npc_dispatcher.hpp"
+#include "./headers/npc.hpp"
+#include "./headers/chest_dispatcher.hpp"
+#include "./headers/chest.hpp"
 
 using namespace PROJECT;
 using namespace std::literals;
@@ -21,6 +24,15 @@ using namespace std::literals;
 float convert_value(int lv, int rv, float value)
 {
 	return (rv * ((value / lv) * 100)) / 100;
+}
+
+std::shared_ptr<CHEST::IChest> make_chest(const DATABASE::IDataBase& dataBase)
+{
+	std::shared_ptr<CHEST::IChest> chest = 
+			std::make_shared<CHEST::Chest>(dataBase.get_resources("ChestRed.png", {0, 0, 24, 24}));
+	chest->set_scale({chest->get_scale().x - 0.2F, chest->get_scale().y + 0.2F});
+
+	return chest;
 }
 
 MOVE::Side inversion_side(MOVE::Side side)
@@ -518,12 +530,13 @@ int main()
 		BASE::DATA::Vector2F loopVec = {};
 		size_t loopContainerIter = 0;
 		size_t loopContainerSize = 0;
-		std::shared_ptr<NPC::INpc>* loopDynamicElement = nullptr;
+		std::shared_ptr<NPC::INpc>* loopNpcElement = nullptr;
+		std::shared_ptr<OBJECT>* loopObjectElement = nullptr;
 		std::shared_ptr<BASE::GRAPHIC::IText>* loopTextElement = nullptr;
-		ANIMATION::Anim* loopDynamicElementAnimation = nullptr;
+		ANIMATION::Anim* loopNpcElementAnimation = nullptr;
 		std::array<std::pair<MOVE::Side, std::string>, 4> loopCollisionObjectList = {};
         std::pair<MOVE::Side, std::string>* loopCollisionElement = nullptr;
-		std::vector<std::pair<MOVE::Side, decltype(loopDynamicElement)>> loopDynamicCollisionList;
+		std::vector<std::pair<MOVE::Side, decltype(loopNpcElement)>> loopNpcCollisionList;
 		MOVE::Side personLastSide = MOVE::Side::NONE;
 //}
 //END VARIABLE FOR USE IN LOOP
@@ -531,9 +544,12 @@ int main()
 //VISUAL OBJECT
 //{
 
-        DISPATCHER::DynamicObjectDispatcher dynamicObjectDispatcher;
-        dynamicObjectDispatcher.add_object(std::move(personTest));
-        dynamicObjectDispatcher.add_object(std::move(personTest1));
+        DISPATCHER::NpcDispatcher npcDispatcher;
+        npcDispatcher.add_object(std::move(personTest));
+        npcDispatcher.add_object(std::move(personTest1));
+
+		DISPATCHER::ChestDispatcher chestDispatcher;
+
 
         std::vector<std::shared_ptr<NPC::QuestNpc>> questObjectList;
         questObjectList.reserve(1);
@@ -565,10 +581,10 @@ int main()
 //RUN ANIMATION
 			anim.run(time * DELAY);
 
-			loopContainerSize = dynamicObjectDispatcher.size();
+			loopContainerSize = npcDispatcher.size();
 			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 			{
-				dynamicObjectDispatcher.animation(loopContainerIter).run(time * DELAY);
+				npcDispatcher.animation(loopContainerIter).run(time * DELAY);
 			}
 //END RUN ANIMATION
 
@@ -645,22 +661,22 @@ int main()
 
 //CHECK NPC INTERACTIOIN WITH MAP OBJECT
 //{
-			loopContainerSize = dynamicObjectDispatcher.size();
+			loopContainerSize = npcDispatcher.size();
 			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 			{
-                loopDynamicElement = &dynamicObjectDispatcher.object(loopContainerIter);
-                ( *loopDynamicElement )->unblock_all_side();
-                loopCollisionObjectList = collision.check_object_collision(*currentLayout, ( *loopDynamicElement ));
+                loopNpcElement = &npcDispatcher.object(loopContainerIter);
+                ( *loopNpcElement )->unblock_all_side();
+                loopCollisionObjectList = collision.check_object_collision(*currentLayout, ( *loopNpcElement ));
 
 				for(auto&& var : loopCollisionObjectList)
                 {
-                    ( *loopDynamicElement )->block_side(var.first, true);
+                    ( *loopNpcElement )->block_side(var.first, true);
                 }
 
 //CHECK NPC OBJECT INTERACTIOIN WITH PERSON
 //{
-                loopCollisionObjectList = collision.check_object_collision(person, ( *loopDynamicElement ));
-				(*loopDynamicElement)->set_state(NPC::State::IDLE);
+                loopCollisionObjectList = collision.check_object_collision(person, ( *loopNpcElement ));
+				(*loopNpcElement)->set_state(NPC::State::IDLE);
 
 				for(auto&& var : loopCollisionObjectList)
                 {
@@ -669,10 +685,10 @@ int main()
 
                     if ( var.first != MOVE::Side::NONE )
                     {
-						(*loopDynamicElement)->set_state(NPC::State::ATTACK);
-						(*loopDynamicElement)->block_all_side();
+						(*loopNpcElement)->set_state(NPC::State::ATTACK);
+						(*loopNpcElement)->block_all_side();
 
-                        loopDynamicCollisionList.emplace_back(var.first, loopDynamicElement);
+                        loopNpcCollisionList.emplace_back(var.first, loopNpcElement);
                     }
                 }
 //}
@@ -725,9 +741,9 @@ int main()
 //IF PERSON INTERSECTS DYNAMIC OBJECT, LOOPDYNAMICELEMENTCOLLISION != NULLPTR
 //DYNAMIC OBJECT ATTACK PERSON, AND UPDATE DYNAMIC OBJECT HEALTH BAR
 //{
-			if(!loopDynamicCollisionList.empty())
+			if(!loopNpcCollisionList.empty())
 			{
-				for(auto&& var : loopDynamicCollisionList)
+				for(auto&& var : loopNpcCollisionList)
 				{
 					person->set_health(person->get_health() - 
 										damage.generate((*var.second)->get_damage(),
@@ -764,15 +780,19 @@ int main()
 //}
 //END
 			
-			loopContainerSize = dynamicObjectDispatcher.size();
+			loopContainerSize = npcDispatcher.size();
 			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 			{
 //CHECK LIFE DYNAMIC OBJECT
-				loopDynamicElement = &dynamicObjectDispatcher.object(loopContainerIter);
-				if((*loopDynamicElement)->get_health() <= 0)
+				loopNpcElement = &npcDispatcher.object(loopContainerIter);
+				if((*loopNpcElement)->get_health() <= 0)
 				{
-					dynamicObjectDispatcher.delete_object(loopContainerIter);
-					loopContainerSize = dynamicObjectDispatcher.size();
+					auto&& chest = make_chest(dataBase);
+					chest->set_position((*loopNpcElement)->get_position());
+					chestDispatcher.add_object(std::move(chest));
+
+					npcDispatcher.delete_object(loopContainerIter);
+					loopContainerSize = npcDispatcher.size();
 					continue;
 				}
 //END CHECK LIFE DYNAMIC OBJECT
@@ -780,41 +800,41 @@ int main()
 
 //SET RANDOM NPC MOVE SIDE AND ANIMATION
 //{
-				loopDynamicElement = &dynamicObjectDispatcher.object(loopContainerIter);
+				loopNpcElement = &npcDispatcher.object(loopContainerIter);
 
-				randMoveSide = dynamicObjectDispatcher.side(loopContainerIter, time * DELAY);
+				randMoveSide = npcDispatcher.side(loopContainerIter, time * DELAY);
 
-				mover->move(randMoveSide, *loopDynamicElement, time / DELAY, SPEED);
+				mover->move(randMoveSide, *loopNpcElement, time / DELAY, SPEED);
 
-				loopDynamicElementAnimation = &dynamicObjectDispatcher.animation(loopContainerIter);
+				loopNpcElementAnimation = &npcDispatcher.animation(loopContainerIter);
 
-				if((*loopDynamicElement)->get_state() != NPC::State::ATTACK)
+				if((*loopNpcElement)->get_state() != NPC::State::ATTACK)
 				{
 					if(randMoveSide == MOVE::Side::NONE)
 					{
-						(*loopDynamicElement)->set_state(NPC::State::IDLE);
-						loopDynamicElementAnimation->reset();
-						loopDynamicElementAnimation->stop(true);
+						(*loopNpcElement)->set_state(NPC::State::IDLE);
+						loopNpcElementAnimation->reset();
+						loopNpcElementAnimation->stop(true);
 					}
 					else
 					{
-						(*loopDynamicElement)->set_state(NPC::State::WALK);
-						loopDynamicElementAnimation->set_animation((*loopDynamicElement)->get_animation_walk(randMoveSide));
-						loopDynamicElementAnimation->stop(false);
+						(*loopNpcElement)->set_state(NPC::State::WALK);
+						loopNpcElementAnimation->set_animation((*loopNpcElement)->get_animation_walk(randMoveSide));
+						loopNpcElementAnimation->stop(false);
 					}
 				}
 				else
 				{
-					for(auto&& object : loopDynamicCollisionList)
+					for(auto&& object : loopNpcCollisionList)
 					{
-						if(object.second == loopDynamicElement)
+						if(object.second == loopNpcElement)
 						{
-							loopDynamicElementAnimation->set_animation((*loopDynamicElement)->get_animation_attack(
+							loopNpcElementAnimation->set_animation((*loopNpcElement)->get_animation_attack(
 													inversion_side(object.first)));
 						}
 					}
 
-					loopDynamicElementAnimation->stop(false);
+					loopNpcElementAnimation->stop(false);
 				}
 			}
 //}
@@ -826,10 +846,16 @@ int main()
 			app->draw(*currentLayout);
 
 
-			loopContainerSize = dynamicObjectDispatcher.size();
+			loopContainerSize = npcDispatcher.size();
 			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 			{
-				app->draw(dynamicObjectDispatcher.object(loopContainerIter));
+				app->draw(npcDispatcher.object(loopContainerIter));
+			}
+
+			loopContainerSize = chestDispatcher.size();
+			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
+			{
+					app->draw(chestDispatcher.object(loopContainerIter));
 			}
 
 			app->draw(person);
@@ -862,12 +888,13 @@ int main()
 			loopVec = {};
 			loopContainerIter = 0;
 			loopContainerSize = 0;
-			loopDynamicElement = nullptr;
+			loopNpcElement = nullptr;
+			loopObjectElement = nullptr;
 			loopTextElement = nullptr;
-			loopDynamicElementAnimation = nullptr;
+			loopNpcElementAnimation = nullptr;
 			loopCollisionObjectList = {};
 			loopCollisionElement = nullptr;
-			loopDynamicCollisionList.clear();
+			loopNpcCollisionList.clear();
 
 //END RESET LOOP VARIABLE
 		}

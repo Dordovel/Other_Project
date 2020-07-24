@@ -13,7 +13,7 @@ namespace PROJECT::BASE::DATA
 
 namespace PROJECT::DATABASE
 {
-    class DataBase final : public IDataBase
+    class DataBase final : public PROJECT::DATABASE::IDataBase
     {
         private:
             std::map<PersonProfession , std::string> _rectList;

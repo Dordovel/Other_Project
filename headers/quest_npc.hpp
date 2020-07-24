@@ -6,7 +6,7 @@
 
 namespace PROJECT::NPC
 {
-	class QuestNpc : public PROJECT::BASE::GRAPHIC::Sprite, public IQuestNpc
+	class QuestNpc : public PROJECT::BASE::GRAPHIC::Sprite, public PROJECT::NPC::IQuestNpc
 	{
 		private:
 			int _points = {0};

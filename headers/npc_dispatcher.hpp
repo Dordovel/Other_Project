@@ -1,14 +1,15 @@
-#ifndef SFMLPROJECT_REBUILD_DYNAMIC_OBEJCT_DISPATCHER_HPP
-#define SFMLPROJECT_REBUILD_DYNAMIC_OBEJCT_DISPATCHER_HPP
+#ifndef SFMLPROJECT_REBUILD_NPC_DISPATCHER_HPP
+#define SFMLPROJECT_REBUILD_NPC_DISPATCHER_HPP
 
 #include "../graphicobject/text.hpp"
-#include "./npc.hpp"
+#include "../Interface/inpc.hpp"
+#include "../headers/animation.hpp"
 #include "../global.hpp"
 #include "side_generator.hpp"
 
 namespace PROJECT::DISPATCHER
 {
-	class DynamicObjectDispatcher
+	class NpcDispatcher
 	{
 		private:
 			std::vector<std::shared_ptr<NPC::INpc>> _object;
@@ -29,4 +30,4 @@ namespace PROJECT::DISPATCHER
 			size_t size() const noexcept;
 	};
 };
-#endif //SFMLPROJECT_REBUILD_DYNAMIC_OBEJCT_DISPATCHER_HPP
+#endif //SFMLPROJECT_REBUILD_NPC_DISPATCHER_HPP
