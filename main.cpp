@@ -542,18 +542,20 @@ int main()
 		BASE::DATA::Vector2F loopVec = {};
 		size_t loopContainerIter = 0;
 		size_t loopContainerSize = 0;
+		MOVE::Side personLastSide = MOVE::Side::NONE;
+        std::pair<MOVE::Side, std::string> loopCollisionElementSimple;
+
+        std::pair<MOVE::Side, std::string>* loopCollisionElement = nullptr;
 		std::shared_ptr<NPC::INpc>* loopNpcElement = nullptr;
 		std::shared_ptr<CHEST::IChest>* loopChestElement = nullptr;
 		std::shared_ptr<OBJECT>* loopObjectElement = nullptr;
 		std::shared_ptr<BASE::GRAPHIC::IText>* loopTextElement = nullptr;
 		ANIMATION::Anim* loopNpcElementAnimation = nullptr;
+        std::pair<MOVE::Side, decltype(loopChestElement)>* loopCollisionChestElement = nullptr;
+
 		std::vector<std::pair<MOVE::Side, std::string>> loopCollisionObjectList;
-        std::pair<MOVE::Side, std::string>* loopCollisionElement = nullptr;
-        std::pair<MOVE::Side, std::string> loopCollisionElementSimple;
-        std::pair<MOVE::Side, decltype(loopChestElement)>* loopCollisionChestElement;
 		std::vector<std::pair<MOVE::Side, decltype(loopNpcElement)>> loopNpcCollisionList;
 		std::vector<std::pair<MOVE::Side, decltype(loopChestElement)>> loopChestCollisionList;
-		MOVE::Side personLastSide = MOVE::Side::NONE;
 //}
 //END VARIABLE FOR USE IN LOOP
 
@@ -985,16 +987,17 @@ int main()
 
 
 //RESET ALL LOOP VARIABLE
+        loopCollisionElement = nullptr;
+		loopNpcElement = nullptr;
+		loopChestElement = nullptr;
+		loopObjectElement = nullptr;
+		loopTextElement = nullptr;
+		loopNpcElementAnimation = nullptr;
+        loopCollisionChestElement = nullptr;
 
-			loopNpcElement = nullptr;
-			loopChestElement = nullptr;
-			loopObjectElement = nullptr;
-			loopTextElement = nullptr;
-			loopNpcElementAnimation = nullptr;
-			loopCollisionObjectList.clear();
-			loopCollisionElement = nullptr;
-			loopNpcCollisionList.clear();
-			loopChestCollisionList.clear();
+		loopCollisionObjectList.clear();
+		loopNpcCollisionList.clear();
+		loopChestCollisionList.clear();
 
 //END RESET LOOP VARIABLE
 		}
