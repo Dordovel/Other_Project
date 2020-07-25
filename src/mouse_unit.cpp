@@ -3,7 +3,7 @@
 
 namespace PROJECT::UNIT::CONTROL::MOUSE
 {
-    void MouseUnit::catch_mouse_wheel_scrolled_event(const PROJECT::EVENT::EventObject& event)
+    void MouseUnit::_catch_mouse_wheel_scrolled_event(const PROJECT::EVENT::EventObject& event)
     {
         if ( event.type == sf::Event::MouseWheelScrolled )
         {
@@ -15,7 +15,7 @@ namespace PROJECT::UNIT::CONTROL::MOUSE
         }
     }
 
-    void MouseUnit::catch_mouse_mouse_moved_event(const PROJECT::EVENT::EventObject& event)
+    void MouseUnit::_catch_mouse_mouse_moved_event(const PROJECT::EVENT::EventObject& event)
     {
         if ( event.type == sf::Event::MouseMoved )
         {
@@ -26,7 +26,7 @@ namespace PROJECT::UNIT::CONTROL::MOUSE
         }
     }
 
-    void MouseUnit::catch_mouse_enter_event(const PROJECT::EVENT::EventObject& event)
+    void MouseUnit::_catch_mouse_enter_event(const PROJECT::EVENT::EventObject& event)
     {
         if ( event.type == sf::Event::MouseEntered )
         {
@@ -37,7 +37,7 @@ namespace PROJECT::UNIT::CONTROL::MOUSE
         }
     }
 
-    void MouseUnit::catch_mouse_pressed_event(const PROJECT::EVENT::EventObject& event)
+    void MouseUnit::_catch_mouse_pressed_event(const PROJECT::EVENT::EventObject& event)
     {
         if ( event.type == sf::Event::MouseButtonPressed )
         {
@@ -50,7 +50,7 @@ namespace PROJECT::UNIT::CONTROL::MOUSE
         }
     }
 
-    void MouseUnit::catch_mouse_released_event(const PROJECT::EVENT::EventObject& event)
+    void MouseUnit::_catch_mouse_released_event(const PROJECT::EVENT::EventObject& event)
     {
         if ( event.type == sf::Event::MouseButtonReleased )
         {
@@ -66,7 +66,7 @@ namespace PROJECT::UNIT::CONTROL::MOUSE
 
     void MouseUnit::button_pressed(int key, const std::function <void(int X, int Y)>& fun) noexcept
     {
-        MouseUnit::EventHandlerMousePressed eventHandler;
+        MouseUnit::_EventHandlerMousePressed eventHandler;
         eventHandler.fun = fun;
         auto value = static_cast<Mouse_Key::Button>(key);
 
@@ -75,7 +75,7 @@ namespace PROJECT::UNIT::CONTROL::MOUSE
 
     void MouseUnit::moved(const std::function <void(int X, int Y)>& fun) noexcept
     {
-        MouseUnit::EventHandlerMouseMoved eventHandler;
+        MouseUnit::_EventHandlerMouseMoved eventHandler;
         eventHandler.fun = fun;
 
         this->_eventMouseMovedPool.push_back(eventHandler);
@@ -83,7 +83,7 @@ namespace PROJECT::UNIT::CONTROL::MOUSE
 
     void MouseUnit::wheel_scrolled(const std::function <void(int X, int Y, int Delta)>& fun) noexcept
     {
-        MouseUnit::EventHandlerMouseWheelScrolled eventHandler;
+        MouseUnit::_EventHandlerMouseWheelScrolled eventHandler;
         eventHandler.fun = fun;
 
         this->_eventMouseWheelScrolledPool.push_back(eventHandler);
@@ -91,7 +91,7 @@ namespace PROJECT::UNIT::CONTROL::MOUSE
 
     void MouseUnit::entered(const std::function <void()>& fun) noexcept
     {
-        MouseUnit::EventHandlerMouseEntered eventHandler;
+        MouseUnit::_EventHandlerMouseEntered eventHandler;
         eventHandler.fun = fun;
 
         this->_eventMouseEnteredPool.push_back(eventHandler);
@@ -99,7 +99,7 @@ namespace PROJECT::UNIT::CONTROL::MOUSE
 
     void MouseUnit::button_released(int key, const std::function <void()>& fun) noexcept
     {
-        MouseUnit::EventHandlerMouseReleased eventHandler;
+        MouseUnit::_EventHandlerMouseReleased eventHandler;
         eventHandler.fun = fun;
         eventHandler.button = static_cast<Mouse_Key::Button>(key);
 
@@ -108,11 +108,11 @@ namespace PROJECT::UNIT::CONTROL::MOUSE
 
     void MouseUnit::catch_events(const PROJECT::EVENT::EventObject& event)
     {
-        this->catch_mouse_enter_event(event);
-        this->catch_mouse_mouse_moved_event(event);
-        this->catch_mouse_pressed_event(event);
-        this->catch_mouse_released_event(event);
-        this->catch_mouse_wheel_scrolled_event(event);
+        this->_catch_mouse_enter_event(event);
+        this->_catch_mouse_mouse_moved_event(event);
+        this->_catch_mouse_pressed_event(event);
+        this->_catch_mouse_released_event(event);
+        this->_catch_mouse_wheel_scrolled_event(event);
     }
 
     BASE::DATA::Vector2I MouseUnit::get_position_in_desktop()

@@ -19,6 +19,8 @@ namespace PROJECT::DISPATCHER
 			std::shared_ptr<PROJECT::CHEST::IChest>& object(int index) noexcept;
 
 			size_t size() const noexcept;
+
+			bool empty() const noexcept;
 	};
 };
 #endif //SFMLPROJECT_REBUILD_CHEST_DISPATCHER_HPP

@@ -6,6 +6,14 @@
 
 namespace PROJECT::MENU
 {
+
+	enum class MenuPosition
+	{
+		LEFT,
+		CENTER,
+		RIGHT
+	};
+
 	class IMenu
 	{
 		public:
@@ -17,13 +25,11 @@ namespace PROJECT::MENU
 
 			virtual void step_back() noexcept = 0;
 
-			virtual void page_forward() noexcept = 0;
-
-			virtual void page_back() noexcept = 0;
-
 			virtual std::string selected_item() noexcept = 0;
 
 			virtual void reset() noexcept = 0;
+
+			virtual void set_position(MenuPosition position) noexcept = 0;
 
 			virtual ~IMenu() = default;
 	};

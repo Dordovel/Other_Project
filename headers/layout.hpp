@@ -18,9 +18,9 @@ namespace PROJECT::COLLECTION
                     {StaticObjectCollection::TREE, "Tree"}, {StaticObjectCollection::BORDER, "Border"}
                 };
 
-            bool check_map_static_object_with_string(std::string object, std::string_view objectName);
+            bool _check_map_static_object_with_string(std::string object, std::string_view objectName);
 
-            void load_map_from_file(std::string_view pathToFile);
+            void _load_map_from_file(std::string_view pathToFile);
 
         public:
             Layout(std::string_view pathToMap, std::string_view mapFileName);

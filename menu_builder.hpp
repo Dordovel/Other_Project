@@ -18,11 +18,11 @@ std::string menu_builder(const std::shared_ptr<PROJECT::APPLICATION::IApplicatio
 {
 	PROJECT::MENU::Menu menu;
 	std::string selectedItem;
+	menu.set_position(PROJECT::MENU::MenuPosition::LEFT);
 
 	std::array menuItems = build_items(std::forward<decltype(generateItem)>(generateItem),
 																		RESOURCES_PATH + "Font.otf");
 
-	menu.set_pointer(menuSelectedPointer);
 
 	for(const auto& item : menuItems)
 	{
@@ -32,6 +32,8 @@ std::string menu_builder(const std::shared_ptr<PROJECT::APPLICATION::IApplicatio
 	auto layoutRect = layout->get_global_bounds();
 
 	menu.menu_configure(layoutRect.left, layoutRect.top, layoutRect.width, layoutRect.height);
+
+	menuSelectedPointer->set_position(menu.get_pointer_position());
 
 	bool isRun = true;
 
@@ -45,15 +47,17 @@ std::string menu_builder(const std::shared_ptr<PROJECT::APPLICATION::IApplicatio
 				isRun = false;
 			});
 
-	keyboard.button_pressed(PROJECT::UNIT::CONTROL::KEYBOARD::Keyboard_Key::Up, [&menu]()
+	keyboard.button_pressed(PROJECT::UNIT::CONTROL::KEYBOARD::Keyboard_Key::Up, [&menu, &menuSelectedPointer]()
 			{
 				menu.step_back();
+				menuSelectedPointer->set_position(menu.get_pointer_position());
 			}, PROJECT::UNIT::CONTROL::EventHandlerType::EVENT_LOOP);
 
 
-	keyboard.button_pressed(PROJECT::UNIT::CONTROL::KEYBOARD::Keyboard_Key::Down, [&menu]()
+	keyboard.button_pressed(PROJECT::UNIT::CONTROL::KEYBOARD::Keyboard_Key::Down, [&menu, &menuSelectedPointer]()
 			{
 				menu.step_forward();
+				menuSelectedPointer->set_position(menu.get_pointer_position());
 			}, PROJECT::UNIT::CONTROL::EventHandlerType::EVENT_LOOP);
 
 

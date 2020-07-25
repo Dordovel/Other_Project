@@ -20,11 +20,11 @@ namespace PROJECT::COLLISION
 
 
 		public:
-			std::array<std::pair<PROJECT::MOVE::Side, std::string>, 4>
+			std::vector<std::pair<PROJECT::MOVE::Side, std::string>>
 			    check_object_collision(const std::shared_ptr<PROJECT::COLLECTION::ILayout>& lv,
 			                            const std::shared_ptr<INTERACTION>& rv ) noexcept override;
 
-			std::array<std::pair<PROJECT::MOVE::Side, std::string>, 4>
+			std::pair<PROJECT::MOVE::Side, std::string>
 			    check_object_collision(const std::shared_ptr<INTERACTION>& lv,
 			                            const std::shared_ptr<INTERACTION>& rv) noexcept override;
 

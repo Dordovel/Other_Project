@@ -28,6 +28,8 @@ namespace PROJECT::DISPATCHER
 			MOVE::Side side(int index, float time) noexcept;
 
 			size_t size() const noexcept;
+
+			bool empty() const noexcept;
 	};
 };
 #endif //SFMLPROJECT_REBUILD_NPC_DISPATCHER_HPP

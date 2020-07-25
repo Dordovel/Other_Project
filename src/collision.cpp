@@ -35,19 +35,12 @@ namespace PROJECT::COLLISION
 	{
 	}
 
-	std::array<std::pair<PROJECT::MOVE::Side, std::string>, 4>
+	std::pair<PROJECT::MOVE::Side, std::string>
 	    Collision::check_object_collision(const std::shared_ptr<INTERACTION>& lv,
                                             const std::shared_ptr<INTERACTION>& rv) noexcept
 	{
 		BASE::DATA::RectangleF rect;
-        std::array<std::pair<PROJECT::MOVE::Side, std::string>, 4> result = {
-																				{
-																					{MOVE::Side::NONE, ""},
-																					{MOVE::Side::NONE, ""},
-																					{MOVE::Side::NONE, ""},
-																					{MOVE::Side::NONE, ""}
-																				}
-																			};
+        std::pair<PROJECT::MOVE::Side, std::string> result = {MOVE::Side::NONE, ""};
 
 		if(this->_physics.check_intersection(lv, rv))
 		{
@@ -57,22 +50,22 @@ namespace PROJECT::COLLISION
 
 			if(this->_physics.check_intersection(rv, this->_circleRight))
 			{
-				result[0] = std::pair(MOVE::Side::RIGHT, "");
+				result = {MOVE::Side::RIGHT, ""};
 			}
 			
 			if(this->_physics.check_intersection(rv, this->_circleLeft))
 			{
-				result[1] = std::pair(MOVE::Side::LEFT, "");
+				result = {MOVE::Side::LEFT, ""};
 			}
 
 			if(this->_physics.check_intersection(rv, this->_circleUp))
 			{
-				result[2] = std::pair(MOVE::Side::UP, "");
+				result = {MOVE::Side::UP, ""};
 			}
 
 			if(this->_physics.check_intersection(rv, this->_circleDown))
 			{
-			    result[3] = std::pair(MOVE::Side::DOWN, "");
+			    result = {MOVE::Side::DOWN, ""};
 			}
 
 		}
@@ -80,19 +73,12 @@ namespace PROJECT::COLLISION
 		return result;
 	}
 
-	std::array<std::pair<PROJECT::MOVE::Side, std::string>,4>
+	std::vector<std::pair<PROJECT::MOVE::Side, std::string>>
 	    Collision::check_object_collision(const std::shared_ptr<PROJECT::COLLECTION::ILayout>& lv,
 	                                        const std::shared_ptr<INTERACTION>& rv ) noexcept
 	{
 		BASE::DATA::RectangleF rect;
-        std::array<std::pair<PROJECT::MOVE::Side, std::string>, 4> result = {
-																				{
-																					{MOVE::Side::NONE, ""},
-																					{MOVE::Side::NONE, ""},
-																					{MOVE::Side::NONE, ""},
-																					{MOVE::Side::NONE, ""}
-																				}
-																			};
+        std::vector<std::pair<PROJECT::MOVE::Side, std::string>> result;
 
 		auto&& collisionObjectList = this->_physics.get_collision_object(lv, rv);
 
@@ -110,25 +96,25 @@ namespace PROJECT::COLLISION
 			auto&& collection = this->_physics.get_collision_object(lv, this->_circleRight);
             if (!collection.empty())
             {
-                result[0] = std::pair(MOVE::Side::RIGHT, collection.at(0));
+                result.emplace_back(MOVE::Side::RIGHT, collection.at(0));
             }
 
 			collection = this->_physics.get_collision_object(lv, this->_circleLeft);
             if (!collection.empty())
             {
-                result[1] = std::pair(MOVE::Side::LEFT, collection.at(0));
+                result.emplace_back(MOVE::Side::LEFT, collection.at(0));
             }
 
 			collection = this->_physics.get_collision_object(lv, this->_circleUp);
             if (!collection.empty())
             {
-                result[2] = std::pair(MOVE::Side::UP, collection.at(0));
+                result.emplace_back(MOVE::Side::UP, collection.at(0));
             }
 
 			collection = this->_physics.get_collision_object(lv, this->_circleDown);
             if (!collection.empty())
             {
-                result[3] = std::pair(MOVE::Side::DOWN, collection.at(0));
+                result.emplace_back(MOVE::Side::DOWN, collection.at(0));
             }
         }
 

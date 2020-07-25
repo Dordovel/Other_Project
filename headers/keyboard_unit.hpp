@@ -12,23 +12,23 @@ namespace PROJECT::UNIT::CONTROL::KEYBOARD
     {
         private:
 
-            enum class KeyEventType
+            enum class _KeyEventType
             {
                 Pressed,
                 Released
             };
 
-            struct EventHandler
+            struct _EventHandler
             {
                 Keyboard_Key::Key key;
                 std::function<void()> fun;
-                KeyboardUnit::KeyEventType type;
+                KeyboardUnit::_KeyEventType type;
             };
 
             std::function<void()> _closeWindowEvent;
 
-            std::vector<KeyboardUnit::EventHandler> _keyPressedEventLoop;
-            std::vector<KeyboardUnit::EventHandler> _keyPressedEventNone;
+            std::vector<KeyboardUnit::_EventHandler> _keyPressedEventLoop;
+            std::vector<KeyboardUnit::_EventHandler> _keyPressedEventNone;
 
         public:
             void set_close_window_event(const std::function<void()>& closeWindowEvent) noexcept override;

@@ -17,13 +17,13 @@ namespace PROJECT::NPC
 		{
 			this->_currentTime = sf::microseconds(this->_currentTime.asMicroseconds() % this->_frameTime.asMicroseconds());
 			
-			this->_lastSide = generate_rand_side();
+			this->_lastSide = this->_generate_rand_side();
 		}
 
 		return this->_lastSide;
 	}
 
-	PROJECT::MOVE::Side SideGenerator::generate_rand_side() noexcept
+	PROJECT::MOVE::Side SideGenerator::_generate_rand_side() noexcept
 	{
 			std::random_device rand_device;
 			std::mt19937 mt(rand_device());

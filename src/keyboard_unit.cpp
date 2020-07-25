@@ -10,10 +10,10 @@ namespace PROJECT::UNIT::CONTROL::KEYBOARD
 
     void KeyboardUnit::button_pressed(int key , const std::function<void()>& fun , EventHandlerType eventType) noexcept
     {
-        KeyboardUnit::EventHandler eventHandler;
+        KeyboardUnit::_EventHandler eventHandler;
         eventHandler.key = static_cast<Keyboard_Key::Key>(key);
         eventHandler.fun = fun;
-        eventHandler.type = KeyboardUnit::KeyEventType::Pressed;
+        eventHandler.type = KeyboardUnit::_KeyEventType::Pressed;
 
         if (eventType == EventHandlerType::EVENT_LOOP)
         {
@@ -27,17 +27,17 @@ namespace PROJECT::UNIT::CONTROL::KEYBOARD
 
     void KeyboardUnit::button_released(int key , const std::function<void()>& fun) noexcept
     {
-        KeyboardUnit::EventHandler eventHandler;
+        KeyboardUnit::_EventHandler eventHandler;
         eventHandler.key = static_cast<Keyboard_Key::Key>(key);
         eventHandler.fun = fun;
-        eventHandler.type = KeyboardUnit::KeyEventType::Released;
+        eventHandler.type = KeyboardUnit::_KeyEventType::Released;
 
         this->_keyPressedEventLoop.push_back(eventHandler);
     }
 
     void KeyboardUnit::catch_events()
     {
-        for (const KeyboardUnit::EventHandler& eventHandlerNone : this->_keyPressedEventNone)
+        for (const KeyboardUnit::_EventHandler& eventHandlerNone : this->_keyPressedEventNone)
         {
             if(Keyboard_Key::isKeyPressed(eventHandlerNone.key))
             {
@@ -51,12 +51,13 @@ namespace PROJECT::UNIT::CONTROL::KEYBOARD
     {
         if(event.type == PROJECT::EVENT::EventObject::Closed)
         {
-            this->_closeWindowEvent();
+            if(this->_closeWindowEvent)
+                this->_closeWindowEvent();
         }
 
-        for(const KeyboardUnit::EventHandler& eventHandlerLoop : this->_keyPressedEventLoop)
+        for(const KeyboardUnit::_EventHandler& eventHandlerLoop : this->_keyPressedEventLoop)
         {
-            if( eventHandlerLoop.type == KeyboardUnit::KeyEventType::Pressed)
+            if( eventHandlerLoop.type == KeyboardUnit::_KeyEventType::Pressed)
             {
                 if((event.type == PROJECT::EVENT::EventObject::KeyPressed) && (event.key.code == eventHandlerLoop.key))
                 {

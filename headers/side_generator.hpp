@@ -13,7 +13,7 @@ namespace PROJECT::NPC
 			sf::Time _frameTime;
 			PROJECT::MOVE::Side _lastSide;
 			
-			PROJECT::MOVE::Side generate_rand_side() noexcept;
+			PROJECT::MOVE::Side _generate_rand_side() noexcept;
 
 		public:
 			PROJECT::MOVE::Side generate(float delta) noexcept;

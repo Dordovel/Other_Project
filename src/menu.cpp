@@ -1,16 +1,48 @@
 #include "../headers/menu.hpp"
 #include "../struct/rect_object.hpp"
 #include "../struct/vector_object.hpp"
-#include "../id.hpp"
+#include <cmath>
 
 namespace
 {
 	using namespace PROJECT::BASE::DATA;
+	using namespace PROJECT::MENU;
 
 	Vector2F get_object_size(const std::shared_ptr<STATIC>& layout) noexcept
 	{
 		RectangleF layoutRect = layout->get_global_bounds();
 		return {layoutRect.width, layoutRect.height};
+	}
+
+	float offset(MenuPosition position, float Width) noexcept
+	{
+		float center = Width / 2;
+
+		if(position == MenuPosition::LEFT)
+		{
+			return center / 2;
+		}
+
+		if(position == MenuPosition::RIGHT)
+		{
+			return center + (center / 2);
+		}
+
+		return center;
+	}
+
+	bool check_intersection(const PROJECT::BASE::DATA::RectangleF& lv,
+							const std::shared_ptr<OBJECT>& rv)
+	{
+		PROJECT::BASE::DATA::Vector2F rvPos = rv->get_position();
+		PROJECT::BASE::DATA::RectangleF rvRect = rv->get_global_bounds();
+
+		if( lv.top > rvPos.y - rvRect.height
+			&& lv.top < rvPos.y + rvRect.height)
+		{
+			return true;
+		}
+		return false;
 	}
 };
 
@@ -21,27 +53,30 @@ namespace PROJECT::MENU
 	{
 		size_t size = 0;
 
-		for(const auto& object : this->_item)
-		{
-			size += get_object_size(object).y;
-		}
+		this->_pointer = {0, 0, 10, 10};
 
-		if(size < Height)
+		float itemHeight = this->_item.front()->get_global_bounds().height;
+
+		float itemOffset = itemHeight + this->_item_offset;
+		
+		int elementOnPage = Height / itemOffset;
+
+		if(elementOnPage > this->_item.size())
 		{
-			this->item_step = ((Height - size) / this->_item.size());
-			float pointerX = X + (Width / 2);
-			float pointerY = Y + this->item_offset;
+			this->_item_step = ((Height - size) / this->_item.size());
+			float pointerX = X + offset(this->_position, Width);
+			float pointerY = Y + this->_item_offset;
 
 			for(const auto& object : this->_item)
 			{
 				object->set_position(pointerX, pointerY);
-				pointerY += this->item_step;
+				pointerY += this->_item_step;
 			}
 
 			PROJECT::BASE::DATA::Vector2F firstElementPosition = (*this->_item.begin())->get_position();
-			PROJECT::BASE::DATA::RectangleF pointerBounds = this->_pointer->get_global_bounds();
-			this->_pointer->set_position(pointerX - (pointerBounds.width * 2), 
-											firstElementPosition.y + (pointerBounds.height / 2));
+			PROJECT::BASE::DATA::RectangleF pointerBounds = this->_pointer;
+			this->_pointer.left = pointerX - (pointerBounds.width * 2);
+			this->_pointer.top = firstElementPosition.y + (pointerBounds.height / 2);
 
 			return true;
 		}
@@ -49,61 +84,36 @@ namespace PROJECT::MENU
 		return false;
 	}
 
-	void Menu::set_pointer(const std::shared_ptr<OBJECT>& pointer) noexcept
-	{
-		this->_pointer = pointer;
-	}
-
 	void Menu::add_item(const std::shared_ptr<OBJECT>& object) noexcept
 	{
 		this->_item.emplace_back(object);
 	}
 
-	void Menu::page_forward() noexcept
-	{
-		this->step_forward();
-	}
-
-	void Menu::page_back() noexcept
-	{
-		this->step_back();
-	}
-
 	void Menu::step_forward() noexcept
 	{
-		std::string selected_item_id = this->selected_item();
-
-		if(selected_item_id != this->_item.back()->get_id())
+		if(!check_intersection(this->_pointer, this->_item.back()))
 		{
-			PROJECT::BASE::DATA::Vector2F oldPosition = this->_pointer->get_position();
-			this->_pointer->set_position(oldPosition.x, oldPosition.y + this->item_step);
+			PROJECT::BASE::DATA::RectangleF oldPosition = this->_pointer;
+			this->_pointer.left = oldPosition.left;
+			this->_pointer.top = oldPosition.top + this->_item_step;
 		}
 	}
 
 	void Menu::step_back() noexcept
 	{	
-		std::string selected_item_id = this->selected_item();
-
-		if(selected_item_id != this->_item.front()->get_id())
+		if(!check_intersection(this->_pointer, this->_item.front()))
 		{
-			PROJECT::BASE::DATA::Vector2F oldPosition = this->_pointer->get_position();
-			this->_pointer->set_position(oldPosition.x, oldPosition.y - this->item_step);
+			PROJECT::BASE::DATA::RectangleF oldPosition = this->_pointer;
+			this->_pointer.left = oldPosition.left;
+			this->_pointer.top = oldPosition.top - this->_item_step;
 		}
 	}
 
 	std::string Menu::selected_item() noexcept
 	{
-		PROJECT::BASE::DATA::Vector2F itemPosition;
-		PROJECT::BASE::DATA::Vector2F pointerPosition = this->_pointer->get_position();
-		PROJECT::BASE::DATA::RectangleF itemRect;
-
 		for (const auto& object : this->_item)
 		{
-			itemPosition = object->get_position();
-			itemRect = object->get_global_bounds();
-
-			if(pointerPosition.y > itemPosition.y - itemRect.height
-				&& pointerPosition.y < itemPosition.y + itemRect.height)
+			if(check_intersection(this->_pointer, object))
 			{
 				return object->get_id();
 			}
@@ -113,8 +123,19 @@ namespace PROJECT::MENU
 	}
 
 
+	void Menu::set_position(MenuPosition position) noexcept
+	{
+		this->_position = position;
+	}
+
 	void Menu::reset() noexcept
 	{
 		this->_item.clear();
+	}
+
+
+	PROJECT::BASE::DATA::Vector2F Menu::get_pointer_position() noexcept
+	{
+		return {this->_pointer.left, this->_pointer.top};
 	}
 };

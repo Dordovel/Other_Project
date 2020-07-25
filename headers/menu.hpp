@@ -3,6 +3,7 @@
 
 #include "../Interface/imenu.hpp"
 #include <vector>
+#include "../struct/rect_object.hpp"
 
 namespace PROJECT::MENU
 {
@@ -10,14 +11,13 @@ namespace PROJECT::MENU
 	{
 		private:
 			std::vector<std::shared_ptr<OBJECT>> _item;
-			std::shared_ptr<OBJECT> _pointer;
-			float item_step;
-			float item_offset = 20;
+			float _item_step;
+			float _item_offset = 20;
+			MenuPosition _position = MenuPosition::CENTER;
+			PROJECT::BASE::DATA::RectangleF _pointer;
 
 		public:
 			bool menu_configure(float X, float Y, float Width, float Height) noexcept override;
-
-			void set_pointer(const std::shared_ptr<OBJECT>& pointer) noexcept;
 
 			void add_item(const std::shared_ptr<OBJECT>& object) noexcept override;
 
@@ -25,11 +25,11 @@ namespace PROJECT::MENU
 
 			void step_back() noexcept override;
 
-			void page_back() noexcept override;
-
-			void page_forward() noexcept override;
-
 			std::string selected_item() noexcept override;
+
+			void set_position(MenuPosition position) noexcept override;
+
+			PROJECT::BASE::DATA::Vector2F get_pointer_position() noexcept;
 
 			void reset() noexcept override;
 

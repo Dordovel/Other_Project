@@ -6,9 +6,7 @@ namespace PROJECT::DISPATCHER
 {
 	void ChestDispatcher::delete_object(size_t index) noexcept
 	{
-		auto elem = this->_object.begin();
-		std::advance(elem, index);
-		this->_object.erase(elem);
+		this->_object.erase(std::next(this->_object.begin(), index));
 	}
 
 	void ChestDispatcher::add_object(std::shared_ptr<PROJECT::CHEST::IChest>&& object) noexcept
@@ -24,5 +22,10 @@ namespace PROJECT::DISPATCHER
 	size_t ChestDispatcher::size() const noexcept
 	{
 		return this->_object.size();
+	}
+
+	bool ChestDispatcher::empty() const noexcept
+	{
+		return this->_object.empty();
 	}
 };

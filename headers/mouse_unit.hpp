@@ -12,51 +12,51 @@ namespace PROJECT::UNIT::CONTROL::MOUSE
     {
         private:
 
-            enum class MouseEventType
+            enum class _MouseEventType
             {
                 Pressed,
                 Released
             };
 
-            struct EventHandlerMousePressed
+            struct _EventHandlerMousePressed
             {
                 std::function<void(float X, float Y)> fun;
             };
 
-            struct EventHandlerMouseMoved
+            struct _EventHandlerMouseMoved
             {
                 std::function<void(float X, float Y)> fun;
             };
 
-            struct EventHandlerMouseWheelScrolled
+            struct _EventHandlerMouseWheelScrolled
             {
                 std::function<void(float X, float Y, float Delta)> fun;
             };
 
-            struct EventHandlerMouseEntered
+            struct _EventHandlerMouseEntered
             {
                 std::function<void()> fun;
             };
 
-            struct EventHandlerMouseReleased
+            struct _EventHandlerMouseReleased
             {
                 Mouse_Key::Button button;
                 std::function<void()> fun;
             };
 
-            std::map<Mouse_Key::Button, MouseUnit::EventHandlerMousePressed> _eventMousePressedPool;
+            std::map<Mouse_Key::Button, MouseUnit::_EventHandlerMousePressed> _eventMousePressedPool;
 
-            std::vector<MouseUnit::EventHandlerMouseMoved> _eventMouseMovedPool;
-            std::vector<MouseUnit::EventHandlerMouseWheelScrolled> _eventMouseWheelScrolledPool;
-            std::vector<MouseUnit::EventHandlerMouseEntered> _eventMouseEnteredPool;
+            std::vector<MouseUnit::_EventHandlerMouseMoved> _eventMouseMovedPool;
+            std::vector<MouseUnit::_EventHandlerMouseWheelScrolled> _eventMouseWheelScrolledPool;
+            std::vector<MouseUnit::_EventHandlerMouseEntered> _eventMouseEnteredPool;
 
-            std::vector<MouseUnit::EventHandlerMouseReleased> _eventMouseReleasedPool;
+            std::vector<MouseUnit::_EventHandlerMouseReleased> _eventMouseReleasedPool;
 
-            inline void catch_mouse_pressed_event(const PROJECT::EVENT::EventObject& event);
-            inline void catch_mouse_wheel_scrolled_event(const PROJECT::EVENT::EventObject& event);
-            inline void catch_mouse_mouse_moved_event(const PROJECT::EVENT::EventObject& event);
-            inline void catch_mouse_enter_event(const PROJECT::EVENT::EventObject& event);
-            inline void catch_mouse_released_event(const PROJECT::EVENT::EventObject& event);
+            inline void _catch_mouse_pressed_event(const PROJECT::EVENT::EventObject& event);
+            inline void _catch_mouse_wheel_scrolled_event(const PROJECT::EVENT::EventObject& event);
+            inline void _catch_mouse_mouse_moved_event(const PROJECT::EVENT::EventObject& event);
+            inline void _catch_mouse_enter_event(const PROJECT::EVENT::EventObject& event);
+            inline void _catch_mouse_released_event(const PROJECT::EVENT::EventObject& event);
 
             sf::Mouse _mouse;
 

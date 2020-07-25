@@ -35,4 +35,9 @@ namespace PROJECT::DISPATCHER
    	{
 		return this->_object.size();
 	}
+
+	bool NpcDispatcher::empty() const noexcept
+	{
+		return this->_object.empty();
+	}
 };

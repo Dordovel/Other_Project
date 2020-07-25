@@ -11,7 +11,7 @@ namespace PROJECT::COLLECTION
                                                                                 _isVisible(true)
     {
         std::cout<<pathToMap<< mapFileName<< '\n';
-        this->load_map_from_file(mapFileName);
+        this->_load_map_from_file(mapFileName);
     }
 
     Layout::~Layout()
@@ -19,7 +19,7 @@ namespace PROJECT::COLLECTION
         std::cout<<"\t~Layout(): \n";
     }
 
-    void Layout::load_map_from_file(std::string_view pathToFile)
+    void Layout::_load_map_from_file(std::string_view pathToFile)
     {
         bool load_map_status = this->_mapLoader->load(pathToFile.data());
 
@@ -31,7 +31,7 @@ namespace PROJECT::COLLECTION
         }
     }
 
-    bool Layout::check_map_static_object_with_string(std::string object, std::string_view objectName)
+    bool Layout::_check_map_static_object_with_string(std::string object, std::string_view objectName)
     {
         auto temp = this->_mapStaticObjectInString.find(object);
         if(temp != this->_mapStaticObjectInString.end())
