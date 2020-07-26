@@ -358,6 +358,7 @@ int main()
 		UNIT::CONTROL::MOUSE::MouseUnit mouse;
 
 		COLLISION::Collision collision;
+		PHYSICS::Physics physics;
 
 		keyboard.set_close_window_event([&app, &isRun, &isOpen]()
 				{
@@ -538,7 +539,7 @@ int main()
 
 
 //VARIABLE FOR USE IN LOOP
-//{
+
 		BASE::DATA::RectangleF loopRect = {};
 		BASE::DATA::Vector2F loopVec = {};
 		size_t loopContainerIter = 0;
@@ -557,11 +558,10 @@ int main()
 		std::vector<std::pair<MOVE::Side, std::string>> loopCollisionObjectList;
 		std::vector<std::pair<MOVE::Side, decltype(loopNpcElement)>> loopNpcCollisionList;
 		std::vector<std::pair<MOVE::Side, decltype(loopChestElement)>> loopChestCollisionList;
-//}
+
 //END VARIABLE FOR USE IN LOOP
 
 //VISUAL OBJECT
-//{
 
         DISPATCHER::NpcDispatcher npcDispatcher;
         npcDispatcher.add_object(std::move(personTest));
@@ -595,33 +595,35 @@ int main()
 		std::shared_ptr<BASE::GRAPHIC::IRectangle> inventoryBack;
 		inventoryBack = std::make_shared<BASE::GRAPHIC::Rectangle>(100, 100);
 		inventoryBack->set_color(BASE::GRAPHIC::Color::Orange);
-//}
+
 //END VISUAL OBJECT
 
 		while (app->is_open() && isRun)
 		{
+
 //EVENT HANDLER
-//{
+
 			while (app->check_events())
 			{
 			    keyboard.catch_events(app->event_handler());
 				mouse.catch_events(app->event_handler());
 			}
 			keyboard.catch_events();
-//}
+
 //END EVENT HANDLER
 
 			clock.restart();
 			time = clock.get_work_time();
 
 //DRAW LAYOUT
-//{
+
 			app->draw(*currentLayout);
-//}
+
 //END DRAW LAYOUT
 
 
 //RUN ANIMATION
+
 			anim.run(time * DELAY);
 
 			loopContainerSize = npcDispatcher.size();
@@ -629,11 +631,12 @@ int main()
 			{
 				npcDispatcher.animation(loopContainerIter).run(time * DELAY);
 			}
+
 //END RUN ANIMATION
 
 
 //POSITIONING HEALTH BAR AND UPDATE VALUE
-//{
+
 			loopRect = view->get_global_bounds();
 
 			personHealth->set_position((loopRect.left + PROGRESSBARHeight),
@@ -667,12 +670,11 @@ int main()
 			enemyHealthStatus->set_position(enemyHealth->get_position()
                                                 + BASE::DATA::Vector2F(10, 0));
             
-//}
 //END POSITIONING HEALTH BAR
 
 
 //CHECK PERSON INTERACTIOIN WITH MAP OBJECT
-//{
+
 			person->unblock_all_side();
 			view->unblock_all_side();
 
@@ -687,11 +689,9 @@ int main()
 					view->block_side(loopCollisionElement->first, true);
 				}
 			}
-//}
+
 //END CHECK PERSON INTERACTIOIN WITH MAP OBJECT
 
-//CHECK PERSON INTERACTIOIN WITH CHEST
-//{
 			if(!chestDispatcher.empty())
 			{
 				loopContainerSize = chestDispatcher.size();
@@ -699,63 +699,90 @@ int main()
 				{
 					loopChestElement = &chestDispatcher.object(loopContainerIter);
 
-					loopCollisionElementSimple = collision.check_object_collision(person, (*loopChestElement));
-					
-					if(loopCollisionElementSimple.first != MOVE::Side::NONE)
+					if(!physics.check_intersection(view, (*loopChestElement)))
 					{
-						loopChestCollisionList.emplace_back(loopCollisionElementSimple.first,
-															loopChestElement);
+						(*loopChestElement)->visible(false);
+					}
+					else
+					{
+						(*loopChestElement)->visible(true);
+					}
 
-						person->block_side(loopCollisionElementSimple.first, true);
-						view->block_side(loopCollisionElementSimple.first, true);
+//CHECK PERSON INTERACTIOIN WITH CHEST
+
+					if((*loopChestElement)->is_visible())
+					{
+						loopCollisionElementSimple = collision.check_object_collision(person, (*loopChestElement));
+						
+						if(loopCollisionElementSimple.first != MOVE::Side::NONE)
+						{
+							loopChestCollisionList.emplace_back(loopCollisionElementSimple.first,
+																loopChestElement);
+
+							person->block_side(loopCollisionElementSimple.first, true);
+							view->block_side(loopCollisionElementSimple.first, true);
+						}
 					}
 				}
 			}
-//}
+
 //END CHECK PERSON INTERACTIOIN WITH CHEST
 
-//CHECK NPC INTERACTIOIN WITH MAP OBJECT
-//{
 			loopContainerSize = npcDispatcher.size();
 			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 			{
                 loopNpcElement = &npcDispatcher.object(loopContainerIter);
-                ( *loopNpcElement )->unblock_all_side();
 
-                loopCollisionObjectList = collision.check_object_collision(*currentLayout, ( *loopNpcElement ));
-
-				if(!loopCollisionObjectList.empty())
+				if(!physics.check_intersection(view, (*loopNpcElement)))
 				{
-					for(auto&& var : loopCollisionObjectList)
-					{
-						( *loopNpcElement )->block_side(var.first, true);
-					}
+					(*loopNpcElement)->visible(false);
+				}
+				else
+				{
+					(*loopNpcElement)->visible(true);
 				}
 
+				if((*loopNpcElement)->is_visible())
+				{
+
+//CHECK NPC INTERACTIOIN WITH MAP OBJECT
+
+					( *loopNpcElement )->unblock_all_side();
+
+					loopCollisionObjectList = collision.check_object_collision(*currentLayout, ( *loopNpcElement ));
+
+					if(!loopCollisionObjectList.empty())
+					{
+						for(auto&& var : loopCollisionObjectList)
+						{
+							( *loopNpcElement )->block_side(var.first, true);
+						}
+					}
+
 //CHECK NPC OBJECT INTERACTIOIN WITH PERSON
-//{
-                loopCollisionElementSimple = collision.check_object_collision(person, ( *loopNpcElement ));
-				(*loopNpcElement)->set_state(NPC::State::IDLE);
 
-					person->block_side(loopCollisionElementSimple.first, true);
-					view->block_side(loopCollisionElementSimple.first, true);
+					loopCollisionElementSimple = collision.check_object_collision(person, ( *loopNpcElement ));
+					(*loopNpcElement)->set_state(NPC::State::IDLE);
 
-                    if (loopCollisionElementSimple.first != MOVE::Side::NONE )
-                    {
-						(*loopNpcElement)->set_state(NPC::State::ATTACK);
-						(*loopNpcElement)->block_all_side();
+						person->block_side(loopCollisionElementSimple.first, true);
+						view->block_side(loopCollisionElementSimple.first, true);
 
-                        loopNpcCollisionList.emplace_back(loopCollisionElementSimple.first, loopNpcElement);
-                    }
-//}
+						if (loopCollisionElementSimple.first != MOVE::Side::NONE )
+						{
+							(*loopNpcElement)->set_state(NPC::State::ATTACK);
+							(*loopNpcElement)->block_all_side();
+
+							loopNpcCollisionList.emplace_back(loopCollisionElementSimple.first, loopNpcElement);
+						}
+
 //END CHECK PERSON INTERACTIOIN WITH NPC OBJECT
+
+				}
             }
-//}
 //END CHECK NPC INTERACTIOIN WITH MAP OBJECT
 
 
 //CHECK PERSON INTERACTIOIN WITH QUEST NPC OBJECT
-//{
 			//for(const auto& questNpc : questObjectList)
 			//{
 				//if(const auto& value = collision.check_object_collision(person, questNpc);
@@ -765,7 +792,6 @@ int main()
 					//view->block_side(value.first, true);
 				//}
 			//}
-//}
 //END CHECK PERSON INTERACTIOIN WITH QUEST NPC OBJECT
 
 			if(personMoveSide != MOVE::Side::NONE)
@@ -795,7 +821,7 @@ int main()
 
 
 //DYNAMIC OBJECT ATTACK PERSON, AND UPDATE DYNAMIC OBJECT HEALTH BAR
-//{
+
 			if(!loopNpcCollisionList.empty())
 			{
 				for(auto&& var : loopNpcCollisionList)
@@ -832,13 +858,15 @@ int main()
                 enemyHealthStatus->visible(false);
 				enemyHealth->visible(false);
 			}
-//}
+
 //END
 
 			loopContainerSize = npcDispatcher.size();
 			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 			{
+
 //CHECK LIFE DYNAMIC OBJECT
+
 				loopNpcElement = &npcDispatcher.object(loopContainerIter);
 				if((*loopNpcElement)->get_health() <= 0)
 				{
@@ -854,58 +882,59 @@ int main()
 					loopContainerSize = npcDispatcher.size();
 					continue;
 				}
+
 //END CHECK LIFE DYNAMIC OBJECT
 
 
 //SET RANDOM NPC MOVE SIDE AND ANIMATION
-//{
-				loopNpcElement = &npcDispatcher.object(loopContainerIter);
 
-				randMoveSide = npcDispatcher.side(loopContainerIter, time * DELAY);
-
-				mover->move(randMoveSide, *loopNpcElement, time / DELAY, SPEED);
-
-				loopNpcElementAnimation = &npcDispatcher.animation(loopContainerIter);
-
-				if((*loopNpcElement)->get_state() != NPC::State::ATTACK)
+				if((*loopNpcElement)->is_visible())
 				{
-					if(randMoveSide == MOVE::Side::NONE)
+					randMoveSide = npcDispatcher.side(loopContainerIter, time * DELAY);
+
+					mover->move(randMoveSide, *loopNpcElement, time / DELAY, SPEED);
+
+					loopNpcElementAnimation = &npcDispatcher.animation(loopContainerIter);
+
+					if((*loopNpcElement)->get_state() != NPC::State::ATTACK)
 					{
-						(*loopNpcElement)->set_state(NPC::State::IDLE);
-						loopNpcElementAnimation->reset();
-						loopNpcElementAnimation->stop(true);
+						if(randMoveSide == MOVE::Side::NONE)
+						{
+							(*loopNpcElement)->set_state(NPC::State::IDLE);
+							loopNpcElementAnimation->reset();
+							loopNpcElementAnimation->stop(true);
+						}
+						else
+						{
+							(*loopNpcElement)->set_state(NPC::State::WALK);
+							loopNpcElementAnimation->set_animation((*loopNpcElement)->get_animation_walk(randMoveSide));
+							loopNpcElementAnimation->stop(false);
+						}
 					}
 					else
 					{
-						(*loopNpcElement)->set_state(NPC::State::WALK);
-						loopNpcElementAnimation->set_animation((*loopNpcElement)->get_animation_walk(randMoveSide));
+						for(auto&& object : loopNpcCollisionList)
+						{
+							if(object.second == loopNpcElement)
+							{
+								loopNpcElementAnimation->set_animation((*loopNpcElement)->get_animation_attack(
+														inversion_side(object.first)));
+							}
+						}
+
 						loopNpcElementAnimation->stop(false);
 					}
-				}
-				else
-				{
-					for(auto&& object : loopNpcCollisionList)
-					{
-						if(object.second == loopNpcElement)
-						{
-							loopNpcElementAnimation->set_animation((*loopNpcElement)->get_animation_attack(
-													inversion_side(object.first)));
-						}
-					}
 
-					loopNpcElementAnimation->stop(false);
-				}
-//}
 //END SET RANDOM NPC MOVE SIDE AND ANIMATION
 
 
 //DRAW OBJECTS
-//{
-				app->draw(npcDispatcher.object(loopContainerIter));
+					app->draw(npcDispatcher.object(loopContainerIter));
+				}
 			}
 
 //DRAW INVENTORY
-//{
+//
 			if(showInventory)
 			{
 				if(!loopChestCollisionList.empty())
@@ -939,14 +968,17 @@ int main()
 					showInventory = false;
 				}
 			}
-//}
-//END DRAW INVENTORY
 
+//END DRAW INVENTORY
 
 			loopContainerSize = chestDispatcher.size();
 			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 			{
-				app->draw(chestDispatcher.object(loopContainerIter));
+				loopChestElement = &chestDispatcher.object(loopContainerIter);
+				if((*loopChestElement)->is_visible())
+				{
+					app->draw((*loopChestElement));
+				}
 			}
 
 			app->draw(person);
@@ -961,13 +993,14 @@ int main()
 				app->draw(enemyHealth);
                 app->draw(enemyHealthStatus);
 			}
-//}
+
 //END DRAW OBJECTS
 
 			app->display();
 
 
 //RESET ALL LOOP VARIABLE
+
 			loopCollisionElement = nullptr;
 			loopNpcElement = nullptr;
 			loopChestElement = nullptr;
@@ -979,6 +1012,7 @@ int main()
 			loopCollisionObjectList.clear();
 			loopNpcCollisionList.clear();
 			loopChestCollisionList.clear();
+
 //END RESET LOOP VARIABLE
 
 		}
