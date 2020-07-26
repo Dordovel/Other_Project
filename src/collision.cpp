@@ -5,65 +5,67 @@
 
 namespace PROJECT::COLLISION
 {
-
 	namespace 
 	{ 
-		void positioning(const PROJECT::BASE::DATA::RectangleF rect,
-							const std::shared_ptr<DYNAMIC>& circleRight,
-							const std::shared_ptr<DYNAMIC>& circleLeft,
-							const std::shared_ptr<DYNAMIC>& circleUp,
-							const std::shared_ptr<DYNAMIC>& circleDown)
+		class Unknown
 		{
-			circleRight->set_position((rect.left + rect.width), (rect.top + (rect.height / 2)));
-			circleLeft->set_position(rect.left, (rect.top + (rect.height / 2)));
-			circleUp->set_position((rect.left + (rect.width / 2)), rect.top);
-			circleDown->set_position((rect.left + (rect.width / 2)), (rect.top + rect.height));
-		}
-	};
+			public:
 
+				static PROJECT::BASE::DATA::RectangleF circleRight;
+				static PROJECT::BASE::DATA::RectangleF circleLeft;
+				static PROJECT::BASE::DATA::RectangleF circleUp;
+				static PROJECT::BASE::DATA::RectangleF circleDown;
 
+				static void update(const PROJECT::BASE::DATA::RectangleF rect)
+				{
+					Unknown::circleRight.left = (rect.left + rect.width);
+					Unknown::circleRight.top = (rect.top + (rect.height / 2));
 
-	Collision::Collision(std::shared_ptr<OBJECT>&& rail)
-	{
-		this->_circleUp = rail->clone();
-		this->_circleLeft = rail->clone();
-		this->_circleRight = rail->clone();
-		this->_circleDown = rail->clone();
+					Unknown::circleLeft.left = rect.left;
+					Unknown::circleLeft.top = (rect.top + (rect.height / 2));
+
+					Unknown::circleUp.left = (rect.left + (rect.width / 2));
+					Unknown::circleUp.top = rect.top;
+
+					Unknown::circleDown.left = (rect.left + (rect.width / 2));
+					Unknown::circleDown.top = (rect.top + rect.height);
+				}
+		};
+		
+		PROJECT::BASE::DATA::RectangleF Unknown::circleRight = {0, 0, 10, 10};
+		PROJECT::BASE::DATA::RectangleF Unknown::circleLeft = {0, 0, 10, 10};
+		PROJECT::BASE::DATA::RectangleF Unknown::circleUp = {0, 0, 10, 10};
+		PROJECT::BASE::DATA::RectangleF Unknown::circleDown = {0, 0, 10, 10};
 	}
 
-	Collision::~Collision()
-	{
-	}
+
 
 	std::pair<PROJECT::MOVE::Side, std::string>
 	    Collision::check_object_collision(const std::shared_ptr<INTERACTION>& lv,
                                             const std::shared_ptr<INTERACTION>& rv) noexcept
 	{
-		BASE::DATA::RectangleF rect;
         std::pair<PROJECT::MOVE::Side, std::string> result = {MOVE::Side::NONE, ""};
 
 		if(this->_physics.check_intersection(lv, rv))
 		{
-			rect = lv->get_global_bounds();
+			Unknown::update(lv->get_global_bounds());
 
-			positioning(rect, this->_circleRight, this->_circleLeft, this->_circleUp, this->_circleDown);
-
-			if(this->_physics.check_intersection(rv, this->_circleRight))
+			if(this->_physics.check_intersection(rv, Unknown::circleRight))
 			{
 				result = {MOVE::Side::RIGHT, ""};
 			}
 			
-			if(this->_physics.check_intersection(rv, this->_circleLeft))
+			if(this->_physics.check_intersection(rv, Unknown::circleLeft))
 			{
 				result = {MOVE::Side::LEFT, ""};
 			}
 
-			if(this->_physics.check_intersection(rv, this->_circleUp))
+			if(this->_physics.check_intersection(rv, Unknown::circleUp))
 			{
 				result = {MOVE::Side::UP, ""};
 			}
 
-			if(this->_physics.check_intersection(rv, this->_circleDown))
+			if(this->_physics.check_intersection(rv, Unknown::circleDown))
 			{
 			    result = {MOVE::Side::DOWN, ""};
 			}
@@ -77,43 +79,34 @@ namespace PROJECT::COLLISION
 	    Collision::check_object_collision(const std::shared_ptr<PROJECT::COLLECTION::ILayout>& lv,
 	                                        const std::shared_ptr<INTERACTION>& rv ) noexcept
 	{
-		BASE::DATA::RectangleF rect;
         std::vector<std::pair<PROJECT::MOVE::Side, std::string>> result;
+		std::vector<std::string> collection;
 
-		auto&& collisionObjectList = this->_physics.get_collision_object(lv, rv);
-
-        if (!collisionObjectList.empty())
+        if (this->_physics.check_intersection(lv, rv))
         {
-            rect = rv->get_global_bounds();
+            Unknown::update(rv->get_global_bounds());
 
-            positioning(rect,
-                this->_circleRight,
-                this->_circleLeft,
-                this->_circleUp,
-                this->_circleDown);
-
-
-			auto&& collection = this->_physics.get_collision_object(lv, this->_circleRight);
-            if (!collection.empty())
+			if(this->_physics.check_intersection(lv, Unknown::circleRight))
             {
+				collection = this->_physics.get_intersection_object_name(lv, Unknown::circleRight);
                 result.emplace_back(MOVE::Side::RIGHT, collection.at(0));
             }
 
-			collection = this->_physics.get_collision_object(lv, this->_circleLeft);
-            if (!collection.empty())
+			if(this->_physics.check_intersection(lv, Unknown::circleLeft))
             {
+				collection = this->_physics.get_intersection_object_name(lv, Unknown::circleLeft);
                 result.emplace_back(MOVE::Side::LEFT, collection.at(0));
             }
 
-			collection = this->_physics.get_collision_object(lv, this->_circleUp);
-            if (!collection.empty())
+			if(this->_physics.check_intersection(lv, Unknown::circleUp))
             {
+				collection = this->_physics.get_intersection_object_name(lv, Unknown::circleUp);
                 result.emplace_back(MOVE::Side::UP, collection.at(0));
             }
 
-			collection = this->_physics.get_collision_object(lv, this->_circleDown);
-            if (!collection.empty())
+			if(this->_physics.check_intersection(lv, Unknown::circleDown))
             {
+				collection = this->_physics.get_intersection_object_name(lv, Unknown::circleDown);
                 result.emplace_back(MOVE::Side::DOWN, collection.at(0));
             }
         }

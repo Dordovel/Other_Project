@@ -10,10 +10,21 @@ namespace PROJECT::PHYSICS
 	{
 		public:
 
-			bool check_intersection(const std::shared_ptr<INTERACTION>& lv, const std::shared_ptr<INTERACTION>& rv) noexcept override;
+            bool check_intersection(const std::shared_ptr<INTERACTION>& lv, const std::shared_ptr<INTERACTION>& rv) noexcept override;
 
-			std::vector<std::string> get_collision_object(const std::shared_ptr<PROJECT::COLLECTION::ICollection>& lv,
-                                                          const std::shared_ptr<INTERACTION>& rv) noexcept override;
+            bool check_intersection(const std::shared_ptr<INTERACTION>& lv, const PROJECT::BASE::DATA::RectangleF& rv) noexcept override;
+
+            bool check_intersection(const std::shared_ptr<PROJECT::COLLECTION::ICollection>& lv,
+                                                                  const std::shared_ptr<INTERACTION>& rv) noexcept override;
+
+            bool check_intersection(const std::shared_ptr<PROJECT::COLLECTION::ICollection>& lv,
+                                                                  const PROJECT::BASE::DATA::RectangleF& rv) noexcept override;
+
+            std::vector<std::string> get_intersection_object_name(const std::shared_ptr<PROJECT::COLLECTION::ICollection>& lv,
+                                                                  const std::shared_ptr<INTERACTION>& rv) noexcept override;
+
+            std::vector<std::string> get_intersection_object_name(const std::shared_ptr<PROJECT::COLLECTION::ICollection>& lv,
+                                                                  const PROJECT::BASE::DATA::RectangleF& rv) noexcept override;
 
 			Physics() = default;
 			~Physics() = default;

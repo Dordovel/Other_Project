@@ -17,6 +17,7 @@
 #include "./headers/npc.hpp"
 #include "./headers/chest_dispatcher.hpp"
 #include "./headers/chest.hpp"
+#include <chrono>
 
 using namespace PROJECT;
 using namespace std::literals;
@@ -356,7 +357,7 @@ int main()
 		UNIT::CONTROL::KEYBOARD::KeyboardUnit keyboard;
 		UNIT::CONTROL::MOUSE::MouseUnit mouse;
 
-		COLLISION::Collision collision(std::make_shared<BASE::GRAPHIC::Circle>(4));
+		COLLISION::Collision collision;
 
 		keyboard.set_close_window_event([&app, &isRun, &isOpen]()
 				{
@@ -599,7 +600,6 @@ int main()
 
 		while (app->is_open() && isRun)
 		{
-		
 //EVENT HANDLER
 //{
 			while (app->check_events())
@@ -630,17 +630,6 @@ int main()
 				npcDispatcher.animation(loopContainerIter).run(time * DELAY);
 			}
 //END RUN ANIMATION
-
-
-			auto var = app->map_pixel_to_coords(mouse.get_position_in_desktop());
-			if(personHealthBackground->collision(var))
-			{
-				personHealthStatus->visible(true);
-			}
-			else
-			{
-				personHealthStatus->visible(false);
-			}
 
 
 //POSITIONING HEALTH BAR AND UPDATE VALUE
@@ -845,8 +834,6 @@ int main()
 			}
 //}
 //END
-			
-
 
 			loopContainerSize = npcDispatcher.size();
 			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
@@ -963,15 +950,10 @@ int main()
 			}
 
 			app->draw(person);
-            app->draw(collision._circleDown);
-            app->draw(collision._circleLeft);
-            app->draw(collision._circleRight);
-            app->draw(collision._circleUp);
             
 			app->draw(personHealthBackground);
 			app->draw(personHealth);
-			if( personHealthStatus->is_visible())
-				app->draw(personHealthStatus);
+			app->draw(personHealthStatus);
 			
 			if(enemyHealth->is_visible())
 			{
@@ -985,21 +967,20 @@ int main()
 			app->display();
 
 
-
 //RESET ALL LOOP VARIABLE
-        loopCollisionElement = nullptr;
-		loopNpcElement = nullptr;
-		loopChestElement = nullptr;
-		loopObjectElement = nullptr;
-		loopTextElement = nullptr;
-		loopNpcElementAnimation = nullptr;
-        loopCollisionChestElement = nullptr;
+			loopCollisionElement = nullptr;
+			loopNpcElement = nullptr;
+			loopChestElement = nullptr;
+			loopObjectElement = nullptr;
+			loopTextElement = nullptr;
+			loopNpcElementAnimation = nullptr;
+			loopCollisionChestElement = nullptr;
 
-		loopCollisionObjectList.clear();
-		loopNpcCollisionList.clear();
-		loopChestCollisionList.clear();
-
+			loopCollisionObjectList.clear();
+			loopNpcCollisionList.clear();
+			loopChestCollisionList.clear();
 //END RESET LOOP VARIABLE
+
 		}
 		delete mover;
 	}
