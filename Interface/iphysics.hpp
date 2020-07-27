@@ -13,6 +13,8 @@ namespace PROJECT::PHYSICS
 
             virtual bool check_intersection(const std::shared_ptr<INTERACTION>& lv, const PROJECT::BASE::DATA::RectangleF& rv) noexcept = 0;
 
+            virtual bool check_intersection(const std::shared_ptr<INTERACTION>& lv, const PROJECT::BASE::DATA::Vector2F& rv) noexcept = 0;
+
             virtual bool check_intersection(const std::shared_ptr<PROJECT::COLLECTION::ICollection>& lv,
                                                                   const std::shared_ptr<INTERACTION>& rv) noexcept = 0;
 

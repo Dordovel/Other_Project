@@ -128,7 +128,7 @@ namespace PROJECT::APPLICATION
 
     PROJECT::BASE::DATA::Vector2F Application::map_pixel_to_coords(const PROJECT::BASE::DATA::Vector2I& position)
     {
-        return sf::RenderWindow::mapPixelToCoords(position - this->getPosition());
+        return sf::RenderWindow::mapPixelToCoords(position);// - this->getPosition());
     }
 
     PROJECT::BASE::DATA::Vector2F Application::map_pixel_to_coords(int X, int Y)

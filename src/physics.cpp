@@ -16,6 +16,11 @@ namespace PROJECT::PHYSICS
 		return lv->collision(rv);
 	}
 
+	bool Physics::check_intersection(const std::shared_ptr<INTERACTION>& lv, const PROJECT::BASE::DATA::Vector2F& rv) noexcept
+	{
+		return lv->collision(rv);
+	}
+
 	bool Physics::check_intersection(const std::shared_ptr<PROJECT::COLLECTION::ICollection>& lv,
 															const std::shared_ptr<INTERACTION>& rv) noexcept
 	{

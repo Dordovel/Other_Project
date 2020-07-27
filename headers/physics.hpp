@@ -14,6 +14,8 @@ namespace PROJECT::PHYSICS
 
             bool check_intersection(const std::shared_ptr<INTERACTION>& lv, const PROJECT::BASE::DATA::RectangleF& rv) noexcept override;
 
+            bool check_intersection(const std::shared_ptr<INTERACTION>& lv, const PROJECT::BASE::DATA::Vector2F& rv) noexcept override;
+
             bool check_intersection(const std::shared_ptr<PROJECT::COLLECTION::ICollection>& lv,
                                                                   const std::shared_ptr<INTERACTION>& rv) noexcept override;
 

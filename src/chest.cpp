@@ -75,28 +75,53 @@ namespace PROJECT::CHEST
 	{
 		if(this->_isMod)
 		{
-			float itemHeight = this->_elements.front()->get_global_bounds().height;
+			PROJECT::BASE::DATA::RectangleF bounds = this->_elements.front()->get_global_bounds();
 
-			float offset = itemHeight + this->_item_offset;
+			float offsetY = bounds.height + this->_item_offset;
+
+			float offsetX = bounds.width + this->_item_offset;
+
+			int countY = std::ceil(this->_chestPageSizeHeight / offsetY);
+
+			int countX = std::ceil(this->_chestPageSizeWidth / offsetX);
 			
-			this->_elementOnPage = std::ceil(this->_chestPageSizeHeight / offset);
+			this->_elementOnPage = countX * countY;
 
 			this->_pageCout = std::ceil((float)this->_elements.size() / (float)this->_elementOnPage);
 
 			float y;
 
+			float x;
+
+			int completeY;
+			int completeX;
+
 			for(int page = 1; page <= this->_pageCout; ++page)
 			{
 				y = this->_chestPageY;
+				x = this->_chestPageX;
+				completeY = 0;
+				completeX = 1;
 
 				this->_currentPage = page;
 
 				auto collection = this->get_elements_on_page();
-
+	
 				for(auto& value : collection)
 				{
-					y += offset;
-					value->set_position(this->_chestPageX, y);
+					if(completeY >= countY)
+					{
+						completeY = 0;
+						x = this->_chestPageX + (completeX * offsetX);
+						y = this->_chestPageY;
+
+						++completeX;
+					}
+
+					value->set_position(x, y);
+					y += offsetY;
+
+					++completeY;
 				}
 			}
 

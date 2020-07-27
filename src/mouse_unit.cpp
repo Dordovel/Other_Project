@@ -45,7 +45,7 @@ namespace PROJECT::UNIT::CONTROL::MOUSE
 
             if ( value != this->_eventMousePressedPool.end())
             {
-                value->second.fun(( event.mouseButton.x - 10 ), ( event.mouseButton.y - 10 ));
+                value->second.fun(( event.mouseButton.x), ( event.mouseButton.y));
             }
         }
     }

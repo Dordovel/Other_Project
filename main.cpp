@@ -22,6 +22,17 @@
 using namespace PROJECT;
 using namespace std::literals;
 
+std::shared_ptr<BASE::GRAPHIC::IRectangle> create_test_inventory(std::string id, float width, float height, BASE::GRAPHIC::Color color)
+{
+	std::shared_ptr<BASE::GRAPHIC::IRectangle> inventoryItem;
+	inventoryItem = std::make_shared<BASE::GRAPHIC::Rectangle>(width, height);
+	inventoryItem->set_color(color);
+	inventoryItem->set_id(id);
+
+	return inventoryItem;
+}
+
+
 float convert_value(int lv, int rv, float value)
 {
 	return (rv * ((value / lv) * 100)) / 100;
@@ -347,6 +358,10 @@ int main()
 		MOVE::Side personMoveSide = MOVE::Side::NONE;
 		MOVE::Side randMoveSide = MOVE::Side::DOWN;
 		bool showInventory = false;
+		bool MOUSE_SINGLE_PRESSED = false;
+		bool MOUSE_SINGLE_PRESSED_1 = false;
+		bool MOUSE_PRESSED = false;
+		BASE::DATA::Vector2I MOUSE_BUTTON_PRESS_COORDS;
 
 		std::pair forest = MAP_PATH.at("forest");
 		std::shared_ptr<COLLECTION::Layout> mapForest =
@@ -359,6 +374,25 @@ int main()
 
 		COLLISION::Collision collision;
 		PHYSICS::Physics physics;
+
+
+		mouse.button_pressed(UNIT::CONTROL::MOUSE::Mouse_Key::Left, [&MOUSE_BUTTON_PRESS_COORDS,
+																		&MOUSE_PRESSED](int x, int y)
+				{
+					MOUSE_BUTTON_PRESS_COORDS.x = x;
+					MOUSE_BUTTON_PRESS_COORDS.y = y;
+
+					MOUSE_PRESSED = true;
+				});
+
+		mouse.button_released(UNIT::CONTROL::MOUSE::Mouse_Key::Left, [&MOUSE_BUTTON_PRESS_COORDS,
+																		&MOUSE_PRESSED]()
+				{
+					MOUSE_BUTTON_PRESS_COORDS.x = 0;
+					MOUSE_BUTTON_PRESS_COORDS.y = 0;
+
+					MOUSE_PRESSED = false;
+				});
 
 		keyboard.set_close_window_event([&app, &isRun, &isOpen]()
 				{
@@ -541,7 +575,9 @@ int main()
 //VARIABLE FOR USE IN LOOP
 
 		BASE::DATA::RectangleF loopRect = {};
+		BASE::DATA::RectangleF loopRectSecond = {};
 		BASE::DATA::Vector2F loopVec = {};
+		BASE::DATA::Vector2F loopVecSecond = {};
 		size_t loopContainerIter = 0;
 		size_t loopContainerSize = 0;
 		MOVE::Side personLastSide = MOVE::Side::NONE;
@@ -568,26 +604,7 @@ int main()
         npcDispatcher.add_object(std::move(personTest1));
 
 		DISPATCHER::ChestDispatcher chestDispatcher;
-
-		std::shared_ptr<BASE::GRAPHIC::IRectangle> inventoryItem;
-		inventoryItem = std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARHeight, PROGRESSBARHeight);
-		inventoryItem->set_color(BASE::GRAPHIC::Color::Purple);
-		inventoryItem->set_id("0");
-
-		std::shared_ptr<BASE::GRAPHIC::IRectangle> inventoryItem1;
-		inventoryItem1 = std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARHeight, PROGRESSBARHeight);
-		inventoryItem1->set_color(BASE::GRAPHIC::Color::Purple);
-		inventoryItem1->set_id("1");
-		 
-		std::shared_ptr<BASE::GRAPHIC::IRectangle> inventoryItem2;
-		inventoryItem2 = std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARHeight, PROGRESSBARHeight);
-		inventoryItem2->set_color(BASE::GRAPHIC::Color::Purple);
-		inventoryItem2->set_id("2");
-
-		std::shared_ptr<BASE::GRAPHIC::IRectangle> inventoryItem3;
-		inventoryItem3 = std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARHeight, PROGRESSBARHeight);
-		inventoryItem3->set_color(BASE::GRAPHIC::Color::Purple);
-		inventoryItem3->set_id("3");
+		std::shared_ptr<BASE::GRAPHIC::IRectangle> chestBackground = std::make_shared<BASE::GRAPHIC::Rectangle>(100, 115);
 
         std::vector<std::shared_ptr<NPC::QuestNpc>> questObjectList;
         questObjectList.reserve(1);
@@ -596,6 +613,14 @@ int main()
 		inventoryBack = std::make_shared<BASE::GRAPHIC::Rectangle>(100, 100);
 		inventoryBack->set_color(BASE::GRAPHIC::Color::Orange);
 
+		std::shared_ptr<BASE::GRAPHIC::ISprite> arrayNext = std::make_shared<BASE::GRAPHIC::Sprite>(dataBase.get_resources("arrayNext.png", {0, 0, 24, 24}));
+		arrayNext->set_scale({0.6, 0.6});
+		std::shared_ptr<BASE::GRAPHIC::ISprite> arrayBack = std::make_shared<BASE::GRAPHIC::Sprite>(dataBase.get_resources("arrayBack.png", {0, 0, 24, 24}));
+		arrayBack->set_scale({0.6, 0.6});
+
+
+		std::shared_ptr<BASE::GRAPHIC::ICircle> testCircle = std::make_shared<BASE::GRAPHIC::Circle>(2);
+		testCircle->set_color(BASE::GRAPHIC::Color::Black);
 //END VISUAL OBJECT
 
 		while (app->is_open() && isRun)
@@ -620,6 +645,26 @@ int main()
 			app->draw(*currentLayout);
 
 //END DRAW LAYOUT
+
+
+			if(MOUSE_PRESSED)
+			{
+				if(MOUSE_SINGLE_PRESSED)
+				{
+					MOUSE_SINGLE_PRESSED = false;
+				}
+
+				if(!MOUSE_SINGLE_PRESSED_1)
+				{
+					MOUSE_SINGLE_PRESSED = true;
+					MOUSE_SINGLE_PRESSED_1 = true;
+				}
+			}
+			else
+			{
+				MOUSE_SINGLE_PRESSED = false;
+				MOUSE_SINGLE_PRESSED_1 = false;
+			}
 
 
 //RUN ANIMATION
@@ -872,10 +917,24 @@ int main()
 				{
 					auto&& chest = make_chest(dataBase);
 					chest->set_position((*loopNpcElement)->get_position());
-					chest->add_elements(inventoryItem1->clone());
-					chest->add_elements(inventoryItem2->clone());
-					chest->add_elements(inventoryItem3->clone());
-					chest->add_elements(inventoryItem->clone());
+					for(int a = 0; a < 20; ++a)
+					{
+						if(a < 10)
+						{
+							chest->add_elements(create_test_inventory(std::to_string(a),
+																	PROGRESSBARHeight + 20, 
+																	PROGRESSBARHeight, 
+																	BASE::GRAPHIC::Color::Black));
+						}
+						else
+						{
+							chest->add_elements(create_test_inventory(std::to_string(a),
+																	PROGRESSBARHeight + 20, 
+																	PROGRESSBARHeight, 
+																	BASE::GRAPHIC::Color::Green));
+						}
+					}
+
 					chestDispatcher.add_object(std::move(chest));
 
 					npcDispatcher.delete_object(loopContainerIter);
@@ -946,20 +1005,64 @@ int main()
 						if((*loopCollisionChestElement).first == personLastSide)
 						{
 							loopChestElement = (*loopCollisionChestElement).second;
-							loopVec = (*loopChestElement)->get_position();
-							(*loopChestElement)->set_page_position(loopVec.x, loopVec.y, 50, 100);
+
+							loopRect = view->get_global_bounds();
+
+							loopRectSecond = chestBackground->get_global_bounds();
+
+							chestBackground->set_position((loopRect.left + (loopRect.width * 0.8)) - loopRectSecond.width, 
+															loopRect.top + (loopRect.height / 2) * 0.5);
+
+							loopRect = chestBackground->get_global_bounds();
+							
+							loopRectSecond = arrayNext->get_global_bounds();
+
+							arrayNext->set_position((loopRect.left + (loopRect.width / 2)) + loopRectSecond.width,
+													(loopRect.top + loopRect.height) - loopRectSecond.height);
+
+							arrayBack->set_position((loopRect.left + (loopRect.width / 2)) - (loopRectSecond.width * 2),
+													(loopRect.top + loopRect.height) - loopRectSecond.height);
+
+							(*loopChestElement)->set_page_position(loopRect.left,
+																	loopRect.top,
+																	loopRect.width,
+																	loopRect.height - loopRectSecond.height);
 							(*loopChestElement)->sort();
 
 							auto collection = (*loopChestElement)->get_elements_on_page();
 
+							app->draw(chestBackground);
+							
 							for(auto test : collection)
 							{
-								if(test->collision(app->map_pixel_to_coords(mouse.get_position_in_desktop())))
+								if(MOUSE_SINGLE_PRESSED)
 								{
-									std::cout<<test->get_id()<<std::endl;
+									if(physics.check_intersection(test, app->map_pixel_to_coords(MOUSE_BUTTON_PRESS_COORDS)))
+									{
+										std::cout<<test->get_id()<<std::endl;
+									}
 								}
+
 								app->draw(test);
 							}
+							
+							if(MOUSE_SINGLE_PRESSED)
+							{
+								if(physics.check_intersection(arrayNext, app->map_pixel_to_coords(MOUSE_BUTTON_PRESS_COORDS)))
+								{
+									std::cout<<"PAGE FORWARD Page "<<(*loopChestElement)->get_page()<<std::endl;
+									(*loopChestElement)->page_forward();
+								}
+
+								if(physics.check_intersection(arrayBack, app->map_pixel_to_coords(MOUSE_BUTTON_PRESS_COORDS)))
+								{
+									std::cout<<"PAGE back Page "<<(*loopChestElement)->get_page()<<std::endl;
+									(*loopChestElement)->page_back();
+								}
+							}
+
+							app->draw(arrayNext);
+							app->draw(arrayBack);
 						}
 					}
 				}
@@ -980,7 +1083,8 @@ int main()
 					app->draw((*loopChestElement));
 				}
 			}
-
+				testCircle->set_position(app->map_pixel_to_coords(MOUSE_BUTTON_PRESS_COORDS));
+				app->draw(testCircle);
 			app->draw(person);
             
 			app->draw(personHealthBackground);
@@ -1000,7 +1104,6 @@ int main()
 
 
 //RESET ALL LOOP VARIABLE
-
 			loopCollisionElement = nullptr;
 			loopNpcElement = nullptr;
 			loopChestElement = nullptr;

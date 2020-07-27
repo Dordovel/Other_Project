@@ -13,7 +13,7 @@ namespace PROJECT::CHEST
 		private:
 			std::vector<std::shared_ptr<OBJECT>> _elements;
 			float _item_step;
-			float _item_offset = 20;
+			float _item_offset = 10;
 			int _pageCout;
 			size_t _elementOnPage;
 			float _chestPageX;
