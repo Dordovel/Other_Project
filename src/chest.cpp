@@ -65,69 +65,34 @@ namespace PROJECT::CHEST
 
 	void Chest::set_page_position(float x, float y, float width, float height) noexcept
 	{
-		this->_chestPageSizeHeight = height;
-		this->_chestPageSizeWidth = width;
-		this->_chestPageX = x;
-		this->_chestPageY = y;
+		this->_adaptiveGrid.init(x, y, width, height);
 	}
 
 	void Chest::sort() noexcept
 	{
 		if(this->_isMod)
 		{
-			PROJECT::BASE::DATA::RectangleF bounds = this->_elements.front()->get_global_bounds();
+			size_t unsortedElement = this->_adaptiveGrid.sort(this->_elements);
 
-			float offsetY = bounds.height + this->_item_offset;
-
-			float offsetX = bounds.width + this->_item_offset;
-
-			int countY = std::ceil(this->_chestPageSizeHeight / offsetY);
-
-			int countX = std::ceil(this->_chestPageSizeWidth / offsetX);
-			
-			this->_elementOnPage = countX * countY;
-
-			this->_pageCout = std::ceil((float)this->_elements.size() / (float)this->_elementOnPage);
-
-			float y;
-
-			float x;
-
-			int completeY;
-			int completeX;
-
-			for(int page = 1; page <= this->_pageCout; ++page)
+			if(unsortedElement > 0)
 			{
-				y = this->_chestPageY;
-				x = this->_chestPageX;
-				completeY = 0;
-				completeX = 1;
+				this->_elementOnPage = this->_elements.size() - unsortedElement;
 
-				this->_currentPage = page;
+				this->_pageCout = std::ceil((float)this->_elements.size() / (float)this->_elementOnPage);
 
-				auto collection = this->get_elements_on_page();
-	
-				for(auto& value : collection)
+				for(int page = 1; page <= this->_pageCout; ++page)
 				{
-					if(completeY >= countY)
-					{
-						completeY = 0;
-						x = this->_chestPageX + (completeX * offsetX);
-						y = this->_chestPageY;
+					this->_currentPage = page;
 
-						++completeX;
-					}
-
-					value->set_position(x, y);
-					y += offsetY;
-
-					++completeY;
+					auto collection = this->get_elements_on_page();
+		
+					this->_adaptiveGrid.sort(collection);
 				}
+
+				this->_currentPage = 1;
+
+				this->_isMod = false;
 			}
-
-			this->_currentPage = 1;
-
-			this->_isMod = false;
 		}
 	}
 };

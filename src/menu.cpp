@@ -14,23 +14,6 @@ namespace
 		return {layoutRect.width, layoutRect.height};
 	}
 
-	float offset(MenuPosition position, float Width) noexcept
-	{
-		float center = Width / 2;
-
-		if(position == MenuPosition::LEFT)
-		{
-			return center / 2;
-		}
-
-		if(position == MenuPosition::RIGHT)
-		{
-			return center + (center / 2);
-		}
-
-		return center;
-	}
-
 	bool check_intersection(const PROJECT::BASE::DATA::RectangleF& lv,
 							const std::shared_ptr<OBJECT>& rv)
 	{
@@ -51,35 +34,22 @@ namespace PROJECT::MENU
 {
 	bool Menu::menu_configure(float X, float Y, float Width, float Height) noexcept
 	{
-		size_t size = 0;
+		this->_verticalGrid.init(X, Y, Width, Height);
 
 		this->_pointer = {0, 0, 10, 10};
 
-		float itemHeight = this->_item.front()->get_global_bounds().height;
+		this->_verticalGrid.set_align(PROJECT::GRID::VERTICAL::GridAlign::RIGHT);
 
-		float itemOffset = itemHeight + this->_item_offset;
-		
-		int elementOnPage = Height / itemOffset;
+		if(this->_verticalGrid.sort(this->_item) > 0)
+			return false;
 
-		if(elementOnPage > this->_item.size())
-		{
-			this->_item_step = ((Height - size) / this->_item.size());
-			float pointerX = X + offset(this->_position, Width);
-			float pointerY = Y + this->_item_offset;
+		PROJECT::BASE::DATA::RectangleF firstElementPosition = (*this->_item.begin())->get_global_bounds();
+		this->_item_step = this->_item_step + firstElementPosition.height;
 
-			for(const auto& object : this->_item)
-			{
-				object->set_position(pointerX, pointerY);
-				pointerY += this->_item_step;
-			}
+		PROJECT::BASE::DATA::RectangleF pointerBounds = this->_pointer;
+		this->_pointer.left = firstElementPosition.left - (pointerBounds.width * 2);
+		this->_pointer.top = firstElementPosition.top;
 
-			PROJECT::BASE::DATA::Vector2F firstElementPosition = (*this->_item.begin())->get_position();
-			PROJECT::BASE::DATA::RectangleF pointerBounds = this->_pointer;
-			this->_pointer.left = pointerX - (pointerBounds.width * 2);
-			this->_pointer.top = firstElementPosition.y + (pointerBounds.height / 2);
-
-			return true;
-		}
 
 		return false;
 	}
@@ -120,12 +90,6 @@ namespace PROJECT::MENU
 		}
 
 		return "";
-	}
-
-
-	void Menu::set_position(MenuPosition position) noexcept
-	{
-		this->_position = position;
 	}
 
 	void Menu::reset() noexcept

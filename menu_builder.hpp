@@ -18,7 +18,6 @@ std::string menu_builder(const std::shared_ptr<PROJECT::APPLICATION::IApplicatio
 {
 	PROJECT::MENU::Menu menu;
 	std::string selectedItem;
-	menu.set_position(PROJECT::MENU::MenuPosition::LEFT);
 
 	std::array menuItems = build_items(std::forward<decltype(generateItem)>(generateItem),
 																		RESOURCES_PATH + "Font.otf");

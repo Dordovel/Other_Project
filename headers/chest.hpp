@@ -3,7 +3,7 @@
 
 #include "../Interface/ichest.hpp"
 #include "../graphicobject/sprite.hpp"
-#include <list>
+#include "./adaptive_grid.hpp"
 
 namespace PROJECT::CHEST
 {
@@ -12,17 +12,12 @@ namespace PROJECT::CHEST
     {
 		private:
 			std::vector<std::shared_ptr<OBJECT>> _elements;
-			float _item_step;
-			float _item_offset = 10;
 			int _pageCout;
 			size_t _elementOnPage;
-			float _chestPageX;
-			float _chestPageY;
-			float _chestPageSizeHeight = 50;
-			float _chestPageSizeWidth = 100;
 			int _currentPage;
 			size_t _begin;
 			bool _isMod;
+			PROJECT::GRID::ADAPTIVE::AdaptiveGrid _adaptiveGrid;
 
         public:
 			void sort() noexcept override;

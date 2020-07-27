@@ -7,12 +7,6 @@
 namespace PROJECT::MENU
 {
 
-	enum class MenuPosition
-	{
-		LEFT,
-		CENTER,
-		RIGHT
-	};
 
 	class IMenu
 	{
@@ -28,8 +22,6 @@ namespace PROJECT::MENU
 			virtual std::string selected_item() noexcept = 0;
 
 			virtual void reset() noexcept = 0;
-
-			virtual void set_position(MenuPosition position) noexcept = 0;
 
 			virtual ~IMenu() = default;
 	};

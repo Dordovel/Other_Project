@@ -4,6 +4,7 @@
 #include "../Interface/imenu.hpp"
 #include <vector>
 #include "../struct/rect_object.hpp"
+#include "../headers/vertical_grid.hpp"
 
 namespace PROJECT::MENU
 {
@@ -11,10 +12,9 @@ namespace PROJECT::MENU
 	{
 		private:
 			std::vector<std::shared_ptr<OBJECT>> _item;
-			float _item_step;
-			float _item_offset = 20;
-			MenuPosition _position = MenuPosition::CENTER;
 			PROJECT::BASE::DATA::RectangleF _pointer;
+			float _item_step = 20;
+			PROJECT::GRID::VERTICAL::VerticalGrid _verticalGrid;
 
 		public:
 			bool menu_configure(float X, float Y, float Width, float Height) noexcept override;
@@ -26,8 +26,6 @@ namespace PROJECT::MENU
 			void step_back() noexcept override;
 
 			std::string selected_item() noexcept override;
-
-			void set_position(MenuPosition position) noexcept override;
 
 			PROJECT::BASE::DATA::Vector2F get_pointer_position() noexcept;
 
