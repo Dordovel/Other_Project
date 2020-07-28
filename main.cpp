@@ -289,8 +289,8 @@ int main()
 		 //std::string result = menu(MenuType::MAIN, app, view);
 		 //if(result == MENU_EXIT_ITEM || result == EXIT)
 		 //{
-		 	//app->close();
-		 	//break;
+		 //	app->close();
+		 //	break;
 		//}
 
 		std::shared_ptr<NPC::Npc> person = nullptr;

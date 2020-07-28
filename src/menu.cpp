@@ -38,7 +38,7 @@ namespace PROJECT::MENU
 
 		this->_pointer = {0, 0, 10, 10};
 
-		this->_verticalGrid.set_align(PROJECT::GRID::VERTICAL::GridAlign::RIGHT);
+		this->_verticalGrid.set_align(PROJECT::GRID::VERTICAL::GridAlign::LEFT);
 
 		if(this->_verticalGrid.sort(this->_item) > 0)
 			return false;
@@ -47,7 +47,7 @@ namespace PROJECT::MENU
 		this->_item_step = this->_item_step + firstElementPosition.height;
 
 		PROJECT::BASE::DATA::RectangleF pointerBounds = this->_pointer;
-		this->_pointer.left = firstElementPosition.left - (pointerBounds.width * 2);
+		this->_pointer.left = (firstElementPosition.left + firstElementPosition.width) + (pointerBounds.width * 2);
 		this->_pointer.top = firstElementPosition.top;
 
 

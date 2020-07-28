@@ -8,8 +8,6 @@ namespace PROJECT::GRID::ADAPTIVE
 	class AdaptiveGrid : public PROJECT::GRID::IGrid
 	{
 		private:
-			float _item_step;
-			float _item_offset = 10;
 			float _x;
 			float _y;
 			float _height;

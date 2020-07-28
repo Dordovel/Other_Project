@@ -38,7 +38,12 @@ namespace PROJECT::GRID::VERTICAL
 	
 	size_t VerticalGrid::sort(const std::vector<std::shared_ptr<OBJECT>>& array) noexcept
 	{
-		PROJECT::BASE::DATA::RectangleF bounds = array.front()->get_global_bounds();
+		auto res = std::max_element(array.begin(), array.end(), [](auto a, auto b)
+																	{
+																		return a->get_global_bounds().width < b->get_global_bounds().width;
+																	});
+
+		PROJECT::BASE::DATA::RectangleF bounds = (*res)->get_global_bounds();
 
 		float offsetY = bounds.height + this->_item_offset;
 
