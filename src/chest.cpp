@@ -93,6 +93,13 @@ namespace PROJECT::CHEST
 
 				this->_isMod = false;
 			}
+			else
+			{
+				this->_elementOnPage = this->_elements.size();
+				this->_pageCout = 1;
+				this->_currentPage = 1;
+			}
+			
 		}
 	}
 };

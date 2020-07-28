@@ -1,6 +1,7 @@
 #include "../headers/adaptive_grid.hpp"
 #include "../struct/rect_object.hpp"
 #include <cmath>
+#include <iostream>
 
 namespace PROJECT::GRID::ADAPTIVE
 {
@@ -16,13 +17,26 @@ namespace PROJECT::GRID::ADAPTIVE
 	{
 		PROJECT::BASE::DATA::RectangleF bounds = array.front()->get_global_bounds();
 
-		float offsetY = bounds.height + this->_item_offset;
+		int countX = (this->_width / bounds.width);
+		int countY = (this->_height / bounds.height);
+		
+		int freeSpaceX = this->_width - (bounds.width * countX);
+		int freeSpaceY = this->_height - (bounds.height * countY);
 
-		float offsetX = bounds.width + this->_item_offset;
+		if(freeSpaceX == 0)
+		{
+			--countX;
+			freeSpaceX = this->_width - (bounds.width * countX);
+		}
 
-		int countY = std::ceil(this->_height / offsetY);
+		if(freeSpaceY == 0)
+		{
+			--countY;
+			freeSpaceY = this->_height - (bounds.height * countY);
+		}
 
-		int countX = std::ceil(this->_width / offsetX);
+		float offsetX = (float(freeSpaceX) / float(countX + 1));
+		float offsetY = (float(freeSpaceY) / float(countY + 1));
 
 		size_t elementOnPage = countX * countY;
 
@@ -31,34 +45,25 @@ namespace PROJECT::GRID::ADAPTIVE
 			return array.size() - elementOnPage;
 		}
 
-		float y;
+		float y = this->_y + offsetY;
+		float x = this->_x + offsetX;
 
-		float x;
+		float X = 0;
 
-		int completeY;
-		int completeX;
-
-		y = this->_y;
-		x = this->_x;
-		completeY = 0;
-		completeX = 1;
-
-
-		for(auto& value : array)
+		for (const auto& value : array)
 		{
-			if(completeY >= countY)
+			if(X == countX)
 			{
-				completeY = 0;
-				x = this->_x+ (completeX * offsetX);
-				y = this->_y;
+				x = this->_x + offsetX;
+				y = (y + offsetY) + (bounds.height);
 
-				++completeX;
+				X = 0;
 			}
 
 			value->set_position(x, y);
-			y += offsetY;
+			x = (x + offsetX) + (bounds.width);
 
-			++completeY;
+			++X;
 		}
 
 		return 0;

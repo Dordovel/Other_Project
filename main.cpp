@@ -286,12 +286,12 @@ int main()
 
 	while(isOpen)
 	{
-		 std::string result = menu(MenuType::MAIN, app, view);
-		 if(result == MENU_EXIT_ITEM || result == EXIT)
-		 {
-		 	app->close();
-		 	break;
-		}
+		 //std::string result = menu(MenuType::MAIN, app, view);
+		 //if(result == MENU_EXIT_ITEM || result == EXIT)
+		 //{
+		 	//app->close();
+		 	//break;
+		//}
 
 		std::shared_ptr<NPC::Npc> person = nullptr;
 		//person = change_person_type(result, dataBase);
@@ -922,14 +922,14 @@ int main()
 						if(a < 10)
 						{
 							chest->add_elements(create_test_inventory(std::to_string(a),
-																	PROGRESSBARHeight + 20, 
+																	PROGRESSBARHeight / 2, 
 																	PROGRESSBARHeight, 
 																	BASE::GRAPHIC::Color::Black));
 						}
 						else
 						{
 							chest->add_elements(create_test_inventory(std::to_string(a),
-																	PROGRESSBARHeight + 20, 
+																	PROGRESSBARHeight / 2, 
 																	PROGRESSBARHeight, 
 																	BASE::GRAPHIC::Color::Green));
 						}
