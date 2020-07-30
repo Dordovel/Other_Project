@@ -3,7 +3,7 @@
 
 #include "../Interface/ichest.hpp"
 #include "../graphicobject/sprite.hpp"
-#include "./adaptive_grid.hpp"
+#include "./grid.hpp"
 
 namespace PROJECT::CHEST
 {
@@ -17,7 +17,7 @@ namespace PROJECT::CHEST
 			int _currentPage;
 			size_t _begin;
 			bool _isMod;
-			PROJECT::GRID::ADAPTIVE::AdaptiveGrid _adaptiveGrid;
+			PROJECT::GRID::Grid _grid;
 
         public:
 			void sort() noexcept override;

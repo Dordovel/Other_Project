@@ -65,14 +65,14 @@ namespace PROJECT::CHEST
 
 	void Chest::set_page_position(float x, float y, float width, float height) noexcept
 	{
-		this->_adaptiveGrid.init(x, y, width, height);
+		this->_grid.init(x, y, width, height);
 	}
 
 	void Chest::sort() noexcept
 	{
 		if(this->_isMod)
 		{
-			size_t unsortedElement = this->_adaptiveGrid.sort(this->_elements);
+			size_t unsortedElement = this->_grid.sort(this->_elements);
 
 			if(unsortedElement > 0)
 			{
@@ -86,7 +86,7 @@ namespace PROJECT::CHEST
 
 					auto collection = this->get_elements_on_page();
 		
-					this->_adaptiveGrid.sort(collection);
+					this->_grid.sort(collection);
 				}
 
 				this->_currentPage = 1;
