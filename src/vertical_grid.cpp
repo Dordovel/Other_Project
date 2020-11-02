@@ -22,18 +22,19 @@ namespace
 
 namespace PROJECT::GRID::VERTICAL
 {
+	VerticalGrid::VerticalGrid (PROJECT::GRID::VERTICAL::GridAlign align, int offsetY)
+	{
+		this->_align = align;
+		this->_item_offset = offsetY;
+	}
+
+
 	void VerticalGrid::init(float x, float y, float width, float height) noexcept
 	{
 		this->_x = x;
 		this->_y = y;
 		this->_width = width;
 		this->_height = height;
-	}
-
-
-	void VerticalGrid::set_align(PROJECT::GRID::VERTICAL::GridAlign align) noexcept
-	{
-		this->_align = align;
 	}
 	
 	size_t VerticalGrid::sort(const std::vector<std::shared_ptr<OBJECT>>& array) noexcept

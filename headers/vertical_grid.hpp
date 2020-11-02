@@ -15,7 +15,7 @@ namespace PROJECT::GRID::VERTICAL
 	class VerticalGrid : public PROJECT::GRID::IGrid
 	{
 		private:
-			float _item_offset = 20;
+			float _item_offset;
 			GridAlign _align = GridAlign::CENTER;
 			float _x;
 			float _y;
@@ -23,11 +23,14 @@ namespace PROJECT::GRID::VERTICAL
 			float _width;
 
 		public:
+
+			VerticalGrid (PROJECT::GRID::VERTICAL::GridAlign align, int offsetY = 0);
+
 			void init(float x, float y, float width, float height) noexcept;
 
-			void set_align(PROJECT::GRID::VERTICAL::GridAlign align) noexcept;
-			
 			size_t sort(const std::vector<std::shared_ptr<OBJECT>>& array) noexcept;
+
+			~VerticalGrid() = default;
 	};
 };
 

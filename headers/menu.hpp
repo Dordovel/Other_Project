@@ -14,9 +14,14 @@ namespace PROJECT::MENU
 			std::vector<std::shared_ptr<OBJECT>> _item;
 			PROJECT::BASE::DATA::RectangleF _pointer;
 			float _item_step = 20;
+			std::size_t _index;
 			PROJECT::GRID::VERTICAL::VerticalGrid _verticalGrid;
 
+			std::shared_ptr<OBJECT>* get_selected_item() noexcept;
+
 		public:
+			Menu();
+
 			bool menu_configure(float X, float Y, float Width, float Height) noexcept override;
 
 			void add_item(const std::shared_ptr<OBJECT>& object) noexcept override;
