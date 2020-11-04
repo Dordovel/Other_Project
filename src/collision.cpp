@@ -41,8 +41,8 @@ namespace PROJECT::COLLISION
 
 
 	std::pair<PROJECT::MOVE::Side, std::string>
-	    Collision::check_object_collision(const std::shared_ptr<INTERACTION>& lv,
-                                            const std::shared_ptr<INTERACTION>& rv) noexcept
+	    Collision::check_object_collision(const INTERACTION* const lv,
+                                            const INTERACTION* const rv) noexcept
 	{
         std::pair<PROJECT::MOVE::Side, std::string> result = {MOVE::Side::NONE, ""};
 
@@ -76,8 +76,8 @@ namespace PROJECT::COLLISION
 	}
 
 	std::vector<std::pair<PROJECT::MOVE::Side, std::string>>
-	    Collision::check_object_collision(const std::shared_ptr<PROJECT::COLLECTION::ILayout>& lv,
-	                                        const std::shared_ptr<INTERACTION>& rv ) noexcept
+	    Collision::check_object_collision(const PROJECT::COLLECTION::ILayout* const lv,
+	                                        const INTERACTION* const rv ) noexcept
 	{
         std::vector<std::pair<PROJECT::MOVE::Side, std::string>> result;
 		std::vector<std::string> collection;

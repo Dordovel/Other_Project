@@ -642,7 +642,7 @@ int main()
 
 //DRAW LAYOUT
 
-			app->draw(*currentLayout);
+			app->draw(currentLayout->get());
 
 //END DRAW LAYOUT
 
@@ -723,7 +723,7 @@ int main()
 			person->unblock_all_side();
 			view->unblock_all_side();
 
-            loopCollisionObjectList = collision.check_object_collision(*currentLayout, person);
+            loopCollisionObjectList = collision.check_object_collision(currentLayout->get(), person.get());
 			if(!loopCollisionObjectList.empty())
 			{
 				loopContainerSize = loopCollisionObjectList.size();
@@ -744,7 +744,7 @@ int main()
 				{
 					loopChestElement = &chestDispatcher.object(loopContainerIter);
 
-					if(!physics.check_intersection(view, (*loopChestElement)))
+					if(!physics.check_intersection(view.get(), loopChestElement->get()))
 					{
 						(*loopChestElement)->visible(false);
 					}
@@ -757,7 +757,7 @@ int main()
 
 					if((*loopChestElement)->is_visible())
 					{
-						loopCollisionElementSimple = collision.check_object_collision(person, (*loopChestElement));
+						loopCollisionElementSimple = collision.check_object_collision(person.get(), loopChestElement->get());
 						
 						if(loopCollisionElementSimple.first != MOVE::Side::NONE)
 						{
@@ -778,7 +778,7 @@ int main()
 			{
                 loopNpcElement = &npcDispatcher.object(loopContainerIter);
 
-				if(!physics.check_intersection(view, (*loopNpcElement)))
+				if(!physics.check_intersection(view.get(), loopNpcElement->get()))
 				{
 					(*loopNpcElement)->visible(false);
 				}
@@ -794,7 +794,7 @@ int main()
 
 					( *loopNpcElement )->unblock_all_side();
 
-					loopCollisionObjectList = collision.check_object_collision(*currentLayout, ( *loopNpcElement ));
+					loopCollisionObjectList = collision.check_object_collision(currentLayout->get(), loopNpcElement->get());
 
 					if(!loopCollisionObjectList.empty())
 					{
@@ -806,7 +806,7 @@ int main()
 
 //CHECK NPC OBJECT INTERACTIOIN WITH PERSON
 
-					loopCollisionElementSimple = collision.check_object_collision(person, ( *loopNpcElement ));
+					loopCollisionElementSimple = collision.check_object_collision(person.get(), loopNpcElement->get());
 					(*loopNpcElement)->set_state(NPC::State::IDLE);
 
 						person->block_side(loopCollisionElementSimple.first, true);
@@ -988,7 +988,7 @@ int main()
 
 
 //DRAW OBJECTS
-					app->draw(npcDispatcher.object(loopContainerIter));
+					app->draw(npcDispatcher.object(loopContainerIter).get());
 				}
 			}
 
@@ -1031,38 +1031,41 @@ int main()
 
 							auto collection = (*loopChestElement)->get_elements_on_page();
 
-							app->draw(chestBackground);
+							app->draw(chestBackground.get());
 							
 							for(auto test : collection)
 							{
 								if(MOUSE_SINGLE_PRESSED)
 								{
-									if(physics.check_intersection(test, app->map_pixel_to_coords(MOUSE_BUTTON_PRESS_COORDS)))
+									if(physics.check_intersection(test.get(),
+												app->map_pixel_to_coords(MOUSE_BUTTON_PRESS_COORDS)))
 									{
 										std::cout<<test->get_id()<<std::endl;
 									}
 								}
 
-								app->draw(test);
+								app->draw(test.get());
 							}
 							
 							if(MOUSE_SINGLE_PRESSED)
 							{
-								if(physics.check_intersection(arrayNext, app->map_pixel_to_coords(MOUSE_BUTTON_PRESS_COORDS)))
+								if(physics.check_intersection(arrayNext.get(),
+											app->map_pixel_to_coords(MOUSE_BUTTON_PRESS_COORDS)))
 								{
 									std::cout<<"PAGE FORWARD Page "<<(*loopChestElement)->get_page()<<std::endl;
 									(*loopChestElement)->page_forward();
 								}
 
-								if(physics.check_intersection(arrayBack, app->map_pixel_to_coords(MOUSE_BUTTON_PRESS_COORDS)))
+								if(physics.check_intersection(arrayBack.get(),
+											app->map_pixel_to_coords(MOUSE_BUTTON_PRESS_COORDS)))
 								{
 									std::cout<<"PAGE back Page "<<(*loopChestElement)->get_page()<<std::endl;
 									(*loopChestElement)->page_back();
 								}
 							}
 
-							app->draw(arrayNext);
-							app->draw(arrayBack);
+							app->draw(arrayNext.get());
+							app->draw(arrayBack.get());
 						}
 					}
 				}
@@ -1080,22 +1083,22 @@ int main()
 				loopChestElement = &chestDispatcher.object(loopContainerIter);
 				if((*loopChestElement)->is_visible())
 				{
-					app->draw((*loopChestElement));
+					app->draw(loopChestElement->get());
 				}
 			}
-				testCircle->set_position(app->map_pixel_to_coords(MOUSE_BUTTON_PRESS_COORDS));
-				app->draw(testCircle);
-			app->draw(person);
+			testCircle->set_position(app->map_pixel_to_coords(MOUSE_BUTTON_PRESS_COORDS));
+			app->draw(testCircle.get());
+			app->draw(person.get());
             
-			app->draw(personHealthBackground);
-			app->draw(personHealth);
-			app->draw(personHealthStatus);
+			app->draw(personHealthBackground.get());
+			app->draw(personHealth.get());
+			app->draw(personHealthStatus.get());
 			
 			if(enemyHealth->is_visible())
 			{
-				app->draw(enemyHealthBackground);
-				app->draw(enemyHealth);
-                app->draw(enemyHealthStatus);
+				app->draw(enemyHealthBackground.get());
+				app->draw(enemyHealth.get());
+                app->draw(enemyHealthStatus.get());
 			}
 
 //END DRAW OBJECTS

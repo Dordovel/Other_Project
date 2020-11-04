@@ -14,7 +14,7 @@ namespace PROJECT::APPLICATION
         public:
             virtual void zoom(float zoom) noexcept = 0;
             virtual PROJECT::BASE::DATA::Vector2F get_size() const noexcept = 0;
-            virtual void set_size(const PROJECT::BASE::DATA::Vector2F& size) noexcept = 0;
+            virtual void set_size(PROJECT::BASE::DATA::Vector2F size) noexcept = 0;
             virtual void set_size(float x, float y) noexcept = 0;
             virtual ~IView() = default;
     };

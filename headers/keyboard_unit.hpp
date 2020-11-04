@@ -31,11 +31,11 @@ namespace PROJECT::UNIT::CONTROL::KEYBOARD
             std::vector<KeyboardUnit::_EventHandler> _keyPressedEventNone;
 
         public:
-            void set_close_window_event(const std::function<void()>& closeWindowEvent) noexcept override;
+            void set_close_window_event(std::function<void()> closeWindowEvent) noexcept override;
             
-            void button_pressed(int key , const std::function<void()>& fun , EventHandlerType eventType) noexcept override;
+            void button_pressed(int key , std::function<void()> fun , EventHandlerType eventType) noexcept override;
             
-            void button_released(int key , const std::function<void()>& fun) noexcept override;
+            void button_released(int key , std::function<void()> fun) noexcept override;
 
             void catch_events() override;
 

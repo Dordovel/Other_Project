@@ -48,7 +48,7 @@ namespace PROJECT::BASE::GRAPHIC
 		this->_id = id;
 	}
 
-	void Text::set_position(const PROJECT::BASE::DATA::Vector2F& position) noexcept
+	void Text::set_position(PROJECT::BASE::DATA::Vector2F position) noexcept
 	{
 		this->set_position(position.x, position.y);
 	}
@@ -72,22 +72,22 @@ namespace PROJECT::BASE::GRAPHIC
 		this->_text->setPosition(X, Y);
 	}
 
-	bool Text::collision(const std::shared_ptr<INTERACTION>& object) noexcept
+	bool Text::collision(const INTERACTION* const object) const noexcept
 	{
 		return this->_text->getGlobalBounds().intersects(object->get_global_bounds());
 	}
 
-	bool Text::collision(const PROJECT::BASE::DATA::Vector2F& vec) noexcept
+	bool Text::collision(PROJECT::BASE::DATA::Vector2F vec) const noexcept
 	{
 		return this->_text->getGlobalBounds().contains(vec);
 	}
 
-	bool Text::collision(const PROJECT::BASE::DATA::RectangleF& rect) noexcept
+	bool Text::collision(PROJECT::BASE::DATA::RectangleF rect) const noexcept
 	{
 		return this->_text->getGlobalBounds().intersects(rect);
 	}
 
-	void Text::move(const PROJECT::BASE::DATA::Vector2F& step) noexcept
+	void Text::move(PROJECT::BASE::DATA::Vector2F step) noexcept
 	{
 		this->move(step.x, step.y);
 	}
@@ -149,7 +149,7 @@ namespace PROJECT::BASE::GRAPHIC
 		this->_text->setCharacterSize(size);
 	}
 
-	void Text::set_color(const GRAPHIC::Color& color)
+	void Text::set_color(GRAPHIC::Color color)
 	{
 		this->_text->setFillColor(RGB::color(color));
 	}

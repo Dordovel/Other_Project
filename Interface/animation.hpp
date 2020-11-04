@@ -14,8 +14,8 @@ namespace PROJECT::ANIMATION
 	class IAnimation
 	{
 		public:
-			virtual void add_frame(const PROJECT::BASE::DATA::RectangleI& frame) = 0;
-			virtual const PROJECT::BASE::DATA::RectangleI& get_frame(std::size_t index) = 0;
+			virtual void add_frame(PROJECT::BASE::DATA::RectangleI frame) = 0;
+			virtual PROJECT::BASE::DATA::RectangleI get_frame(std::size_t index) = 0;
 			virtual std::size_t get_frame_count() const = 0;
 			virtual void set_object(ANIMATED* object) noexcept = 0;
 			virtual ANIMATED* get_object() noexcept = 0;

@@ -91,12 +91,12 @@ std::string menu_builder(const std::shared_ptr<PROJECT::APPLICATION::IApplicatio
 			}
 		}
 	
-		app->draw(layout);
-		app->draw(menuSelectedPointer);
+		app->draw(layout.get());
+		app->draw(menuSelectedPointer.get());
 
 		for(const auto& pointers : menuItems)
 		{
-			app->draw(pointers);
+			app->draw(pointers.get());
 		}
 
 		app->display();

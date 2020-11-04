@@ -50,12 +50,12 @@ namespace PROJECT::BASE::GRAPHIC
 	}
 
 
-	void Rectangle::set_position(const PROJECT::BASE::DATA::Vector2F& position) noexcept
+	void Rectangle::set_position(PROJECT::BASE::DATA::Vector2F position) noexcept
 	{
 		this->set_position(position.x, position.y);
 	}
 
-	void Rectangle::set_size(const BASE::DATA::Vector2F& size) noexcept
+	void Rectangle::set_size(BASE::DATA::Vector2F size) noexcept
 	{
 		this->_rectangle->setSize(size);
 	}
@@ -89,22 +89,22 @@ namespace PROJECT::BASE::GRAPHIC
 		this->_rectangle->setPosition(X, Y);
 	}
 
-	bool Rectangle::collision(const std::shared_ptr<INTERACTION>& object) noexcept
+	bool Rectangle::collision(const INTERACTION* const object) const noexcept
 	{
 		return this->_rectangle->getGlobalBounds().contains(object->get_position());
 	}
 
-	bool Rectangle::collision(const PROJECT::BASE::DATA::Vector2F& vec) noexcept
+	bool Rectangle::collision(PROJECT::BASE::DATA::Vector2F vec) const noexcept
 	{
 		return this->_rectangle->getGlobalBounds().contains(vec);
 	}
 
-	bool Rectangle::collision(const PROJECT::BASE::DATA::RectangleF& rect) noexcept
+	bool Rectangle::collision(PROJECT::BASE::DATA::RectangleF rect) const noexcept
 	{
 		return this->_rectangle->getGlobalBounds().intersects(rect);
 	}
 
-	void Rectangle::move(const PROJECT::BASE::DATA::Vector2F& step) noexcept
+	void Rectangle::move(PROJECT::BASE::DATA::Vector2F step) noexcept
 	{
 		this->move(step.x, step.y);
 	}
@@ -189,7 +189,7 @@ namespace PROJECT::BASE::GRAPHIC
 		this->_up = this->_down = this->_left = this->_right = false;
 	}
 
-	void Rectangle::set_color(const Color& color)
+	void Rectangle::set_color(Color color)
 	{
 		this->_rectangle->setFillColor(RGB::color(color));
 	}

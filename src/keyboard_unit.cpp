@@ -3,12 +3,12 @@
 
 namespace PROJECT::UNIT::CONTROL::KEYBOARD
 {
-    void KeyboardUnit::set_close_window_event(const std::function<void()>& closeWindowEvent) noexcept
+    void KeyboardUnit::set_close_window_event(std::function<void()> closeWindowEvent) noexcept
     {
         this->_closeWindowEvent = closeWindowEvent;
     }
 
-    void KeyboardUnit::button_pressed(int key , const std::function<void()>& fun , EventHandlerType eventType) noexcept
+    void KeyboardUnit::button_pressed(int key, std::function<void()> fun , EventHandlerType eventType) noexcept
     {
         KeyboardUnit::_EventHandler eventHandler;
         eventHandler.key = static_cast<Keyboard_Key::Key>(key);
@@ -25,7 +25,7 @@ namespace PROJECT::UNIT::CONTROL::KEYBOARD
         }
     }
 
-    void KeyboardUnit::button_released(int key , const std::function<void()>& fun) noexcept
+    void KeyboardUnit::button_released(int key, std::function<void()> fun) noexcept
     {
         KeyboardUnit::_EventHandler eventHandler;
         eventHandler.key = static_cast<Keyboard_Key::Key>(key);

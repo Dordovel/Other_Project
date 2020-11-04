@@ -40,7 +40,7 @@ namespace PROJECT::APPLICATION
         return this->_eventPool;
     }
 
-    void Application::draw(const std::shared_ptr<DRAWABLE>& object)
+    void Application::draw(const DRAWABLE* const object)
     {
         sf::RenderWindow::draw(*(object->draw().object));
     }
@@ -116,7 +116,7 @@ namespace PROJECT::APPLICATION
         return sf::RenderWindow::getSize();
     }
 
-    void Application::set_view(const std::shared_ptr<PROJECT::APPLICATION::IView>& view)
+    void Application::set_view(std::shared_ptr<PROJECT::APPLICATION::IView> view)
     {
         auto pointer = std::dynamic_pointer_cast<sf::View>(view);
 
@@ -126,7 +126,7 @@ namespace PROJECT::APPLICATION
         }
     }
 
-    PROJECT::BASE::DATA::Vector2F Application::map_pixel_to_coords(const PROJECT::BASE::DATA::Vector2I& position)
+    PROJECT::BASE::DATA::Vector2F Application::map_pixel_to_coords(PROJECT::BASE::DATA::Vector2I position)
     {
         return sf::RenderWindow::mapPixelToCoords(position);// - this->getPosition());
     }

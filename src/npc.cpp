@@ -82,7 +82,7 @@ namespace PROJECT::NPC
 			return nullptr;
 	}
 
-	void Npc::add_animation_walk(PROJECT::MOVE::Side side, const std::array<PROJECT::BASE::DATA::RectangleI, 3>& rect) noexcept
+	void Npc::add_animation_walk(PROJECT::MOVE::Side side, std::array<PROJECT::BASE::DATA::RectangleI, 3> rect) noexcept
 	{
 		ANIMATION::Animation animation;
 		animation.set_object(this);
@@ -92,7 +92,7 @@ namespace PROJECT::NPC
 		this->_animWalk.emplace(side, animation);
 	}
 
-	void Npc::add_animation_attack(PROJECT::MOVE::Side side, const std::array<PROJECT::BASE::DATA::RectangleI, 3>& rect) noexcept
+	void Npc::add_animation_attack(PROJECT::MOVE::Side side, std::array<PROJECT::BASE::DATA::RectangleI, 3> rect) noexcept
 	{
 		ANIMATION::Animation animation;
 		animation.set_object(this);

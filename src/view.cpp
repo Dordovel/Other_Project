@@ -14,46 +14,46 @@ namespace PROJECT::APPLICATION
 		sf::View::setCenter(X, Y);
 	}
 
-	View::View(const PROJECT::BASE::DATA::Vector2F& position, float Width, float Height):View(position.x,
+	View::View(PROJECT::BASE::DATA::Vector2F position, float Width, float Height):View(position.x,
 																		position.y,
 																		Width,
 																		Height)
 	{}
 
-	View::View(const PROJECT::BASE::DATA::Vector2F& position, const PROJECT::BASE::DATA::Vector2F& size):View(position.x,
+	View::View(PROJECT::BASE::DATA::Vector2F position, PROJECT::BASE::DATA::Vector2F size):View(position.x,
 																		position.y,
 																		size.x,
 																		size.y)
 	{}
 
-	View::View(const PROJECT::BASE::DATA::Vector2F& size):View(0, 0, size.x, size.y){}
+	View::View(PROJECT::BASE::DATA::Vector2F size):View(0, 0, size.x, size.y){}
 
 	void View::zoom(float zoom) noexcept
 	{
 		sf::View::zoom(zoom);
 	}
 
-	void View::set_position(const PROJECT::BASE::DATA::Vector2F& position) noexcept
+	void View::set_position(PROJECT::BASE::DATA::Vector2F position) noexcept
 	{
 		this->set_position(position.x, position.y);
 	}
 
-	bool View::collision(const std::shared_ptr<INTERACTION>& object) noexcept
+	bool View::collision(const INTERACTION* const object) const noexcept
 	{
 		return this->get_global_bounds().contains(object->get_position());
 	}
 
-	bool View::collision(const PROJECT::BASE::DATA::Vector2F& vec) noexcept
+	bool View::collision(PROJECT::BASE::DATA::Vector2F vec) const noexcept
 	{
 		return this->get_global_bounds().contains(vec);
 	}
 
-	bool View::collision(const PROJECT::BASE::DATA::RectangleF& rect) noexcept
+	bool View::collision(PROJECT::BASE::DATA::RectangleF rect) const noexcept
 	{
 		return this->get_global_bounds().intersects(rect);
 	}
 
-	void View::move(const PROJECT::BASE::DATA::Vector2F& step) noexcept
+	void View::move(PROJECT::BASE::DATA::Vector2F step) noexcept
 	{
 		this->move(step.x, step.y);
 	}
@@ -115,7 +115,7 @@ namespace PROJECT::APPLICATION
 		return sf::View::getSize();
 	}
 
-	void View::set_size(const PROJECT::BASE::DATA::Vector2F& size) noexcept
+	void View::set_size(PROJECT::BASE::DATA::Vector2F size) noexcept
 	{
 		sf::View::setSize(size);
 	}

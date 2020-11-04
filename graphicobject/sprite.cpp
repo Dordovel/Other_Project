@@ -37,7 +37,7 @@ namespace PROJECT::BASE::GRAPHIC
 		return {this->_sprite};
 	}
 
-	void Sprite::move(const PROJECT::BASE::DATA::Vector2F& step) noexcept
+	void Sprite::move(PROJECT::BASE::DATA::Vector2F step) noexcept
 	{
 		this->move(step.x, step.y);
 	}
@@ -69,17 +69,17 @@ namespace PROJECT::BASE::GRAPHIC
 		return this->_sprite->getGlobalBounds();
 	}
 
-	bool Sprite::collision(const std::shared_ptr<INTERACTION>& object) noexcept
+	bool Sprite::collision(const INTERACTION* const object) const noexcept
 	{
 		return this->_sprite->getGlobalBounds().intersects(object->get_global_bounds());
 	}
 
-	bool Sprite::collision(const PROJECT::BASE::DATA::Vector2F& vec) noexcept
+	bool Sprite::collision(PROJECT::BASE::DATA::Vector2F vec) const noexcept
 	{
 		return this->_sprite->getGlobalBounds().contains(vec);
 	}
 
-	bool Sprite::collision(const PROJECT::BASE::DATA::RectangleF& rect) noexcept
+	bool Sprite::collision(PROJECT::BASE::DATA::RectangleF rect) const noexcept
 	{
 		return this->_sprite->getGlobalBounds().intersects(rect);
 	}
@@ -94,12 +94,12 @@ namespace PROJECT::BASE::GRAPHIC
 		this->_id = id;
 	}
 
-	void Sprite::set_position(const PROJECT::BASE::DATA::Vector2F& position) noexcept
+	void Sprite::set_position(PROJECT::BASE::DATA::Vector2F position) noexcept
 	{
 		this->set_position(position.x, position.y);
 	}
 
-	void Sprite::set_texture_rect(const PROJECT::BASE::DATA::RectangleI& rect)
+	void Sprite::set_texture_rect(PROJECT::BASE::DATA::RectangleI rect)
 	{
 		this->_sprite->setTextureRect(rect);
 	}

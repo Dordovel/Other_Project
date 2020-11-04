@@ -64,7 +64,7 @@ namespace PROJECT::UNIT::CONTROL::MOUSE
         }
     }
 
-    void MouseUnit::button_pressed(int key, const std::function <void(int X, int Y)>& fun) noexcept
+    void MouseUnit::button_pressed(int key, std::function <void(int X, int Y)> fun) noexcept
     {
         MouseUnit::_EventHandlerMousePressed eventHandler;
         eventHandler.fun = fun;
@@ -73,7 +73,7 @@ namespace PROJECT::UNIT::CONTROL::MOUSE
         this->_eventMousePressedPool.emplace(value, eventHandler);
     }
 
-    void MouseUnit::moved(const std::function <void(int X, int Y)>& fun) noexcept
+    void MouseUnit::moved(std::function <void(int X, int Y)> fun) noexcept
     {
         MouseUnit::_EventHandlerMouseMoved eventHandler;
         eventHandler.fun = fun;
@@ -81,7 +81,7 @@ namespace PROJECT::UNIT::CONTROL::MOUSE
         this->_eventMouseMovedPool.push_back(eventHandler);
     }
 
-    void MouseUnit::wheel_scrolled(const std::function <void(int X, int Y, int Delta)>& fun) noexcept
+    void MouseUnit::wheel_scrolled(std::function <void(int X, int Y, int Delta)> fun) noexcept
     {
         MouseUnit::_EventHandlerMouseWheelScrolled eventHandler;
         eventHandler.fun = fun;
@@ -89,7 +89,7 @@ namespace PROJECT::UNIT::CONTROL::MOUSE
         this->_eventMouseWheelScrolledPool.push_back(eventHandler);
     }
 
-    void MouseUnit::entered(const std::function <void()>& fun) noexcept
+    void MouseUnit::entered(std::function <void()> fun) noexcept
     {
         MouseUnit::_EventHandlerMouseEntered eventHandler;
         eventHandler.fun = fun;
@@ -97,7 +97,7 @@ namespace PROJECT::UNIT::CONTROL::MOUSE
         this->_eventMouseEnteredPool.push_back(eventHandler);
     }
 
-    void MouseUnit::button_released(int key, const std::function <void()>& fun) noexcept
+    void MouseUnit::button_released(int key, std::function <void()> fun) noexcept
     {
         MouseUnit::_EventHandlerMouseReleased eventHandler;
         eventHandler.fun = fun;

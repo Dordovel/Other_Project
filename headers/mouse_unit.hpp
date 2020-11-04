@@ -62,15 +62,15 @@ namespace PROJECT::UNIT::CONTROL::MOUSE
 
         public:
 
-            void entered(const std::function<void()>& fun) noexcept override;
+            void entered(std::function<void()> fun) noexcept override;
 
-            void button_pressed(int key, const std::function<void(int X, int Y)>& fun) noexcept override;
+            void button_pressed(int key, std::function<void(int X, int Y)> fun) noexcept override;
 
-            void button_released(int key, const std::function<void()>& fun) noexcept override;
+            void button_released(int key, std::function<void()> fun) noexcept override;
 
-            void moved(const std::function<void(int X, int Y)>& fun) noexcept override;
+            void moved(const std::function<void(int X, int Y)> fun) noexcept override;
 
-            void wheel_scrolled(const std::function<void(int X, int Y, int Delta)>& fun) noexcept override;
+            void wheel_scrolled(std::function<void(int X, int Y, int Delta)> fun) noexcept override;
 
             void catch_events(const PROJECT::EVENT::EventObject& event) override;
 

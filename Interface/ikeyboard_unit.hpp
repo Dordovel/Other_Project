@@ -8,12 +8,12 @@ namespace PROJECT::UNIT::CONTROL::KEYBOARD
     class IKeyboardUnit : public PROJECT::UNIT::CONTROL::IControlUnit
     {
         public:
-            virtual void set_close_window_event(const std::function <void()> &closeWindowEvent) noexcept = 0;
+            virtual void set_close_window_event(std::function <void()> closeWindowEvent) noexcept = 0;
 
-            virtual void button_pressed(int key, const std::function <void()> &fun,
+            virtual void button_pressed(int key, std::function <void()> fun,
                                            PROJECT::UNIT::CONTROL::EventHandlerType eventType) noexcept = 0;
 
-            virtual void button_released(int key, const std::function <void()> &fun) noexcept = 0;
+            virtual void button_released(int key, std::function <void()> fun) noexcept = 0;
 
             virtual void catch_events() = 0;
 

@@ -6,42 +6,42 @@
 namespace PROJECT::PHYSICS
 {
 
-	bool Physics::check_intersection(const std::shared_ptr<INTERACTION>& lv, const std::shared_ptr<INTERACTION>& rv) noexcept
+	bool Physics::check_intersection(const INTERACTION* const lv, const INTERACTION* const rv) noexcept
 	{
 		return this->check_intersection(lv, rv->get_global_bounds());
 	}
 
-	bool Physics::check_intersection(const std::shared_ptr<INTERACTION>& lv, const PROJECT::BASE::DATA::RectangleF& rv) noexcept
+	bool Physics::check_intersection(const INTERACTION* const lv, PROJECT::BASE::DATA::RectangleF rv) noexcept
 	{
 		return lv->collision(rv);
 	}
 
-	bool Physics::check_intersection(const std::shared_ptr<INTERACTION>& lv, const PROJECT::BASE::DATA::Vector2F& rv) noexcept
+	bool Physics::check_intersection(const INTERACTION* const lv, PROJECT::BASE::DATA::Vector2F rv) noexcept
 	{
 		return lv->collision(rv);
 	}
 
-	bool Physics::check_intersection(const std::shared_ptr<PROJECT::COLLECTION::ICollection>& lv,
-															const std::shared_ptr<INTERACTION>& rv) noexcept
+	bool Physics::check_intersection(const PROJECT::COLLECTION::ICollection* const lv,
+															const INTERACTION* const rv) noexcept
 	{
 		return this->check_intersection(lv, rv->get_global_bounds());
 	}
 
-	bool Physics::check_intersection(const std::shared_ptr<PROJECT::COLLECTION::ICollection>& lv,
-															const PROJECT::BASE::DATA::RectangleF& rv) noexcept
+	bool Physics::check_intersection(const PROJECT::COLLECTION::ICollection* const lv,
+															PROJECT::BASE::DATA::RectangleF rv) noexcept
 	{
 		auto collisionPoint = lv->get_objects(rv);
 		return !collisionPoint.empty();
 	}
 
-	std::vector<std::string> Physics::get_intersection_object_name(const std::shared_ptr<PROJECT::COLLECTION::ICollection>& lv,
-															const std::shared_ptr<INTERACTION>& rv) noexcept
+	std::vector<std::string> Physics::get_intersection_object_name(const PROJECT::COLLECTION::ICollection* const lv,
+															const INTERACTION* const rv) noexcept
 	{
 		return this->get_intersection_object_name(lv, rv->get_global_bounds());
 	}
 
-	std::vector<std::string> Physics::get_intersection_object_name(const std::shared_ptr<PROJECT::COLLECTION::ICollection>& lv,
-															const PROJECT::BASE::DATA::RectangleF& rv) noexcept
+	std::vector<std::string> Physics::get_intersection_object_name(const PROJECT::COLLECTION::ICollection* const lv,
+															PROJECT::BASE::DATA::RectangleF rv) noexcept
 	{
 		std::vector<std::string> result;
 		result.reserve(2);

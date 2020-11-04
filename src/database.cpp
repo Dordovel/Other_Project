@@ -65,7 +65,7 @@ namespace PROJECT::DATABASE
 		return {this->_pathToResourcesFile + this->_rectList.at(person), this->get_animation_walk(side)[0]};
 	}
 
-	PROJECT::DATABASE::DataBaseResult DataBase::get_resources(std::string_view file, const PROJECT::BASE::DATA::RectangleI& rect) const noexcept
+	PROJECT::DATABASE::DataBaseResult DataBase::get_resources(std::string_view file, PROJECT::BASE::DATA::RectangleI rect) const noexcept
 	{
 		return {this->_pathToResourcesFile + std::string(file), rect};
 	}

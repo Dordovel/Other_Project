@@ -7,8 +7,9 @@
 
 namespace PROJECT::COLLECTION
 {
-    Layout::Layout(std::string_view pathToMap , std::string_view mapFileName):_mapLoader(std::make_shared<tmx::MapLoader>(pathToMap.data())),
-                                                                                _isVisible(true)
+    Layout::Layout(std::string_view pathToMap , std::string_view mapFileName):
+							_mapLoader(std::make_shared<tmx::MapLoader>(pathToMap.data())),
+                            _isVisible(true)
     {
         std::cout<<pathToMap<< mapFileName<< '\n';
         this->_load_map_from_file(mapFileName);
@@ -62,7 +63,7 @@ namespace PROJECT::COLLECTION
         return this->_isVisible;
     }
 
-    std::map<std::string, std::vector<PROJECT::BASE::DATA::RectangleF>> Layout::get_objects(const PROJECT::BASE::DATA::RectangleF &rectangleF) const noexcept
+    std::map<std::string, std::vector<PROJECT::BASE::DATA::RectangleF>> Layout::get_objects(PROJECT::BASE::DATA::RectangleF rectangleF) const noexcept
     {
         std::map<std::string, std::vector<PROJECT::BASE::DATA::RectangleF>> result{};
 

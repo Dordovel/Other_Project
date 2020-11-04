@@ -18,12 +18,12 @@ namespace PROJECT
 			public:
 
 				virtual std::pair<PROJECT::MOVE::Side, std::string>
-				    check_object_collision(const std::shared_ptr<INTERACTION>& lv,
-				                            const std::shared_ptr<INTERACTION>& rv) noexcept = 0;
+				    check_object_collision(const INTERACTION* const lv,
+				                            const INTERACTION* const rv) noexcept = 0;
 
 				virtual std::vector<std::pair<PROJECT::MOVE::Side, std::string>>
-				    check_object_collision(const std::shared_ptr<PROJECT::COLLECTION::ILayout>& lv,
-				                           const std::shared_ptr<INTERACTION>& rv ) noexcept = 0;
+				    check_object_collision(const PROJECT::COLLECTION::ILayout* const lv,
+				                           const INTERACTION* const rv ) noexcept = 0;
 				
 				virtual ~ICollision() = default;
 		};

@@ -24,7 +24,7 @@ namespace PROJECT::DATABASE
         public:
             explicit DataBase(const std::string& pathToResourcesFile);
             DataBaseResult get_resources(PersonProfession person, PROJECT::MOVE::Side side) const noexcept override;
-			PROJECT::DATABASE::DataBaseResult get_resources(std::string_view file, const PROJECT::BASE::DATA::RectangleI& rect) const noexcept override;
+			PROJECT::DATABASE::DataBaseResult get_resources(std::string_view file, PROJECT::BASE::DATA::RectangleI rect) const noexcept override;
             std::array<PROJECT::BASE::DATA::RectangleI, 3> get_animation_walk(PROJECT::MOVE::Side side) const noexcept override;
             std::array<PROJECT::BASE::DATA::RectangleI, 3> get_animation_attack(PROJECT::MOVE::Side side) const noexcept override;
             ~DataBase() = default;

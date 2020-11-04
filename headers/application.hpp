@@ -24,7 +24,7 @@ namespace PROJECT::APPLICATION
 
             bool check_events() override;
 
-            void draw(const std::shared_ptr<DRAWABLE>& object) override;
+            void draw(const DRAWABLE* const object) override;
             void window_close() override;
             void clear() override;
             void set_position(int x, int y) override;
@@ -32,11 +32,11 @@ namespace PROJECT::APPLICATION
             PROJECT::BASE::DATA::Vector2I get_position() const override;
             PROJECT::BASE::DATA::Vector2UI get_size() const override;
 
-            PROJECT::BASE::DATA::Vector2F map_pixel_to_coords(const PROJECT::BASE::DATA::Vector2I& position) override;
+            PROJECT::BASE::DATA::Vector2F map_pixel_to_coords(PROJECT::BASE::DATA::Vector2I position) override;
 
             PROJECT::BASE::DATA::Vector2F map_pixel_to_coords(int X, int Y) override;
 
-            void set_view(const std::shared_ptr<PROJECT::APPLICATION::IView>& view) override;
+            void set_view(std::shared_ptr<PROJECT::APPLICATION::IView> view) override;
 
             ~Application() = default;
             Application(const std::string& windowName, int width, int height);

@@ -41,17 +41,17 @@ namespace PROJECT::BASE::GRAPHIC
 
             void set_id(std::string_view id) noexcept override;
 
-            void set_position(const PROJECT::BASE::DATA::Vector2F& position) noexcept override;
+            void set_position(PROJECT::BASE::DATA::Vector2F position) noexcept override;
 
             void set_position(float X, float Y) noexcept override;
 
-            bool collision(const std::shared_ptr<INTERACTION>& object) noexcept override;
+            bool collision(const INTERACTION* const object) const noexcept override;
 
-            bool collision(const PROJECT::BASE::DATA::Vector2F& vec) noexcept override;
+            bool collision(PROJECT::BASE::DATA::Vector2F vec) const noexcept override;
 
-            bool collision(const PROJECT::BASE::DATA::RectangleF& rect) noexcept override;
+            bool collision(PROJECT::BASE::DATA::RectangleF rect) const noexcept override;
 
-            void move(const PROJECT::BASE::DATA::Vector2F& step) noexcept override;
+            void move(PROJECT::BASE::DATA::Vector2F step) noexcept override;
 
             void move(float X, float Y) noexcept override;
 
@@ -63,7 +63,7 @@ namespace PROJECT::BASE::GRAPHIC
 
             void set_font_size(int size) override;
 
-            void set_color(const Color& color) override;
+            void set_color(Color color) override;
 
             void visible(bool flag) noexcept override;
 

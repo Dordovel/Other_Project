@@ -24,7 +24,7 @@ namespace PROJECT::MENU
 
 			bool menu_configure(float X, float Y, float Width, float Height) noexcept override;
 
-			void add_item(const std::shared_ptr<OBJECT>& object) noexcept override;
+			void add_item(std::shared_ptr<OBJECT> object) noexcept override;
 
 			void step_forward() noexcept override;
 

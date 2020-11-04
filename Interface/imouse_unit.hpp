@@ -16,16 +16,16 @@ namespace PROJECT
         {
             public:
 
-                virtual void button_pressed(int key, const std::function <void(int X, int Y)>& fun) noexcept = 0;
+                virtual void button_pressed(int key, std::function <void(int X, int Y)> fun) noexcept = 0;
 
-                virtual void button_released(int key, const std::function <void()>& fun) noexcept = 0;
+                virtual void button_released(int key, std::function <void()> fun) noexcept = 0;
 
-                virtual void moved(const std::function <void(int X, int Y)>& fun) noexcept = 0;
+                virtual void moved(std::function <void(int X, int Y)> fun) noexcept = 0;
 
                 virtual void
-                wheel_scrolled(const std::function <void(int X, int Y, int Delta)>& fun) noexcept = 0;
+                wheel_scrolled(std::function <void(int X, int Y, int Delta)> fun) noexcept = 0;
 
-                virtual void entered(const std::function <void()>& fun) noexcept = 0;
+                virtual void entered(std::function <void()> fun) noexcept = 0;
 
                 virtual PROJECT::BASE::DATA::Vector2I get_position_in_desktop() = 0;
 

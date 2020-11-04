@@ -47,7 +47,7 @@ namespace PROJECT::BASE::GRAPHIC
 		this->_id = id;
 	}
 
-	void Circle::set_position(const PROJECT::BASE::DATA::Vector2F& position) noexcept
+	void Circle::set_position(PROJECT::BASE::DATA::Vector2F position) noexcept
 	{
 		this->set_position(position.x, position.y);
 	}
@@ -71,22 +71,22 @@ namespace PROJECT::BASE::GRAPHIC
 		this->_circleShape->setPosition(X, Y);
 	}
 
-	bool Circle::collision(const std::shared_ptr<INTERACTION>& object) noexcept
+	bool Circle::collision(const INTERACTION* const object) const noexcept
 	{
 		return this->_circleShape->getGlobalBounds().contains(object->get_position());
 	}
 
-	bool Circle::collision(const PROJECT::BASE::DATA::Vector2F& vec) noexcept
+	bool Circle::collision(PROJECT::BASE::DATA::Vector2F vec) const noexcept
 	{
 		return this->_circleShape->getGlobalBounds().contains(vec);
 	}
 
-	bool Circle::collision(const PROJECT::BASE::DATA::RectangleF& rect) noexcept
+	bool Circle::collision(PROJECT::BASE::DATA::RectangleF rect) const noexcept
 	{
 		return this->_circleShape->getGlobalBounds().intersects(rect);
 	}
 
-	void Circle::move(const PROJECT::BASE::DATA::Vector2F& step) noexcept
+	void Circle::move(PROJECT::BASE::DATA::Vector2F step) noexcept
 	{
 		this->move(step.x, step.y);
 	}
@@ -171,7 +171,7 @@ namespace PROJECT::BASE::GRAPHIC
 		this->_up = this->_down = this->_left = this->_right = false;
 	}
 
-	void Circle::set_color(const Color& color)
+	void Circle::set_color(Color color)
 	{
 		this->_circleShape->setFillColor(RGB::color(color));
 	}

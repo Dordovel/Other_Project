@@ -11,7 +11,7 @@ namespace PROJECT::BASE::GRAPHIC
 		public:
             virtual void set_text(std::string_view str) = 0;
             virtual void set_font_size(int size) = 0;
-            virtual void set_color(const Color& color) = 0;
+            virtual void set_color(Color color) = 0;
 			virtual ~IText() = default;
 	};
 };

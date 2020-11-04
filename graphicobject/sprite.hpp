@@ -40,11 +40,11 @@ namespace PROJECT::BASE::GRAPHIC
 
             PROJECT::BASE::DATA::DrawableObject draw() const noexcept override;
 
-            void move(const PROJECT::BASE::DATA::Vector2F& step) noexcept override;
+            void move(PROJECT::BASE::DATA::Vector2F step) noexcept override;
 
             void move(float X, float Y) noexcept override;
 
-            void set_position(const PROJECT::BASE::DATA::Vector2F& position) noexcept override;
+            void set_position(PROJECT::BASE::DATA::Vector2F position) noexcept override;
 
             void set_position(float X, float Y) noexcept override;
 
@@ -52,11 +52,11 @@ namespace PROJECT::BASE::GRAPHIC
 
             PROJECT::BASE::DATA::RectangleF get_global_bounds() const noexcept override;
 
-            bool collision(const std::shared_ptr<INTERACTION>& object) noexcept override;
+            bool collision(const INTERACTION* const object) const noexcept override;
             
-            bool collision(const PROJECT::BASE::DATA::Vector2F& vec) noexcept override;
+            bool collision(PROJECT::BASE::DATA::Vector2F vec) const noexcept override;
 
-            bool collision(const PROJECT::BASE::DATA::RectangleF& rect) noexcept override;
+            bool collision(PROJECT::BASE::DATA::RectangleF rect) const noexcept override;
 
             void visible(bool flag) noexcept override;
 
@@ -76,7 +76,7 @@ namespace PROJECT::BASE::GRAPHIC
 
             void unblock_all_side() noexcept override;
 
-            void set_texture_rect(const PROJECT::BASE::DATA::RectangleI& rect) override;
+            void set_texture_rect(PROJECT::BASE::DATA::RectangleI rect) override;
     };
 };
 #endif //SFMLPROJECT_REBUILD_SPRITE_HPP

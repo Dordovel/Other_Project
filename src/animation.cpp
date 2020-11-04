@@ -4,12 +4,12 @@
 
 namespace PROJECT::ANIMATION
 {
-	void Animation::add_frame(const PROJECT::BASE::DATA::RectangleI& frame)
+	void Animation::add_frame(PROJECT::BASE::DATA::RectangleI frame)
 	{
 		this->_frames.push_back(frame);
 	}
 
-	const PROJECT::BASE::DATA::RectangleI& Animation::get_frame(std::size_t index)
+	PROJECT::BASE::DATA::RectangleI Animation::get_frame(std::size_t index)
 	{
 		return this->_frames.at(index);
 	}

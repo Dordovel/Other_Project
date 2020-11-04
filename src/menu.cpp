@@ -5,8 +5,8 @@
 
 namespace
 {
-	bool check_intersection(const PROJECT::BASE::DATA::RectangleF& lv,
-							const std::shared_ptr<OBJECT>& rv)
+	bool check_intersection(PROJECT::BASE::DATA::RectangleF lv,
+							const OBJECT* const rv)
 	{
 		PROJECT::BASE::DATA::Vector2F rvPos = rv->get_position();
 		PROJECT::BASE::DATA::RectangleF rvRect = rv->get_global_bounds();
@@ -22,8 +22,8 @@ namespace
 
 namespace PROJECT::MENU
 {
-	Menu::Menu():_verticalGrid(PROJECT::GRID::VERTICAL::GridAlign::LEFT, this->_item_step),
-				_pointer(0, 0, 10, 10){}
+	Menu::Menu():_pointer(0, 0, 10, 10),
+				_verticalGrid(PROJECT::GRID::VERTICAL::GridAlign::LEFT, this->_item_step){}
 
 	bool Menu::menu_configure(float X, float Y, float Width, float Height) noexcept
 	{
@@ -44,9 +44,9 @@ namespace PROJECT::MENU
 		return false;
 	}
 
-	void Menu::add_item(const std::shared_ptr<OBJECT>& object) noexcept
+	void Menu::add_item(std::shared_ptr<OBJECT> object) noexcept
 	{
-		this->_item.emplace_back(object);
+		this->_item.emplace_back(std::move(object));
 	}
 
 	void Menu::step_forward() noexcept
