@@ -12,7 +12,7 @@ namespace PROJECT::MOVE
 	class IMove
 	{
 		public:
-			virtual void move(PROJECT::MOVE::Side side, const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept = 0;
+			virtual void move(PROJECT::MOVE::Side side, MOVABLE* const object, float clock, float speed) noexcept = 0;
 
 			virtual void block_side(PROJECT::MOVE::Side side, bool status) noexcept = 0;
 

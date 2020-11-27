@@ -51,7 +51,7 @@ namespace PROJECT::ANIMATION
 			{
 				this->_currentTime = sf::microseconds(this->_currentTime.asMicroseconds() % this->_frameTime.asMicroseconds());
 
-				if (this->_currentFrame + 1 < this->_anim->get_frame_count())
+				if ((this->_currentFrame + 1) < this->_anim->get_frame_count())
 					this->_currentFrame++;
 				else
 				{

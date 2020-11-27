@@ -9,14 +9,14 @@ namespace PROJECT::DISPATCHER
 		this->_sideGenerator.erase(this->_sideGenerator.begin() + index);
 	}
 
-	void NpcDispatcher::add_object(std::shared_ptr<NPC::INpc>&& object) noexcept
+	void NpcDispatcher::add_object(std::unique_ptr<NPC::INpc> object) noexcept
 	{
 		this->_object.emplace_back(std::move(object));
 		this->_objectAnimation.emplace_back(ANIMATION_FRAME);
 		this->_sideGenerator.emplace_back(10.F);
 	}
 
-	std::shared_ptr<NPC::INpc>& NpcDispatcher::object(int index) noexcept
+	std::shared_ptr<NPC::INpc> NpcDispatcher::object(int index) const noexcept
 	{
 		return this->_object.at(index);
 	}

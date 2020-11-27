@@ -4,7 +4,7 @@
 #include "../Interface/inpc.hpp"
 #include "../graphicobject/sprite.hpp"
 #include "./animation.hpp"
-#include <map>
+#include <vector>
 
 namespace PROJECT::NPC
 {
@@ -18,10 +18,13 @@ namespace PROJECT::NPC
 			int _health = {-1};
 			int _maxHealth = {-1};
 			int _points = {-1};
-			std::map<PROJECT::MOVE::Side, PROJECT::ANIMATION::Animation> _animWalk;
-			std::map<PROJECT::MOVE::Side, PROJECT::ANIMATION::Animation> _animAttack;
+			std::vector<std::pair<PROJECT::MOVE::Side, PROJECT::ANIMATION::Animation>> _animWalk;
+			std::vector<std::pair<PROJECT::MOVE::Side, PROJECT::ANIMATION::Animation>> _animAttack;
+			std::vector<std::pair<PROJECT::MOVE::Side, PROJECT::ANIMATION::Animation>> _animIdle;
 
 			State _state;
+
+			float _viewRadius;
 
 		public:
 
@@ -55,9 +58,13 @@ namespace PROJECT::NPC
 
 			void set_points(int points) noexcept override;
 
-			State get_state() noexcept override;
+			State get_state() const noexcept override;
 
 			void set_state(State state) noexcept override;
+
+			float get_view_radius() const noexcept override;
+
+			void set_view_radius(float radius) noexcept override;
 
 			void add_animation_walk(PROJECT::MOVE::Side side,
 									std::array<PROJECT::BASE::DATA::RectangleI, 3> rect) noexcept;
@@ -65,9 +72,14 @@ namespace PROJECT::NPC
 			void add_animation_attack(PROJECT::MOVE::Side side,
 										std::array<PROJECT::BASE::DATA::RectangleI, 3> rect) noexcept;
 
+			void add_animation_idle(PROJECT::MOVE::Side side,
+										std::array<PROJECT::BASE::DATA::RectangleI, 3> rect) noexcept;
+
 			PROJECT::ANIMATION::IAnimation* get_animation_attack(PROJECT::MOVE::Side side) noexcept override;
 
 			PROJECT::ANIMATION::IAnimation* get_animation_walk(PROJECT::MOVE::Side side) noexcept override;
+
+			PROJECT::ANIMATION::IAnimation* get_animation_idle(PROJECT::MOVE::Side side) noexcept override;
 
             ~Npc() = default;
 	};

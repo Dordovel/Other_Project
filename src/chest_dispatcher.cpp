@@ -9,12 +9,12 @@ namespace PROJECT::DISPATCHER
 		this->_object.erase(std::next(this->_object.begin(), index));
 	}
 
-	void ChestDispatcher::add_object(std::shared_ptr<PROJECT::CHEST::IChest>&& object) noexcept
+	void ChestDispatcher::add_object(std::unique_ptr<PROJECT::CHEST::IChest> object) noexcept
 	{
 		this->_object.emplace_back(std::move(object));
 	}
 
-	std::shared_ptr<PROJECT::CHEST::IChest>& ChestDispatcher::object(int index) noexcept
+	std::shared_ptr<PROJECT::CHEST::IChest> ChestDispatcher::object(int index) const noexcept
 	{
 		return this->_object.at(index);
 	}

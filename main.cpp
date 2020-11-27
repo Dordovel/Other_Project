@@ -38,10 +38,10 @@ float convert_value(int lv, int rv, float value)
 	return (rv * ((value / lv) * 100)) / 100;
 }
 
-std::shared_ptr<CHEST::IChest> make_chest(const DATABASE::IDataBase& dataBase)
+std::unique_ptr<CHEST::IChest> make_chest(const DATABASE::IDataBase& dataBase)
 {
-	std::shared_ptr<CHEST::IChest> chest = 
-			std::make_shared<CHEST::Chest>(dataBase.get_resources("ChestRed.png", {0, 0, 24, 24}));
+	std::unique_ptr<CHEST::IChest> chest = 
+			std::make_unique<CHEST::Chest>(dataBase.get_resources("ChestRed.png", {0, 0, 24, 24}));
 	chest->set_scale({chest->get_scale().x - 0.2F, chest->get_scale().y + 0.2F});
 
 	return chest;
@@ -129,39 +129,39 @@ open_pause_menu() noexcept
 	return generateItem;
 }
 
-std::shared_ptr<NPC::Npc> change_person_type(std::string_view type, const DATABASE::IDataBase& dataBase) noexcept
+std::unique_ptr<NPC::Npc> change_person_type(std::string_view type, const DATABASE::IDataBase& dataBase) noexcept
 
 {
-	std::shared_ptr<NPC::Npc> result = nullptr;
+	std::unique_ptr<NPC::Npc> result = nullptr;
 
 	if(type == NPC_JEREMY_PINK)
 	{
-		result = std::make_shared<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::JEREMY_PINK, MOVE::Side::DOWN));
+		result = std::make_unique<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::JEREMY_PINK, MOVE::Side::DOWN));
 	}
 
 	else if(type == NPC_MARTHA_PINK)
 	{
-		result = std::make_shared<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_PINK, MOVE::Side::DOWN));
+		result = std::make_unique<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_PINK, MOVE::Side::DOWN));
 	}
 
 	else if(type == NPC_JEREMY_GREEN)
 	{
-		result = std::make_shared<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::JEREMY_GREEN, MOVE::Side::DOWN));
+		result = std::make_unique<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::JEREMY_GREEN, MOVE::Side::DOWN));
 	}
 
 	else if(type == NPC_MARTHA_GREEN)
 	{
-		result = std::make_shared<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_GREEN, MOVE::Side::DOWN));
+		result = std::make_unique<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_GREEN, MOVE::Side::DOWN));
 	}
 
 	else if(type == NPC_JEREMY_BLONDE)
 	{
-		result = std::make_shared<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::JEREMY_BLONDE, MOVE::Side::DOWN));
+		result = std::make_unique<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::JEREMY_BLONDE, MOVE::Side::DOWN));
 	}
 
 	else if(type == NPC_MARTHA_BLONDE)
 	{
-		result = std::make_shared<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_BLONDE, MOVE::Side::DOWN));
+		result = std::make_unique<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_BLONDE, MOVE::Side::DOWN));
 	}
 
 	return result;
@@ -174,7 +174,7 @@ enum class MenuType
 };
 
 
-PROJECT::BASE::DATA::Vector2F get_object_center_position(const std::shared_ptr<STATIC>& object)
+PROJECT::BASE::DATA::Vector2F get_object_center_position(const STATIC* const object)
 {
 	PROJECT::BASE::DATA::RectangleF rect = object->get_global_bounds();
 	
@@ -193,8 +193,8 @@ PROJECT::BASE::DATA::Vector2F
 }
 
 std::string menu(MenuType type,
-				const std::shared_ptr<APPLICATION::IApplication>& app,
-				const std::shared_ptr<APPLICATION::IView>& view) noexcept
+				std::shared_ptr<APPLICATION::IApplication> app,
+				std::shared_ptr<APPLICATION::IView> view) noexcept
 {	
 	std::shared_ptr<BASE::GRAPHIC::Rectangle> menuSelectedPointer =
 			std::make_shared<BASE::GRAPHIC::Rectangle>(8, 20);
@@ -295,14 +295,15 @@ int main()
 
 		std::shared_ptr<NPC::Npc> person = nullptr;
 		//person = change_person_type(result, dataBase);
-		person = std::make_shared<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_PINK, MOVE::Side::DOWN));
+		person = std::make_unique<NPC::Npc>(dataBase.get_resources(DATABASE::PersonProfession::MARTHA_PINK, MOVE::Side::DOWN));
 		person->set_position(DEFAULT_POSITION);
 		person->set_scale(OBJECT_SCALE);
 		person->set_max_health(200);
 		person->set_health(person->get_max_health());
 		person->set_damage(100);
+		person->set_state(NPC::State::IDLE);
 
-		std::shared_ptr<NPC::Npc> personTest = nullptr;
+		std::unique_ptr<NPC::Npc> personTest = nullptr;
 		personTest = change_person_type(NPC_JEREMY_GREEN, dataBase);
 		personTest->set_position(1230, 1200);
 		personTest->set_scale(OBJECT_SCALE);
@@ -311,7 +312,7 @@ int main()
 		personTest->set_damage(10);
 		personTest->set_id("TEST");
 
-		std::shared_ptr<NPC::Npc> personTest1 = nullptr;
+		std::unique_ptr<NPC::Npc> personTest1 = nullptr;
 		personTest1 = change_person_type(NPC_MARTHA_GREEN, dataBase);
 		personTest1->set_position(1170, 1200);
 		personTest1->set_scale(OBJECT_SCALE);
@@ -364,10 +365,10 @@ int main()
 		BASE::DATA::Vector2I MOUSE_BUTTON_PRESS_COORDS;
 
 		std::pair forest = MAP_PATH.at("forest");
-		std::shared_ptr<COLLECTION::Layout> mapForest =
-				std::make_shared<COLLECTION::Layout>(forest.first, forest.second);
+		std::unique_ptr<COLLECTION::Layout> mapForest =
+				std::make_unique<COLLECTION::Layout>(forest.first, forest.second);
 
-		MOVE::Move* mover = new MOVE::Move;
+		std::unique_ptr<MOVE::Move> mover = std::make_unique<MOVE::Move>();
 
 		UNIT::CONTROL::KEYBOARD::KeyboardUnit keyboard;
 		UNIT::CONTROL::MOUSE::MouseUnit mouse;
@@ -534,40 +535,40 @@ int main()
 		const int PROGRESSBARHeight = 25;
 		const BASE::DATA::Vector2F SPRITEScale = {0.3, 0.3};
 
-		std::shared_ptr<BASE::GRAPHIC::IRectangle> personHealth;
-		personHealth = std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARWidth, PROGRESSBARHeight);
+		std::unique_ptr<BASE::GRAPHIC::IRectangle> personHealth;
+		personHealth = std::make_unique<BASE::GRAPHIC::Rectangle>(PROGRESSBARWidth, PROGRESSBARHeight);
 		personHealth->set_color(BASE::GRAPHIC::Color::Red);
-		std::shared_ptr<BASE::GRAPHIC::Text> personHealthStatus = 
-				std::make_shared<BASE::GRAPHIC::Text>(RESOURCES_PATH + "Font.otf");
+		std::unique_ptr<BASE::GRAPHIC::Text> personHealthStatus = 
+				std::make_unique<BASE::GRAPHIC::Text>(RESOURCES_PATH + "Font.otf");
 		personHealthStatus->visible(false);
 		personHealthStatus->set_font_size(15);
 		personHealthStatus->set_color(BASE::GRAPHIC::Color::Black);
 
-		std::shared_ptr<BASE::GRAPHIC::Sprite> personHealthBackground =
-				std::make_shared<BASE::GRAPHIC::Sprite>(dataBase.get_resources("healthPanel.png", 
+		std::unique_ptr<BASE::GRAPHIC::Sprite> personHealthBackground =
+				std::make_unique<BASE::GRAPHIC::Sprite>(dataBase.get_resources("healthPanel.png", 
 																				{0, 0, 450, 150}));
 		personHealthBackground->set_scale(SPRITEScale);
 
 
-		std::shared_ptr<BASE::GRAPHIC::IRectangle> enemyHealth;
-		enemyHealth	= std::make_shared<BASE::GRAPHIC::Rectangle>(PROGRESSBARWidth, PROGRESSBARHeight);
+		std::unique_ptr<BASE::GRAPHIC::IRectangle> enemyHealth;
+		enemyHealth	= std::make_unique<BASE::GRAPHIC::Rectangle>(PROGRESSBARWidth, PROGRESSBARHeight);
 		enemyHealth->set_color(BASE::GRAPHIC::Color::Purple);
 		enemyHealth->visible(false);
 
-		std::shared_ptr<BASE::GRAPHIC::Text> enemyHealthStatus =
-				std::make_shared<BASE::GRAPHIC::Text>(RESOURCES_PATH + "Font.otf");
+		std::unique_ptr<BASE::GRAPHIC::Text> enemyHealthStatus =
+				std::make_unique<BASE::GRAPHIC::Text>(RESOURCES_PATH + "Font.otf");
 		enemyHealthStatus->visible(false);
 		enemyHealthStatus->set_font_size(15);
 		enemyHealthStatus->set_color(BASE::GRAPHIC::Color::Black);
 
-		std::shared_ptr<BASE::GRAPHIC::Sprite> enemyHealthBackground = 
-				std::make_shared<BASE::GRAPHIC::Sprite>(dataBase.get_resources("healthPanel.png", {0, 0, 450, 150}));
+		std::unique_ptr<BASE::GRAPHIC::Sprite> enemyHealthBackground = 
+				std::make_unique<BASE::GRAPHIC::Sprite>(dataBase.get_resources("healthPanel.png", {0, 0, 450, 150}));
 
 		enemyHealthBackground->set_scale(SPRITEScale);
 
 
 		float time;
-		auto* currentLayout = &mapForest;
+		auto currentLayout = std::move(mapForest);
 		NPC::DamageGenerator damage;
 		damage.set_frame_time(5.F);
 
@@ -581,19 +582,12 @@ int main()
 		size_t loopContainerIter = 0;
 		size_t loopContainerSize = 0;
 		MOVE::Side personLastSide = MOVE::Side::NONE;
-        std::pair<MOVE::Side, std::string> loopCollisionElementSimple;
 
-        std::pair<MOVE::Side, std::string>* loopCollisionElement = nullptr;
-		std::shared_ptr<NPC::INpc>* loopNpcElement = nullptr;
-		std::shared_ptr<CHEST::IChest>* loopChestElement = nullptr;
-		std::shared_ptr<OBJECT>* loopObjectElement = nullptr;
-		std::shared_ptr<BASE::GRAPHIC::IText>* loopTextElement = nullptr;
-		ANIMATION::Anim* loopNpcElementAnimation = nullptr;
-        std::pair<MOVE::Side, decltype(loopChestElement)>* loopCollisionChestElement = nullptr;
 
 		std::vector<std::pair<MOVE::Side, std::string>> loopCollisionObjectList;
-		std::vector<std::pair<MOVE::Side, decltype(loopNpcElement)>> loopNpcCollisionList;
-		std::vector<std::pair<MOVE::Side, decltype(loopChestElement)>> loopChestCollisionList;
+		std::vector<std::pair<MOVE::Side, std::shared_ptr<NPC::INpc>>> loopNpcCollisionList;
+
+		std::vector<std::pair<MOVE::Side, std::shared_ptr<CHEST::IChest>>> loopChestCollisionList;
 
 //END VARIABLE FOR USE IN LOOP
 
@@ -604,28 +598,24 @@ int main()
         npcDispatcher.add_object(std::move(personTest1));
 
 		DISPATCHER::ChestDispatcher chestDispatcher;
-		std::shared_ptr<BASE::GRAPHIC::IRectangle> chestBackground = std::make_shared<BASE::GRAPHIC::Rectangle>(100, 115);
+		std::unique_ptr<BASE::GRAPHIC::IRectangle> chestBackground = std::make_unique<BASE::GRAPHIC::Rectangle>(100, 115);
 
         std::vector<std::shared_ptr<NPC::QuestNpc>> questObjectList;
         questObjectList.reserve(1);
 
-		std::shared_ptr<BASE::GRAPHIC::IRectangle> inventoryBack;
-		inventoryBack = std::make_shared<BASE::GRAPHIC::Rectangle>(100, 100);
+		std::unique_ptr<BASE::GRAPHIC::IRectangle> inventoryBack;
+		inventoryBack = std::make_unique<BASE::GRAPHIC::Rectangle>(100, 100);
 		inventoryBack->set_color(BASE::GRAPHIC::Color::Orange);
 
-		std::shared_ptr<BASE::GRAPHIC::ISprite> arrayNext = std::make_shared<BASE::GRAPHIC::Sprite>(dataBase.get_resources("arrayNext.png", {0, 0, 24, 24}));
+		std::unique_ptr<BASE::GRAPHIC::ISprite> arrayNext = std::make_unique<BASE::GRAPHIC::Sprite>(dataBase.get_resources("arrayNext.png", {0, 0, 24, 24}));
 		arrayNext->set_scale({0.6, 0.6});
-		std::shared_ptr<BASE::GRAPHIC::ISprite> arrayBack = std::make_shared<BASE::GRAPHIC::Sprite>(dataBase.get_resources("arrayBack.png", {0, 0, 24, 24}));
+		std::unique_ptr<BASE::GRAPHIC::ISprite> arrayBack = std::make_unique<BASE::GRAPHIC::Sprite>(dataBase.get_resources("arrayBack.png", {0, 0, 24, 24}));
 		arrayBack->set_scale({0.6, 0.6});
 
-
-		std::shared_ptr<BASE::GRAPHIC::ICircle> testCircle = std::make_shared<BASE::GRAPHIC::Circle>(2);
-		testCircle->set_color(BASE::GRAPHIC::Color::Black);
 //END VISUAL OBJECT
 
 		while (app->is_open() && isRun)
 		{
-
 //EVENT HANDLER
 
 			while (app->check_events())
@@ -642,7 +632,7 @@ int main()
 
 //DRAW LAYOUT
 
-			app->draw(currentLayout->get());
+			app->draw(currentLayout.get());
 
 //END DRAW LAYOUT
 
@@ -723,15 +713,15 @@ int main()
 			person->unblock_all_side();
 			view->unblock_all_side();
 
-            loopCollisionObjectList = collision.check_object_collision(currentLayout->get(), person.get());
+            loopCollisionObjectList = collision.check_object_collision(currentLayout.get(), person.get());
 			if(!loopCollisionObjectList.empty())
 			{
 				loopContainerSize = loopCollisionObjectList.size();
 				for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 				{
-					loopCollisionElement = &loopCollisionObjectList.at(loopContainerIter);
-					person->block_side(loopCollisionElement->first, true);
-					view->block_side(loopCollisionElement->first, true);
+					auto&& value = loopCollisionObjectList.at(loopContainerIter);
+					person->block_side(value.first, true);
+					view->block_side(value.first, true);
 				}
 			}
 
@@ -742,30 +732,30 @@ int main()
 				loopContainerSize = chestDispatcher.size();
 				for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 				{
-					loopChestElement = &chestDispatcher.object(loopContainerIter);
+					auto&& chest = chestDispatcher.object(loopContainerIter);
 
-					if(!physics.check_intersection(view.get(), loopChestElement->get()))
+					if(!physics.check_intersection(view.get(), chest.get()))
 					{
-						(*loopChestElement)->visible(false);
+						chest->visible(false);
 					}
 					else
 					{
-						(*loopChestElement)->visible(true);
+						chest->visible(true);
 					}
 
 //CHECK PERSON INTERACTIOIN WITH CHEST
 
-					if((*loopChestElement)->is_visible())
+					if(chest->is_visible())
 					{
-						loopCollisionElementSimple = collision.check_object_collision(person.get(), loopChestElement->get());
+						auto&& intersectsSide = collision.check_object_collision(person.get(), chest.get());
 						
-						if(loopCollisionElementSimple.first != MOVE::Side::NONE)
+						if(intersectsSide.first != MOVE::Side::NONE)
 						{
-							loopChestCollisionList.emplace_back(loopCollisionElementSimple.first,
-																loopChestElement);
+							loopChestCollisionList.emplace_back(intersectsSide.first,
+																std::move(chest));
 
-							person->block_side(loopCollisionElementSimple.first, true);
-							view->block_side(loopCollisionElementSimple.first, true);
+							person->block_side(intersectsSide.first, true);
+							view->block_side(intersectsSide.first, true);
 						}
 					}
 				}
@@ -776,49 +766,49 @@ int main()
 			loopContainerSize = npcDispatcher.size();
 			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 			{
-                loopNpcElement = &npcDispatcher.object(loopContainerIter);
+                auto&& npc = npcDispatcher.object(loopContainerIter);
 
-				if(!physics.check_intersection(view.get(), loopNpcElement->get()))
+				if(!physics.check_intersection(view.get(), npc.get()))
 				{
-					(*loopNpcElement)->visible(false);
+					npc->visible(false);
 				}
 				else
 				{
-					(*loopNpcElement)->visible(true);
+					npc->visible(true);
 				}
 
-				if((*loopNpcElement)->is_visible())
+				if(npc->is_visible())
 				{
 
 //CHECK NPC INTERACTIOIN WITH MAP OBJECT
 
-					( *loopNpcElement )->unblock_all_side();
+					npc->unblock_all_side();
 
-					loopCollisionObjectList = collision.check_object_collision(currentLayout->get(), loopNpcElement->get());
+					loopCollisionObjectList = collision.check_object_collision(currentLayout.get(), npc.get());
 
 					if(!loopCollisionObjectList.empty())
 					{
 						for(auto&& var : loopCollisionObjectList)
 						{
-							( *loopNpcElement )->block_side(var.first, true);
+							npc->block_side(var.first, true);
 						}
 					}
 
 //CHECK NPC OBJECT INTERACTIOIN WITH PERSON
 
-					loopCollisionElementSimple = collision.check_object_collision(person.get(), loopNpcElement->get());
-					(*loopNpcElement)->set_state(NPC::State::IDLE);
+					auto&& intersectsSide = collision.check_object_collision(person.get(), npc.get());
+					npc->set_state(NPC::State::IDLE);
 
-						person->block_side(loopCollisionElementSimple.first, true);
-						view->block_side(loopCollisionElementSimple.first, true);
+					person->block_side(intersectsSide.first, true);
+					view->block_side(intersectsSide.first, true);
 
-						if (loopCollisionElementSimple.first != MOVE::Side::NONE )
-						{
-							(*loopNpcElement)->set_state(NPC::State::ATTACK);
-							(*loopNpcElement)->block_all_side();
+					if (intersectsSide.first != MOVE::Side::NONE )
+					{
+						npc->set_state(NPC::State::ATTACK);
+						npc->block_all_side();
 
-							loopNpcCollisionList.emplace_back(loopCollisionElementSimple.first, loopNpcElement);
-						}
+						loopNpcCollisionList.emplace_back(intersectsSide.first, std::move(npc));
+					}
 
 //END CHECK PERSON INTERACTIOIN WITH NPC OBJECT
 
@@ -841,8 +831,8 @@ int main()
 
 			if(personMoveSide != MOVE::Side::NONE)
 			{
-				mover->move(personMoveSide, person, time / DELAY , SPEED);
-				mover->move(personMoveSide, view, time / DELAY , SPEED);
+				mover->move(personMoveSide, person.get(), time / DELAY , SPEED);
+				mover->move(personMoveSide, view.get(), time / DELAY , SPEED);
 
 				personLastSide = personMoveSide;
 				anim.set_animation(person->get_animation_walk(personMoveSide));
@@ -872,7 +862,7 @@ int main()
 				for(auto&& var : loopNpcCollisionList)
 				{
 					person->set_health(person->get_health() - 
-										damage.generate((*var.second)->get_damage(),
+										damage.generate(var.second->get_damage(),
 															time * ATTACK_SPEED));
                     
 					
@@ -880,18 +870,18 @@ int main()
 					{
 						if(person->get_state() == NPC::State::ATTACK)
 						{
-							(*var.second)->set_health((*var.second)->get_health() -
+							var.second->set_health(var.second->get_health() -
 														damage.generate(person->get_damage(),
 																			time * ATTACK_SPEED));
 						}
 
-						enemyHealth->set_size(convert_value((*var.second)->get_max_health(),
+						enemyHealth->set_size(convert_value(var.second->get_max_health(),
 																PROGRESSBARWidth, 
-																(*var.second)->get_health()), 
+																var.second->get_health()), 
 												PROGRESSBARHeight); 
 
-                        enemyHealthStatus->set_text(std::to_string((*var.second)->get_health()) + "/"
-                                                        + std::to_string((*var.second)->get_max_health()));
+                        enemyHealthStatus->set_text(std::to_string(var.second->get_health()) + "/"
+                                                        + std::to_string(var.second->get_max_health()));
 
 						enemyHealth->visible(true);
                         enemyHealthStatus->visible(true);
@@ -912,11 +902,11 @@ int main()
 
 //CHECK LIFE DYNAMIC OBJECT
 
-				loopNpcElement = &npcDispatcher.object(loopContainerIter);
-				if((*loopNpcElement)->get_health() <= 0)
+				auto&& npc = npcDispatcher.object(loopContainerIter);
+				if(npc->get_health() <= 0)
 				{
 					auto&& chest = make_chest(dataBase);
-					chest->set_position((*loopNpcElement)->get_position());
+					chest->set_position(npc->get_position());
 					for(int a = 0; a < 20; ++a)
 					{
 						if(a < 10)
@@ -947,41 +937,41 @@ int main()
 
 //SET RANDOM NPC MOVE SIDE AND ANIMATION
 
-				if((*loopNpcElement)->is_visible())
+				if(npc->is_visible())
 				{
 					randMoveSide = npcDispatcher.side(loopContainerIter, time * DELAY);
 
-					mover->move(randMoveSide, *loopNpcElement, time / DELAY, SPEED);
+					mover->move(randMoveSide, npc.get(), time / DELAY, SPEED);
 
-					loopNpcElementAnimation = &npcDispatcher.animation(loopContainerIter);
+					auto&& npcAnimation = npcDispatcher.animation(loopContainerIter);
 
-					if((*loopNpcElement)->get_state() != NPC::State::ATTACK)
+					if(npc->get_state() != NPC::State::ATTACK)
 					{
 						if(randMoveSide == MOVE::Side::NONE)
 						{
-							(*loopNpcElement)->set_state(NPC::State::IDLE);
-							loopNpcElementAnimation->reset();
-							loopNpcElementAnimation->stop(true);
+							npc->set_state(NPC::State::IDLE);
+							npcAnimation.reset();
+							npcAnimation.stop(true);
 						}
 						else
 						{
-							(*loopNpcElement)->set_state(NPC::State::WALK);
-							loopNpcElementAnimation->set_animation((*loopNpcElement)->get_animation_walk(randMoveSide));
-							loopNpcElementAnimation->stop(false);
+							npc->set_state(NPC::State::WALK);
+							npcAnimation.set_animation(npc->get_animation_walk(randMoveSide));
+							npcAnimation.stop(false);
 						}
 					}
 					else
 					{
 						for(auto&& object : loopNpcCollisionList)
 						{
-							if(object.second == loopNpcElement)
+							if(object.second == npc)
 							{
-								loopNpcElementAnimation->set_animation((*loopNpcElement)->get_animation_attack(
+								npcAnimation.set_animation(npc->get_animation_attack(
 														inversion_side(object.first)));
 							}
 						}
 
-						loopNpcElementAnimation->stop(false);
+						npcAnimation.stop(false);
 					}
 
 //END SET RANDOM NPC MOVE SIDE AND ANIMATION
@@ -990,7 +980,7 @@ int main()
 //DRAW OBJECTS
 					app->draw(npcDispatcher.object(loopContainerIter).get());
 				}
-			}
+			}// for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 
 //DRAW INVENTORY
 //
@@ -1001,10 +991,10 @@ int main()
 					loopContainerSize = loopChestCollisionList.size();
 					for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 					{
-						loopCollisionChestElement = &loopChestCollisionList.at(loopContainerIter);
-						if((*loopCollisionChestElement).first == personLastSide)
+						auto&& intersectsSide = loopChestCollisionList.at(loopContainerIter);
+						if(intersectsSide.first == personLastSide)
 						{
-							loopChestElement = (*loopCollisionChestElement).second;
+							auto&& chest = std::move(intersectsSide.second);
 
 							loopRect = view->get_global_bounds();
 
@@ -1020,16 +1010,19 @@ int main()
 							arrayNext->set_position((loopRect.left + (loopRect.width / 2)) + loopRectSecond.width,
 													(loopRect.top + loopRect.height) - loopRectSecond.height);
 
+
+							loopRectSecond = arrayBack->get_global_bounds();
+
 							arrayBack->set_position((loopRect.left + (loopRect.width / 2)) - (loopRectSecond.width * 2),
 													(loopRect.top + loopRect.height) - loopRectSecond.height);
 
-							(*loopChestElement)->set_page_position(loopRect.left,
+							chest->set_page_position(loopRect.left,
 																	loopRect.top,
 																	loopRect.width,
 																	loopRect.height - loopRectSecond.height);
-							(*loopChestElement)->sort();
+							chest->sort();
 
-							auto collection = (*loopChestElement)->get_elements_on_page();
+							auto collection = chest->get_elements_on_page();
 
 							app->draw(chestBackground.get());
 							
@@ -1052,42 +1045,39 @@ int main()
 								if(physics.check_intersection(arrayNext.get(),
 											app->map_pixel_to_coords(MOUSE_BUTTON_PRESS_COORDS)))
 								{
-									std::cout<<"PAGE FORWARD Page "<<(*loopChestElement)->get_page()<<std::endl;
-									(*loopChestElement)->page_forward();
+									chest->page_forward();
 								}
 
 								if(physics.check_intersection(arrayBack.get(),
 											app->map_pixel_to_coords(MOUSE_BUTTON_PRESS_COORDS)))
 								{
-									std::cout<<"PAGE back Page "<<(*loopChestElement)->get_page()<<std::endl;
-									(*loopChestElement)->page_back();
+									chest->page_back();
 								}
 							}
 
 							app->draw(arrayNext.get());
 							app->draw(arrayBack.get());
-						}
-					}
-				}
+
+						}// if((*loopCollisionChestElement).first == personLastSide)
+					}// for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
+				}//loopChestCollisionList.empty())
 				else
 				{
 					showInventory = false;
 				}
-			}
+			}//if(showInventory)
 
 //END DRAW INVENTORY
 
 			loopContainerSize = chestDispatcher.size();
 			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 			{
-				loopChestElement = &chestDispatcher.object(loopContainerIter);
-				if((*loopChestElement)->is_visible())
+				auto&& chest = chestDispatcher.object(loopContainerIter);
+				if(chest->is_visible())
 				{
-					app->draw(loopChestElement->get());
+					app->draw(chest.get());
 				}
 			}
-			testCircle->set_position(app->map_pixel_to_coords(MOUSE_BUTTON_PRESS_COORDS));
-			app->draw(testCircle.get());
 			app->draw(person.get());
             
 			app->draw(personHealthBackground.get());
@@ -1107,23 +1097,14 @@ int main()
 
 
 //RESET ALL LOOP VARIABLE
-			loopCollisionElement = nullptr;
-			loopNpcElement = nullptr;
-			loopChestElement = nullptr;
-			loopObjectElement = nullptr;
-			loopTextElement = nullptr;
-			loopNpcElementAnimation = nullptr;
-			loopCollisionChestElement = nullptr;
-
 			loopCollisionObjectList.clear();
 			loopNpcCollisionList.clear();
 			loopChestCollisionList.clear();
 
 //END RESET LOOP VARIABLE
 
-		}
-		delete mover;
-	}
+		}// while (app->is_open() && isRun)
+	}// while(isOpen)
 
 	return EXIT_SUCCESS;
 }

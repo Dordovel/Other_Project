@@ -3,12 +3,12 @@
 
 namespace PROJECT::MOVE
 {
-	void Move::object_move(const std::shared_ptr<MOVABLE>& object , float posX , float posY) noexcept
+	void Move::object_move(MOVABLE* const object , float posX , float posY) noexcept
 	{
 		object->move ( posX , posY );
 	}
 
-	void Move::moveUp(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
+	void Move::moveUp(MOVABLE *const object, float clock, float speed) noexcept
 	{
 		float posX = 0;
 		float posY = -(speed * clock);
@@ -16,7 +16,7 @@ namespace PROJECT::MOVE
 		object_move(object , posX , posY );
 	}
 
-	void Move::moveDown(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
+	void Move::moveDown(MOVABLE* const object, float clock, float speed) noexcept
 	{
 		float posX = 0;
 		float posY = speed * clock;
@@ -24,7 +24,7 @@ namespace PROJECT::MOVE
 		object_move(object , posX , posY );
 	}
 
-	void Move::moveLeft(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
+	void Move::moveLeft(MOVABLE *const  object, float clock, float speed) noexcept
 	{
 		float posX = -(speed * clock);
 		float posY = 0;
@@ -32,7 +32,7 @@ namespace PROJECT::MOVE
 		object_move(object , posX , posY );
 	}
 
-	void Move::moveRight(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
+	void Move::moveRight(MOVABLE* const object, float clock, float speed) noexcept
 	{
 		float posX = speed * clock;
 		float posY = 0;
@@ -41,7 +41,7 @@ namespace PROJECT::MOVE
 	}
 
 
-	void Move::move(Side side, const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept
+	void Move::move(Side side, MOVABLE* const object, float clock, float speed) noexcept
 	{
 		if(side == Side::UP && !this->_up)
 		{

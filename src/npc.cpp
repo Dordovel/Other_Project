@@ -54,7 +54,7 @@ namespace PROJECT::NPC
 		this->_points = points;
 	}
 
-	State Npc::get_state() noexcept
+	State Npc::get_state() const noexcept
 	{
 		return this->_state;
 	}
@@ -64,9 +64,21 @@ namespace PROJECT::NPC
 		this->_state = state;
 	}
 
+	float Npc::get_view_radius() const noexcept
+	{
+		return this->_viewRadius;
+	}
+
+	void Npc::set_view_radius(float radius) noexcept
+	{
+		this->_viewRadius = radius;
+	}
+
 	PROJECT::ANIMATION::IAnimation* Npc::get_animation_attack(PROJECT::MOVE::Side side) noexcept
 	{
-		auto&& result = this->_animAttack.find(side);
+		auto&& comparator = [&side](auto&& value){return value.first == side;};
+		auto&& result = std::find_if(std::begin(this->_animAttack), std::end(this->_animAttack), comparator);
+
 		if(result != this->_animAttack.end())
 				return &result->second;
 		else
@@ -75,8 +87,21 @@ namespace PROJECT::NPC
 
 	PROJECT::ANIMATION::IAnimation* Npc::get_animation_walk(PROJECT::MOVE::Side side) noexcept
 	{
-		auto&& result = this->_animWalk.find(side);
+		auto&& comparator = [&side](auto&& value){return value.first == side;};
+		auto&& result = std::find_if(std::begin(this->_animWalk), std::end(this->_animWalk), comparator);
+
 		if(result != this->_animWalk.end())
+				return &result->second;
+		else
+			return nullptr;
+	}
+
+	PROJECT::ANIMATION::IAnimation* Npc::get_animation_idle(PROJECT::MOVE::Side side) noexcept
+	{
+		auto&& comparator = [&side](auto&& value){return value.first == side;};
+		auto&& result = std::find_if(std::begin(this->_animIdle), std::end(this->_animIdle), comparator);
+
+		if(result != this->_animIdle.end())
 				return &result->second;
 		else
 			return nullptr;
@@ -89,7 +114,7 @@ namespace PROJECT::NPC
 		for(const auto& var : rect)
 			animation.add_frame(var);
 
-		this->_animWalk.emplace(side, animation);
+		this->_animWalk.emplace_back(side, animation);
 	}
 
 	void Npc::add_animation_attack(PROJECT::MOVE::Side side, std::array<PROJECT::BASE::DATA::RectangleI, 3> rect) noexcept
@@ -99,6 +124,16 @@ namespace PROJECT::NPC
 		for(const auto& var : rect)
 			animation.add_frame(var);
 
-		this->_animAttack.emplace(side, animation);
+		this->_animAttack.emplace_back(side, animation);
+	}
+
+	void Npc::add_animation_idle(PROJECT::MOVE::Side side, std::array<PROJECT::BASE::DATA::RectangleI, 3> rect) noexcept
+	{
+		ANIMATION::Animation animation;
+		animation.set_object(this);
+		for(const auto& var : rect)
+			animation.add_frame(var);
+
+		this->_animIdle.emplace_back(side, animation);
 	}
 };

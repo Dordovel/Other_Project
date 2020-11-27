@@ -14,9 +14,9 @@ namespace PROJECT::DISPATCHER
 		public:
 			void delete_object(size_t index) noexcept;
 
-			void add_object(std::shared_ptr<PROJECT::CHEST::IChest>&& object) noexcept;
+			void add_object(std::unique_ptr<PROJECT::CHEST::IChest> object) noexcept;
 
-			std::shared_ptr<PROJECT::CHEST::IChest>& object(int index) noexcept;
+			std::shared_ptr<PROJECT::CHEST::IChest> object(int index) const noexcept;
 
 			size_t size() const noexcept;
 

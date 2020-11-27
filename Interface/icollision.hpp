@@ -19,11 +19,13 @@ namespace PROJECT
 
 				virtual std::pair<PROJECT::MOVE::Side, std::string>
 				    check_object_collision(const INTERACTION* const lv,
-				                            const INTERACTION* const rv) noexcept = 0;
+				                            const INTERACTION* const rv,
+											float radius) noexcept = 0;
 
 				virtual std::vector<std::pair<PROJECT::MOVE::Side, std::string>>
 				    check_object_collision(const PROJECT::COLLECTION::ILayout* const lv,
-				                           const INTERACTION* const rv ) noexcept = 0;
+				                           const INTERACTION* const rv,
+										   float radius) noexcept = 0;
 				
 				virtual ~ICollision() = default;
 		};

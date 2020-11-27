@@ -19,9 +19,9 @@ namespace PROJECT::DISPATCHER
 		public:
 			void delete_object(size_t index) noexcept;
 
-			void add_object(std::shared_ptr<NPC::INpc>&& object) noexcept;
+			void add_object(std::unique_ptr<NPC::INpc> object) noexcept;
 
-			std::shared_ptr<NPC::INpc>& object(int index) noexcept;
+			std::shared_ptr<NPC::INpc> object(int index) const noexcept;
 
 			ANIMATION::Anim& animation(int index) noexcept;
 

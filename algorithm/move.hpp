@@ -8,15 +8,15 @@ namespace PROJECT::MOVE
 	class Move : public IMove
 	{
 		private:
-			static void object_move(const std::shared_ptr<MOVABLE>& object , float posX , float posY) noexcept;
+			static void object_move(MOVABLE* const object , float posX , float posY) noexcept;
 
-			static void moveUp(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept;
+			static void moveUp(MOVABLE* const object, float clock, float speed) noexcept;
 
-			static void moveDown(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept;
+			static void moveDown(MOVABLE* const object, float clock, float speed) noexcept;
 
-			static void moveLeft(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept;
+			static void moveLeft(MOVABLE* const object, float clock, float speed) noexcept;
 
-			static void moveRight(const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept;
+			static void moveRight(MOVABLE* const object, float clock, float speed) noexcept;
 
 			bool _up;
 			bool _down;
@@ -24,7 +24,7 @@ namespace PROJECT::MOVE
 			bool _right;
 
 		public:
-			void move(PROJECT::MOVE::Side side, const std::shared_ptr<MOVABLE>& object, float clock, float speed) noexcept override;
+			void move(PROJECT::MOVE::Side side, MOVABLE* const object, float clock, float speed) noexcept override;
 
 			void block_side(PROJECT::MOVE::Side side, bool status) noexcept override;
 

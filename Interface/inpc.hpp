@@ -33,8 +33,11 @@ namespace PROJECT::NPC
 
 			virtual PROJECT::ANIMATION::IAnimation* get_animation_attack(PROJECT::MOVE::Side side) noexcept = 0;
 			virtual PROJECT::ANIMATION::IAnimation* get_animation_walk(PROJECT::MOVE::Side side) noexcept = 0;
-			virtual State get_state() noexcept = 0;
+			virtual PROJECT::ANIMATION::IAnimation* get_animation_idle(PROJECT::MOVE::Side side) noexcept = 0;
+			virtual State get_state() const noexcept = 0;
 			virtual void set_state(State state) noexcept = 0;
+			virtual float get_view_radius() const noexcept = 0;
+			virtual void set_view_radius(float radius) noexcept = 0;
 			virtual ~INpc() = default;
 	};
 };
