@@ -24,7 +24,7 @@ namespace PROJECT::GRID::VERTICAL
 
 		public:
 
-			VerticalGrid (PROJECT::GRID::VERTICAL::GridAlign align, int offsetY = 0);
+			VerticalGrid (PROJECT::GRID::VERTICAL::GridAlign align, int offsetY = 20);
 
 			void init(float x, float y, float width, float height) noexcept;
 

@@ -16,7 +16,7 @@ class OBJECT : public MOVABLE,
 				public MODIFIABLE
 {
     public:
-		virtual std::shared_ptr<OBJECT> clone() noexcept = 0;
+		virtual std::unique_ptr<OBJECT> clone() noexcept = 0;
         virtual ~OBJECT() = default;
 };
 #endif //SFMLPROJECT_REBUILD_OBJECT_OBJECT_HPP

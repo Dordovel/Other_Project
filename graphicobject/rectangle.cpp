@@ -26,9 +26,9 @@ namespace PROJECT::BASE::GRAPHIC
 		std::cout<<"\t~Rectangle(): "<<this->get_id()<< '\n';
 	}
 
-	std::shared_ptr<OBJECT> Rectangle::clone() noexcept
+	std::unique_ptr<OBJECT> Rectangle::clone() noexcept
 	{
-		std::shared_ptr<Rectangle> copy = std::make_shared<Rectangle>(*this);
+		std::unique_ptr<Rectangle> copy = std::make_unique<Rectangle>(*this);
 		copy->_rectangle = std::make_shared<sf::RectangleShape>(*(this->_rectangle.get()));
 
 		return copy;
@@ -48,7 +48,6 @@ namespace PROJECT::BASE::GRAPHIC
 	{
 		this->_id = id;
 	}
-
 
 	void Rectangle::set_position(PROJECT::BASE::DATA::Vector2F position) noexcept
 	{

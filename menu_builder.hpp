@@ -9,6 +9,7 @@
 #include "./Interface/iapplication.hpp"
 #include "./graphicobject/rectangle.hpp"
 #include "./struct/rect_object.hpp"
+#include "./headers/vertical_grid.hpp"
 
 template <size_t N>
 std::string menu_builder(const std::shared_ptr<PROJECT::APPLICATION::IApplication>& app, 
@@ -16,47 +17,57 @@ std::string menu_builder(const std::shared_ptr<PROJECT::APPLICATION::IApplicatio
 						const std::shared_ptr<OBJECT>& layout,
 						std::array<std::pair<std::string, std::string>, N>&& generateItem) noexcept
 {
-	PROJECT::MENU::Menu menu;
-	std::string selectedItem;
+	PROJECT::MENU::Menu menu(20.f);
+	int selectedItem;
 
 	std::array menuItems = build_items(std::forward<decltype(generateItem)>(generateItem),
 																		RESOURCES_PATH + "Font.otf");
 
-
-	for(const auto& item : menuItems)
-	{
-		menu.add_item(item);
-	}
-
+	float step = 20;
 	auto layoutRect = layout->get_global_bounds();
 
-	menu.menu_configure(layoutRect.left, layoutRect.top, layoutRect.width, layoutRect.height);
+	PROJECT::GRID::VERTICAL::VerticalGrid grid(PROJECT::GRID::VERTICAL::GridAlign::CENTER, step);
+	grid.init(layoutRect.left, layoutRect.top, layoutRect.width, layoutRect.height);
+	grid.sort(std::vector<std::shared_ptr<OBJECT>>(std::begin(menuItems), std::end(menuItems)));
 
-	menuSelectedPointer->set_position(menu.get_pointer_position());
+	for(const auto& item : menuItems)
+		menu.add_item(item->get_global_bounds());
+
+	menu.menu_configure();
+
+	auto pointers = menu.get_pointer_position();
+
+	menuSelectedPointer->set_position(pointers[1]);
+	auto leftPointer = menuSelectedPointer->clone();
+	leftPointer->set_position(pointers[0]);
 
 	bool isRun = true;
 
     PROJECT::UNIT::CONTROL::KEYBOARD::KeyboardUnit keyboard;
 
-	std::string item_id;
-
-	keyboard.set_close_window_event([&selectedItem, &isRun]()
-			{
-				selectedItem = EXIT;
-				isRun = false;
-			});
-
-	keyboard.button_pressed(PROJECT::UNIT::CONTROL::KEYBOARD::Keyboard_Key::Up, [&menu, &menuSelectedPointer]()
+	keyboard.button_pressed(PROJECT::UNIT::CONTROL::KEYBOARD::Keyboard_Key::Up, [&menu,
+																				&menuSelectedPointer,
+																				&leftPointer]()
 			{
 				menu.step_back();
-				menuSelectedPointer->set_position(menu.get_pointer_position());
+
+				auto pointers = menu.get_pointer_position();
+				menuSelectedPointer->set_position(pointers[1]);
+				leftPointer->set_position(pointers[0]);
+
 			}, PROJECT::UNIT::CONTROL::EventHandlerType::EVENT_LOOP);
 
 
-	keyboard.button_pressed(PROJECT::UNIT::CONTROL::KEYBOARD::Keyboard_Key::Down, [&menu, &menuSelectedPointer]()
+	keyboard.button_pressed(PROJECT::UNIT::CONTROL::KEYBOARD::Keyboard_Key::Down, [&menu,
+																					&menuSelectedPointer,
+																					&leftPointer]()
 			{
 				menu.step_forward();
-				menuSelectedPointer->set_position(menu.get_pointer_position());
+
+				auto pointers = menu.get_pointer_position();
+				menuSelectedPointer->set_position(pointers[1]);
+				leftPointer->set_position(pointers[0]);
+
 			}, PROJECT::UNIT::CONTROL::EventHandlerType::EVENT_LOOP);
 
 
@@ -77,22 +88,13 @@ std::string menu_builder(const std::shared_ptr<PROJECT::APPLICATION::IApplicatio
 		
 		keyboard.catch_events();
 
-		for(const auto& item : menuItems)
-		{
-			item_id = menu.selected_item();
+		menuItems[selectedItem]->set_color(PROJECT::BASE::GRAPHIC::Color::White);
+		selectedItem = menu.selected_item();
+		menuItems[selectedItem]->set_color(PROJECT::BASE::GRAPHIC::Color::Red);
 
-			if(item->get_id() == item_id)
-			{
-				item->set_color(PROJECT::BASE::GRAPHIC::Color::Red);
-			}
-			else
-			{
-				item->set_color(PROJECT::BASE::GRAPHIC::Color::Yellow);
-			}
-		}
-	
 		app->draw(layout.get());
 		app->draw(menuSelectedPointer.get());
+		app->draw(leftPointer.get());
 
 		for(const auto& pointers : menuItems)
 		{
@@ -103,5 +105,5 @@ std::string menu_builder(const std::shared_ptr<PROJECT::APPLICATION::IApplicatio
 	}
 
 
-	return selectedItem;
+	return generateItem[selectedItem].second;
 }

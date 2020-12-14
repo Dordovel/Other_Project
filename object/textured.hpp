@@ -6,11 +6,11 @@ namespace PROJECT::BASE::DATA
 	class RectangleI;
 };
 
-class ANIMATED
+class TEXTURED
 {
 	public:
 		virtual void set_texture_rect(PROJECT::BASE::DATA::RectangleI rect) = 0;
 
-		virtual ~ANIMATED() = default;
+		virtual ~TEXTURED() = default;
 };
 #endif //SFMLPROJECT_REBUILD_OBJECT_ANIMATED_HPP

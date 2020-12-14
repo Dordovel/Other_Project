@@ -33,7 +33,7 @@ namespace PROJECT::BASE::GRAPHIC
 
             ~Text();
 
-			std::shared_ptr<OBJECT> clone() noexcept override;
+			std::unique_ptr<OBJECT> clone() noexcept override;
 
             PROJECT::BASE::DATA::DrawableObject draw() const noexcept override;
 

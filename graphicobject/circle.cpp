@@ -24,9 +24,9 @@ namespace PROJECT::BASE::GRAPHIC
 		std::cout<<"\t~Circle(): "<< this->get_id()<< '\n';
 	}
 
-	std::shared_ptr<OBJECT> Circle::clone() noexcept
+	std::unique_ptr<OBJECT> Circle::clone() noexcept
 	{
-		std::shared_ptr<Circle> copy = std::make_shared<Circle>(*this);
+		std::unique_ptr<Circle> copy = std::make_unique<Circle>(*this);
 		copy->_circleShape = std::make_shared<sf::CircleShape>(*(this->_circleShape.get()));
 
 		return copy;

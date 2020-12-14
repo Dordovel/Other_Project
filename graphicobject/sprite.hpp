@@ -36,7 +36,7 @@ namespace PROJECT::BASE::GRAPHIC
 
             Sprite& operator= (const Sprite& rectangle) = default;
 
-            std::shared_ptr<OBJECT> clone() noexcept override;
+            std::unique_ptr<OBJECT> clone() noexcept override;
 
             PROJECT::BASE::DATA::DrawableObject draw() const noexcept override;
 

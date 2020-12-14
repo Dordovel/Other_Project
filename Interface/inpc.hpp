@@ -1,21 +1,12 @@
 #ifndef SFMLPROJECT_REBUILD_NPC_INTERFACE_HPP
 #define SFMLPROJECT_REBUILD_NPC_INTERFACE_HPP
 
-#include "./iarmor.hpp"
-#include "./ipoints.hpp"
-#include "./ihealth.hpp"
-#include "./idamage.hpp"
-#include "./animation.hpp"
+#include "./istate.hpp"
+#include "./ianimated.hpp"
 #include "../graphicobject/isprite.hpp"
-
-namespace PROJECT::MOVE
-{
-	enum class Side;
-}
 
 namespace PROJECT::NPC
 {
-
 	enum class State
 	{
 		WALK,
@@ -23,17 +14,12 @@ namespace PROJECT::NPC
 		ATTACK
 	};
 
-	class INpc : public IDamage,
-				public IHealth,
-				public IPoints,
-				public IArmor,
+	class INpc : public INpcState,
+				public PROJECT::ANIMATION::IAnimated,
 				virtual public PROJECT::BASE::GRAPHIC::ISprite
 	{
 		public:
 
-			virtual PROJECT::ANIMATION::IAnimation* get_animation_attack(PROJECT::MOVE::Side side) noexcept = 0;
-			virtual PROJECT::ANIMATION::IAnimation* get_animation_walk(PROJECT::MOVE::Side side) noexcept = 0;
-			virtual PROJECT::ANIMATION::IAnimation* get_animation_idle(PROJECT::MOVE::Side side) noexcept = 0;
 			virtual State get_state() const noexcept = 0;
 			virtual void set_state(State state) noexcept = 0;
 			virtual float get_view_radius() const noexcept = 0;

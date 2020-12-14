@@ -23,9 +23,9 @@ namespace PROJECT::BASE::GRAPHIC
 		std::cout<<"\t~Sprite(): "<<this->get_id()<< '\n';
 	}
 
-	std::shared_ptr<OBJECT> Sprite::clone() noexcept
+	std::unique_ptr<OBJECT> Sprite::clone() noexcept
 	{
-		std::shared_ptr<Sprite> copy = std::make_shared<Sprite>(*this);
+		std::unique_ptr<Sprite> copy = std::make_unique<Sprite>(*this);
 		copy->_sprite = std::make_shared<sf::Sprite>(*(this->_sprite.get()));
 		copy->_texture = std::make_shared<sf::Texture>(*(this->_texture.get()));
 

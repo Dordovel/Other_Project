@@ -28,7 +28,6 @@ namespace PROJECT::GRID::VERTICAL
 		this->_item_offset = offsetY;
 	}
 
-
 	void VerticalGrid::init(float x, float y, float width, float height) noexcept
 	{
 		this->_x = x;
@@ -39,31 +38,30 @@ namespace PROJECT::GRID::VERTICAL
 	
 	size_t VerticalGrid::sort(const std::vector<std::shared_ptr<OBJECT>>& array) noexcept
 	{
-		auto res = std::max_element(array.begin(), array.end(), [](auto a, auto b)
-																	{
-																		return a->get_global_bounds().width < b->get_global_bounds().width;
-																	});
+		PROJECT::BASE::DATA::RectangleF bounds;
+		const std::size_t size = array.size();
 
-		PROJECT::BASE::DATA::RectangleF bounds = (*res)->get_global_bounds();
+		float posX = 0;
+		float posY = this->_y;
 
-		float offsetY = bounds.height + this->_item_offset;
-
-		size_t elementOnPage = std::ceil(this->_height / offsetY);
-
-		if(array.size() > elementOnPage)
+		for(std::size_t i = 0; i < size; ++i)
 		{
-			return array.size() - elementOnPage;
-		}
+			bounds = array[i]->get_global_bounds();
 
-		float y = this->_y;
-		float x = this->_x + offset(this->_align, this->_width, bounds.width);
+			if(float height = (bounds.height + this->_item_offset);
+					height < this->_height)
+			{
+				posX = this->_x + offset(this->_align, this->_width, bounds.width);
 
-		for(const auto& value : array)
-		{
-			value->set_position(x, y);
+				if(i != 0)
+					posY += height;
 
-			y += offsetY;
-								
+				array[i]->set_position(posX, posY);
+			}
+			else
+			{
+				return size - i;
+			}
 		}
 
 		return 0;

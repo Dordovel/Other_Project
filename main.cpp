@@ -269,7 +269,7 @@ int main()
 	view->zoom(DEFAULT_VIEW_ZOOM);
 
     std::shared_ptr<APPLICATION::Application> app =
-			std::make_shared<APPLICATION::Application>("Test_Game", 700, 500);
+			std::make_shared<APPLICATION::Application>("Test_Project", 700, 500);
     app->init();
     app->set_position(500, 500);
 	app->set_view(view);
@@ -291,7 +291,7 @@ int main()
 		 //{
 		 //	app->close();
 		 //	break;
-		//}
+		 //}
 
 		std::shared_ptr<NPC::Npc> person = nullptr;
 		//person = change_person_type(result, dataBase);
@@ -403,9 +403,9 @@ int main()
 				});
 
 		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Escape, [&app,
-													&view,
-													&person,
-													&isRun]()
+																				&view,
+																				&person,
+																				&isRun]()
 				{
 					view->unblock_all_side();
 					std::string result = menu(MenuType::PAUSE, app, view);
@@ -437,9 +437,7 @@ int main()
 					if(!showInventory)
 						showInventory = true;
 					else
-					{
 						showInventory = false;
-					}
 				}, UNIT::CONTROL::EventHandlerType::EVENT_LOOP);
 
 
@@ -677,10 +675,13 @@ int main()
 			personHealth->set_position((loopRect.left + PROGRESSBARHeight),
 										((loopRect.top + loopRect.height) - (PROGRESSBARHeight * 2)));
 
-			personHealth->set_size(convert_value(person->get_max_health(),
+			float health = convert_value(person->get_max_health(),
 													PROGRESSBARWidth,
-													person->get_health()), 
-									PROGRESSBARHeight); 
+													person->get_health());
+									
+			if(health < 0) health = 0;
+
+			personHealth->set_size(health, PROGRESSBARHeight); 
 
 			loopVec = personHealth->get_position();
 
@@ -861,24 +862,38 @@ int main()
 			{
 				for(auto&& var : loopNpcCollisionList)
 				{
-					person->set_health(person->get_health() - 
-										damage.generate(var.second->get_damage(),
-															time * ATTACK_SPEED));
+					{
+						float damageValue = damage.generate(var.second.get(), time * ATTACK_SPEED);
+
+						float health = person->get_health();
+
+						if(damageValue > health)
+							person->set_health(0);
+						else
+							person->set_health(health - damageValue);
+					}
                     
 					
                     if(var.first == personLastSide)
 					{
 						if(person->get_state() == NPC::State::ATTACK)
 						{
-							var.second->set_health(var.second->get_health() -
-														damage.generate(person->get_damage(),
-																			time * ATTACK_SPEED));
+							float damageValue = damage.generate(person.get(), time * ATTACK_SPEED);
+
+							float health = var.second->get_health();
+
+							if(damageValue > health)
+								var.second->set_health(0);
+							else
+								var.second->set_health(health - damageValue);
 						}
 
-						enemyHealth->set_size(convert_value(var.second->get_max_health(),
+						float healthBarSize = convert_value(var.second->get_max_health(),
 																PROGRESSBARWidth, 
-																var.second->get_health()), 
-												PROGRESSBARHeight); 
+																var.second->get_health());
+						if(healthBarSize < 0) healthBarSize = 0;
+
+						enemyHealth->set_size(healthBarSize , PROGRESSBARHeight); 
 
                         enemyHealthStatus->set_text(std::to_string(var.second->get_health()) + "/"
                                                         + std::to_string(var.second->get_max_health()));
@@ -1017,9 +1032,9 @@ int main()
 													(loopRect.top + loopRect.height) - loopRectSecond.height);
 
 							chest->set_page_position(loopRect.left,
-																	loopRect.top,
-																	loopRect.width,
-																	loopRect.height - loopRectSecond.height);
+														loopRect.top,
+														loopRect.width,
+														loopRect.height - loopRectSecond.height);
 							chest->sort();
 
 							auto collection = chest->get_elements_on_page();

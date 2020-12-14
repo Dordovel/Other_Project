@@ -19,12 +19,12 @@ namespace PROJECT::ANIMATION
 		return this->_frames.size();
 	}
 
-	void Animation::set_object(ANIMATED* object) noexcept
+	void Animation::set_object(TEXTURED* object) noexcept
 	{
 		this->_object = object;
 	}
 
-	ANIMATED* Animation::get_object() noexcept
+	TEXTURED* Animation::get_object() noexcept
 	{
 		return this->_object;
 	}

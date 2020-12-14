@@ -11,14 +11,14 @@ namespace PROJECT::ANIMATION
 	{
 		private:
 			std::vector<PROJECT::BASE::DATA::RectangleI> _frames;
-			ANIMATED* _object;
+			TEXTURED* _object;
 
 		public:
 			void add_frame(PROJECT::BASE::DATA::RectangleI frame) override;
 			PROJECT::BASE::DATA::RectangleI get_frame(std::size_t index) override;
 			std::size_t get_frame_count() const override;
-			void set_object(ANIMATED* object) noexcept override;
-			ANIMATED* get_object() noexcept override;
+			void set_object(TEXTURED* object) noexcept override;
+			TEXTURED* get_object() noexcept override;
 			Animation() = default;
 	};
 

@@ -3,7 +3,7 @@
 
 #include <random>
 #include <SFML/System/Time.hpp>
-#include "../Interface/inpc.hpp"
+#include "../Interface/istate.hpp"
 
 namespace PROJECT::NPC
 {
@@ -12,12 +12,12 @@ namespace PROJECT::NPC
 		private:
 			std::random_device _randDevice;
 			std::mt19937 _mt;
-			std::uniform_int_distribution<int> _uid;
+			std::uniform_real_distribution<float> _uid;
 			sf::Time _currentTime;
 			sf::Time _frameTime;
 
 		public:
-			int generate(int damage, float delta) noexcept;
+			float generate(const PROJECT::NPC::INpcState* const npc, float delta) noexcept;
 
 			void set_frame_time(float frameTime) noexcept;
 

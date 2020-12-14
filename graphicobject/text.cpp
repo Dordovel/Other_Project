@@ -25,9 +25,9 @@ namespace PROJECT::BASE::GRAPHIC
 		std::cout<<"\t~Text(): "<< this->get_id()<< '\n';
 	}
 
-	std::shared_ptr<OBJECT> Text::clone() noexcept
+	std::unique_ptr<OBJECT> Text::clone() noexcept
 	{
-		std::shared_ptr<Text> copy = std::make_shared<Text>(*this);
+		std::unique_ptr<Text> copy = std::make_unique<Text>(*this);
 		copy->_text = std::make_shared<sf::Text>(*(this->_text.get()));
 
 		return copy;

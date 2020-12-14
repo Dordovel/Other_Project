@@ -32,7 +32,7 @@ namespace PROJECT::BASE::GRAPHIC
 
             ~Circle();
 
-			std::shared_ptr<OBJECT> clone() noexcept override;
+			std::unique_ptr<OBJECT> clone() noexcept override;
 
             PROJECT::BASE::DATA::DrawableObject draw() const noexcept override;
 

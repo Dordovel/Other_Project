@@ -1,7 +1,7 @@
 #ifndef SFMLPROJECT_REBUILD_ANIMATION_INTERFACE_HPP
 #define SFMLPROJECT_REBUILD_ANIMATION_INTERFACE_HPP
 
-#include "../object/animated.hpp"
+#include "../object/textured.hpp"
 #include <memory>
 
 namespace PROJECT::BASE::DATA
@@ -17,8 +17,8 @@ namespace PROJECT::ANIMATION
 			virtual void add_frame(PROJECT::BASE::DATA::RectangleI frame) = 0;
 			virtual PROJECT::BASE::DATA::RectangleI get_frame(std::size_t index) = 0;
 			virtual std::size_t get_frame_count() const = 0;
-			virtual void set_object(ANIMATED* object) noexcept = 0;
-			virtual ANIMATED* get_object() noexcept = 0;
+			virtual void set_object(TEXTURED* object) noexcept = 0;
+			virtual TEXTURED* get_object() noexcept = 0;
 			virtual ~IAnimation() = default;
 	};
 

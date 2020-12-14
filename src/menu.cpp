@@ -3,59 +3,45 @@
 #include "../struct/vector_object.hpp"
 #include <cmath>
 
-namespace
-{
-	bool check_intersection(PROJECT::BASE::DATA::RectangleF lv,
-							const OBJECT* const rv)
-	{
-		PROJECT::BASE::DATA::Vector2F rvPos = rv->get_position();
-		PROJECT::BASE::DATA::RectangleF rvRect = rv->get_global_bounds();
-
-		if( lv.top > rvPos.y - rvRect.height
-			&& lv.top < rvPos.y + rvRect.height)
-		{
-			return true;
-		}
-		return false;
-	}
-};
-
 namespace PROJECT::MENU
 {
-	Menu::Menu():_pointer(0, 0, 10, 10),
-				_verticalGrid(PROJECT::GRID::VERTICAL::GridAlign::LEFT, this->_item_step){}
+	Menu::Menu(float heightStep, float widthStep):_pointerLeft(0, 0, 10, 10),
+													_pointerRight(0, 0, 10, 10),
+													_heightStep(heightStep),
+													_widthStep(widthStep){}
 
-	bool Menu::menu_configure(float X, float Y, float Width, float Height) noexcept
+	bool Menu::menu_configure() noexcept
 	{
-		this->_verticalGrid.init(X, Y, Width, Height);
+		PROJECT::BASE::DATA::RectangleF firstElementPosition = this->_item.front();
+		this->_heightStep = this->_heightStep + firstElementPosition.height;
 
-		if(this->_verticalGrid.sort(this->_item) > 0)
-			return false;
+		this->_pointerRight.left = (firstElementPosition.left + firstElementPosition.width) + (this->_pointerRight.width * 2);
+		this->_pointerRight.top = firstElementPosition.top;
 
-		PROJECT::BASE::DATA::RectangleF firstElementPosition = (*this->_item.begin())->get_global_bounds();
-		this->_item_step = this->_item_step + firstElementPosition.height;
-
-		PROJECT::BASE::DATA::RectangleF pointerBounds = this->_pointer;
-		this->_pointer.left = (firstElementPosition.left + firstElementPosition.width) + (pointerBounds.width * 2);
-		this->_pointer.top = firstElementPosition.top;
+		this->_pointerLeft.left = (firstElementPosition.left - (this->_pointerLeft.width * 2)) - this->_pointerLeft.width;
+		this->_pointerLeft.top = firstElementPosition.top;
 
 		this->_index = 0;
 
-		return false;
+		return true;
 	}
 
-	void Menu::add_item(std::shared_ptr<OBJECT> object) noexcept
+	void Menu::add_item(PROJECT::BASE::DATA::RectangleF bounds) noexcept
 	{
-		this->_item.emplace_back(std::move(object));
+		this->_item.emplace_back(std::move(bounds));
 	}
 
 	void Menu::step_forward() noexcept
 	{
-		if(this->_index < this->_item.size())
+		if(this->_index < (this->_item.size() - 1))
 		{
-			PROJECT::BASE::DATA::RectangleF pointer_pos = this->_item.at(this->_index + 1)->get_global_bounds();
-			this->_pointer.left = (pointer_pos.left + pointer_pos.width) + (this->_pointer.width * 2);
-			this->_pointer.top = this->_pointer.top + this->_item_step;
+			PROJECT::BASE::DATA::RectangleF pointer_pos = this->_item.at(this->_index + 1);
+
+			this->_pointerRight.left = (pointer_pos.left + pointer_pos.width) + (this->_pointerRight.width * 2);
+			this->_pointerRight.top = this->_pointerRight.top + this->_heightStep;
+
+			this->_pointerLeft.left = (pointer_pos.left - (this->_pointerLeft.width * 2)) - this->_pointerLeft.width;
+			this->_pointerLeft.top = this->_pointerLeft.top + this->_heightStep;
 
 			++this->_index;
 		}
@@ -65,17 +51,21 @@ namespace PROJECT::MENU
 	{	
 		if(this->_index > 0)
 		{
-			PROJECT::BASE::DATA::RectangleF pointer_pos = this->_item.at(this->_index - 1)->get_global_bounds();
-			this->_pointer.left = (pointer_pos.left + pointer_pos.width) + (this->_pointer.width * 2);
-			this->_pointer.top = this->_pointer.top - this->_item_step;
+			PROJECT::BASE::DATA::RectangleF pointer_pos = this->_item.at(this->_index - 1);
+
+			this->_pointerRight.left = (pointer_pos.left + pointer_pos.width) + (this->_pointerRight.width * 2);
+			this->_pointerRight.top = this->_pointerRight.top - this->_heightStep;
+
+			this->_pointerLeft.left = (pointer_pos.left - (this->_pointerLeft.width * 2)) - this->_pointerLeft.width;
+			this->_pointerLeft.top = this->_pointerLeft.top - this->_heightStep;
 
 			--this->_index;
 		}
 	}
 
-	std::string Menu::selected_item() noexcept
+	int Menu::selected_item() noexcept
 	{
-		return this->_item.at(this->_index)->get_id();
+		return this->_index;
 	}
 
 	void Menu::reset() noexcept
@@ -83,8 +73,13 @@ namespace PROJECT::MENU
 		this->_item.clear();
 	}
 
-	PROJECT::BASE::DATA::Vector2F Menu::get_pointer_position() noexcept
+	std::array<PROJECT::BASE::DATA::Vector2F, 2> Menu::get_pointer_position() noexcept
 	{
-		return {this->_pointer.left, this->_pointer.top};
+		using namespace PROJECT::BASE::DATA;
+
+		return {
+					Vector2F{this->_pointerLeft.left, this->_pointerLeft.top},
+					Vector2F{this->_pointerRight.left, this->_pointerRight.top}
+				};
 	}
 };
