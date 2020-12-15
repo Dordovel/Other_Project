@@ -11,8 +11,8 @@ namespace PROJECT::BASE::GRAPHIC
     class Sprite : virtual public PROJECT::BASE::GRAPHIC::ISprite
     {
         private:
-            std::shared_ptr<sf::Sprite> _sprite;
-            std::shared_ptr<sf::Texture> _texture;
+            sf::Sprite _sprite;
+            sf::Texture _texture;
             std::string _id;
             bool _isVisible;
         

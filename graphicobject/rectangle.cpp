@@ -11,7 +11,7 @@ namespace PROJECT::BASE::GRAPHIC
 {
 	Rectangle::Rectangle(float width, float height):Rectangle(PROJECT::BASE::DATA::Vector2F{width, height}){}
 
-	Rectangle::Rectangle(PROJECT::BASE::DATA::Vector2F size):_rectangle(std::make_shared<sf::RectangleShape>(size)),
+	Rectangle::Rectangle(PROJECT::BASE::DATA::Vector2F size):_rectangle(size),
 													_isVisible(false),
 													_up(false),
 													_down(false),
@@ -29,7 +29,7 @@ namespace PROJECT::BASE::GRAPHIC
 	std::unique_ptr<OBJECT> Rectangle::clone() noexcept
 	{
 		std::unique_ptr<Rectangle> copy = std::make_unique<Rectangle>(*this);
-		copy->_rectangle = std::make_shared<sf::RectangleShape>(*(this->_rectangle.get()));
+		copy->_rectangle = this->_rectangle;
 
 		return copy;
 	}
@@ -56,17 +56,17 @@ namespace PROJECT::BASE::GRAPHIC
 
 	void Rectangle::set_size(BASE::DATA::Vector2F size) noexcept
 	{
-		this->_rectangle->setSize(size);
+		this->_rectangle.setSize(size);
 	}
 
 	void Rectangle::set_size(float width, float height) noexcept
 	{
-		this->_rectangle->setSize({width, height});
+		this->_rectangle.setSize({width, height});
 	}
 
 	BASE::DATA::Vector2F Rectangle::get_size() const noexcept
 	{
-		return this->_rectangle->getSize();
+		return this->_rectangle.getSize();
 	}
 
 	void Rectangle::set_position(float X, float Y) noexcept
@@ -85,22 +85,22 @@ namespace PROJECT::BASE::GRAPHIC
 		if(this->_right)
 			if(X > current_position.y) X = current_position.x;
 
-		this->_rectangle->setPosition(X, Y);
+		this->_rectangle.setPosition(X, Y);
 	}
 
 	bool Rectangle::collision(const INTERACTION* const object) const noexcept
 	{
-		return this->_rectangle->getGlobalBounds().contains(object->get_position());
+		return this->_rectangle.getGlobalBounds().contains(object->get_position());
 	}
 
 	bool Rectangle::collision(PROJECT::BASE::DATA::Vector2F vec) const noexcept
 	{
-		return this->_rectangle->getGlobalBounds().contains(vec);
+		return this->_rectangle.getGlobalBounds().contains(vec);
 	}
 
 	bool Rectangle::collision(PROJECT::BASE::DATA::RectangleF rect) const noexcept
 	{
-		return this->_rectangle->getGlobalBounds().intersects(rect);
+		return this->_rectangle.getGlobalBounds().intersects(rect);
 	}
 
 	void Rectangle::move(PROJECT::BASE::DATA::Vector2F step) noexcept
@@ -122,17 +122,17 @@ namespace PROJECT::BASE::GRAPHIC
 		if(this->_right)
 			if(X > 0) X = 0;
 
-		this->_rectangle->move(X, Y);
+		this->_rectangle.move(X, Y);
 	}
 
 	PROJECT::BASE::DATA::Vector2F Rectangle::get_position() const  noexcept
 	{
-		return this->_rectangle->getPosition();
+		return this->_rectangle.getPosition();
 	}
 
 	PROJECT::BASE::DATA::RectangleF Rectangle::get_global_bounds() const noexcept
 	{
-		return this->_rectangle->getGlobalBounds();
+		return this->_rectangle.getGlobalBounds();
 	}
 
 	void Rectangle::visible(bool flag) noexcept
@@ -147,12 +147,12 @@ namespace PROJECT::BASE::GRAPHIC
 
 	void Rectangle::set_scale(PROJECT::BASE::DATA::Vector2F scale) noexcept
 	{
-		this->_rectangle->setScale(scale);
+		this->_rectangle.setScale(scale);
 	}
 
 	PROJECT::BASE::DATA::Vector2F Rectangle::get_scale() noexcept
 	{
-		return this->_rectangle->getScale();
+		return this->_rectangle.getScale();
 	}
 
 	void Rectangle::block_side(PROJECT::MOVE::Side side, bool status) noexcept
@@ -190,6 +190,6 @@ namespace PROJECT::BASE::GRAPHIC
 
 	void Rectangle::set_color(Color color)
 	{
-		this->_rectangle->setFillColor(RGB::color(color));
+		this->_rectangle.setFillColor(RGB::color(color));
 	}
 };

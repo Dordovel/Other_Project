@@ -7,14 +7,14 @@
 
 namespace PROJECT::BASE::GRAPHIC
 {
-	Circle::Circle(float radius):_circleShape(new sf::CircleShape(radius)),
-															_isVisible(false),
-															_up(false),
-															_down(false),
-															_left(false),
-															_right(false)
+	Circle::Circle(float radius):_circleShape(radius),
+									_isVisible(false),
+									_up(false),
+									_down(false),
+									_left(false),
+									_right(false)
 	{
-		this->_circleShape->setOutlineThickness(radius / 10);
+		this->_circleShape.setOutlineThickness(radius / 10);
 
 		std::cout<<"Circle(): "<<this->get_id()<< '\n';
 	}
@@ -27,7 +27,7 @@ namespace PROJECT::BASE::GRAPHIC
 	std::unique_ptr<OBJECT> Circle::clone() noexcept
 	{
 		std::unique_ptr<Circle> copy = std::make_unique<Circle>(*this);
-		copy->_circleShape = std::make_shared<sf::CircleShape>(*(this->_circleShape.get()));
+		copy->_circleShape = this->_circleShape;
 
 		return copy;
 	}
@@ -68,22 +68,22 @@ namespace PROJECT::BASE::GRAPHIC
 		if(this->_right)
 			if(X > current_position.y) X = current_position.x;
 
-		this->_circleShape->setPosition(X, Y);
+		this->_circleShape.setPosition(X, Y);
 	}
 
 	bool Circle::collision(const INTERACTION* const object) const noexcept
 	{
-		return this->_circleShape->getGlobalBounds().contains(object->get_position());
+		return this->_circleShape.getGlobalBounds().contains(object->get_position());
 	}
 
 	bool Circle::collision(PROJECT::BASE::DATA::Vector2F vec) const noexcept
 	{
-		return this->_circleShape->getGlobalBounds().contains(vec);
+		return this->_circleShape.getGlobalBounds().contains(vec);
 	}
 
 	bool Circle::collision(PROJECT::BASE::DATA::RectangleF rect) const noexcept
 	{
-		return this->_circleShape->getGlobalBounds().intersects(rect);
+		return this->_circleShape.getGlobalBounds().intersects(rect);
 	}
 
 	void Circle::move(PROJECT::BASE::DATA::Vector2F step) noexcept
@@ -105,17 +105,17 @@ namespace PROJECT::BASE::GRAPHIC
 		if(this->_right)
 			if(X > 0) X = 0;
 
-		this->_circleShape->move(X, Y);
+		this->_circleShape.move(X, Y);
 	}
 
 	PROJECT::BASE::DATA::Vector2F Circle::get_position() const  noexcept
 	{
-		return this->_circleShape->getPosition();
+		return this->_circleShape.getPosition();
 	}
 
 	PROJECT::BASE::DATA::RectangleF Circle::get_global_bounds() const noexcept
 	{
-		return this->_circleShape->getGlobalBounds();
+		return this->_circleShape.getGlobalBounds();
 	}
 
 	void Circle::visible(bool flag) noexcept
@@ -130,12 +130,12 @@ namespace PROJECT::BASE::GRAPHIC
 
 	void Circle::set_scale(PROJECT::BASE::DATA::Vector2F scale) noexcept
 	{
-		this->_circleShape->setScale(scale);
+		this->_circleShape.setScale(scale);
 	}
 
 	PROJECT::BASE::DATA::Vector2F Circle::get_scale() noexcept
 	{
-		return this->_circleShape->getScale();
+		return this->_circleShape.getScale();
 	}
 
 	void Circle::block_side(PROJECT::MOVE::Side side, bool status) noexcept
@@ -173,11 +173,11 @@ namespace PROJECT::BASE::GRAPHIC
 
 	void Circle::set_color(Color color)
 	{
-		this->_circleShape->setFillColor(RGB::color(color));
+		this->_circleShape.setFillColor(RGB::color(color));
 	}
 
 	void Circle::set_points_count(int points)
 	{
-		this->_circleShape->setPointCount(points);
+		this->_circleShape.setPointCount(points);
 	}
 };

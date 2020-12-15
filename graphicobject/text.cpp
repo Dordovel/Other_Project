@@ -8,15 +8,14 @@
 
 namespace PROJECT::BASE::GRAPHIC
 {
-	Text::Text(std::string_view pathToFontFile):_text(std::make_shared<sf::Text>()),
-																	_isVisible(true),
-																	_up(false),
-																	_down(false),
-																	_left(false),
-																	_right(false)
+	Text::Text(std::string_view pathToFontFile): _isVisible(true),
+													_up(false),
+													_down(false),
+													_left(false),
+													_right(false)
 	{
 		this->_font.loadFromFile(pathToFontFile.data());
-		this->_text->setFont(this->_font);
+		this->_text.setFont(this->_font);
 		std::cout<<"Text(): "<< this->get_id()<< '\n';
 	}
 
@@ -28,7 +27,7 @@ namespace PROJECT::BASE::GRAPHIC
 	std::unique_ptr<OBJECT> Text::clone() noexcept
 	{
 		std::unique_ptr<Text> copy = std::make_unique<Text>(*this);
-		copy->_text = std::make_shared<sf::Text>(*(this->_text.get()));
+		copy->_text = this->_text;
 
 		return copy;
 	}
@@ -69,22 +68,22 @@ namespace PROJECT::BASE::GRAPHIC
 		if(this->_right)
 			if(X > current_position.y) X = current_position.x;
 
-		this->_text->setPosition(X, Y);
+		this->_text.setPosition(X, Y);
 	}
 
 	bool Text::collision(const INTERACTION* const object) const noexcept
 	{
-		return this->_text->getGlobalBounds().intersects(object->get_global_bounds());
+		return this->_text.getGlobalBounds().intersects(object->get_global_bounds());
 	}
 
 	bool Text::collision(PROJECT::BASE::DATA::Vector2F vec) const noexcept
 	{
-		return this->_text->getGlobalBounds().contains(vec);
+		return this->_text.getGlobalBounds().contains(vec);
 	}
 
 	bool Text::collision(PROJECT::BASE::DATA::RectangleF rect) const noexcept
 	{
-		return this->_text->getGlobalBounds().intersects(rect);
+		return this->_text.getGlobalBounds().intersects(rect);
 	}
 
 	void Text::move(PROJECT::BASE::DATA::Vector2F step) noexcept
@@ -106,17 +105,17 @@ namespace PROJECT::BASE::GRAPHIC
 		if(this->_right)
 			if(X > 0) X = 0;
 
-		this->_text->move(X, Y);
+		this->_text.move(X, Y);
 	}
 
 	PROJECT::BASE::DATA::Vector2F Text::get_position() const noexcept
 	{
-		return this->_text->getPosition();
+		return this->_text.getPosition();
 	}
 
 	PROJECT::BASE::DATA::RectangleF Text::get_global_bounds() const noexcept
 	{
-		return this->_text->getGlobalBounds();
+		return this->_text.getGlobalBounds();
 	}
 
 	void Text::visible(bool flag) noexcept
@@ -131,27 +130,27 @@ namespace PROJECT::BASE::GRAPHIC
 
 	void Text::set_scale(PROJECT::BASE::DATA::Vector2F scale) noexcept
 	{
-		this->_text->setScale(scale);
+		this->_text.setScale(scale);
 	}
 
 	PROJECT::BASE::DATA::Vector2F Text::get_scale() noexcept
 	{
-		return this->_text->getScale();
+		return this->_text.getScale();
 	}
 
 	void Text::set_text(std::string_view str)
 	{
-		this->_text->setString(str.data());
+		this->_text.setString(str.data());
 	}
 
 	void Text::set_font_size(int size)
 	{
-		this->_text->setCharacterSize(size);
+		this->_text.setCharacterSize(size);
 	}
 
 	void Text::set_color(GRAPHIC::Color color)
 	{
-		this->_text->setFillColor(RGB::color(color));
+		this->_text.setFillColor(RGB::color(color));
 	}
 
 	void Text::block_side(PROJECT::MOVE::Side side, bool status) noexcept

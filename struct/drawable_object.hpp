@@ -2,14 +2,13 @@
 #define SFMLPROJECT_REBUILD_STRUCT_DRAWABLE_OBJECT_HPP
 
 #include <SFML/Graphics/Drawable.hpp>
-#include <memory>
 
 namespace PROJECT::BASE::DATA
 {
     class DrawableObject
     {
         public:
-			std::shared_ptr<sf::Drawable> object;
+			const sf::Drawable& object;
 
 			~DrawableObject() = default;
     };

@@ -9,7 +9,7 @@ namespace PROJECT::BASE::GRAPHIC
     class Text final : public PROJECT::BASE::GRAPHIC::IText
     {
         private:
-            std::shared_ptr<sf::Text> _text;
+            sf::Text _text;
             std::string _id;
             bool _isVisible;
             sf::Font _font;

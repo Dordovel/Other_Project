@@ -1,20 +1,25 @@
 #ifndef SFMLPROJECT_REBUILD_LAYOUT_HPP
 #define SFMLPROJECT_REBUILD_LAYOUT_HPP
 
-#include "../Game_Resources/map_loader/include/tmx/MapLoader.hpp"
 #include "../Interface/ilayout.hpp"
 #include <cstring>
 #include <memory>
 #include "../struct/static_object_collection.hpp"
+
+
+namespace tmx
+{
+	class MapLoader;
+};
 
 namespace PROJECT::COLLECTION
 {
     class Layout final : public PROJECT::COLLECTION::ILayout
     {   
         private:
-            std::shared_ptr<tmx::MapLoader> _mapLoader;
+			std::unique_ptr<tmx::MapLoader> _mapLoader;
             bool _isVisible;
-            std::map<std::string, std::string> _mapStaticObjectInString = {
+            std::vector<std::pair<std::string, std::string>> _mapStaticObjectInString = {
                     {StaticObjectCollection::TREE, "Tree"}, {StaticObjectCollection::BORDER, "Border"}
                 };
 

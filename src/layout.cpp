@@ -1,6 +1,8 @@
 #include "../headers/layout.hpp"
 
 #include <utility>
+#include "../Game_Resources/map_loader/include/tmx/MapLoader.hpp"
+
 #include "../struct/rect_object.hpp"
 #include "../struct/vector_object.hpp"
 #include "../struct/drawable_object.hpp"
@@ -8,7 +10,7 @@
 namespace PROJECT::COLLECTION
 {
     Layout::Layout(std::string_view pathToMap , std::string_view mapFileName):
-							_mapLoader(std::make_shared<tmx::MapLoader>(pathToMap.data())),
+							_mapLoader(std::make_unique<tmx::MapLoader>(pathToMap.data())),
                             _isVisible(true)
     {
         std::cout<<pathToMap<< mapFileName<< '\n';
@@ -28,17 +30,17 @@ namespace PROJECT::COLLECTION
         {
             std::cout<<"Layout not load"<<std::endl;
 
-            //assert(load_map_status);
+            assert(load_map_status);
         }
     }
 
     bool Layout::_check_map_static_object_with_string(std::string object, std::string_view objectName)
     {
-        auto temp = this->_mapStaticObjectInString.find(object);
-        if(temp != this->_mapStaticObjectInString.end())
-        {
-            return (strcmp(objectName.data(), temp->second.c_str()) == 0);
-        }
+		auto value = std::find_if(std::begin(this->_mapStaticObjectInString), std::end(this->_mapStaticObjectInString),
+										[&object](auto value){return value.first == object;});
+
+        if(value != this->_mapStaticObjectInString.end())
+            return (strcmp(objectName.data(), value->second.c_str()) == 0);
 
         return false;
     }
@@ -50,7 +52,7 @@ namespace PROJECT::COLLECTION
 
     PROJECT::BASE::DATA::DrawableObject Layout::draw() const noexcept
     {
-        return PROJECT::BASE::DATA::DrawableObject{this->_mapLoader};
+        return PROJECT::BASE::DATA::DrawableObject{*this->_mapLoader};
     }
 
     void Layout::visible(bool flag) noexcept

@@ -9,7 +9,7 @@ namespace PROJECT::BASE::GRAPHIC
     class Rectangle final : public PROJECT::BASE::GRAPHIC::IRectangle
     {
         private:
-            std::shared_ptr<sf::RectangleShape> _rectangle;
+            sf::RectangleShape _rectangle;
             std::string _id;
             bool _isVisible;
 

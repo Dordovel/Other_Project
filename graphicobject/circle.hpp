@@ -10,7 +10,7 @@ namespace PROJECT::BASE::GRAPHIC
     class Circle final : public PROJECT::BASE::GRAPHIC::ICircle
     {
         private:
-            std::shared_ptr<sf::CircleShape> _circleShape;
+            sf::CircleShape _circleShape;
             std::string _id;
             bool _isVisible;
             bool _up;

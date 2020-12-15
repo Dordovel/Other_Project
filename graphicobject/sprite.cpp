@@ -11,9 +11,9 @@ namespace PROJECT::BASE::GRAPHIC
 																	_left(false),
 																	_right(false)
 	{
-		this->_texture = std::make_shared<sf::Texture>();
-		this->_texture->loadFromFile(data.rv);
-		this->_sprite = std::make_shared<sf::Sprite>(*(_texture), data.rect);
+		this->_texture = sf::Texture();
+		this->_texture.loadFromFile(data.rv);
+		this->_sprite = sf::Sprite(this->_texture, data.rect);
 
 		std::cout<<"Sprite(): "<<this->get_id()<< '\n';
 	}
@@ -26,8 +26,8 @@ namespace PROJECT::BASE::GRAPHIC
 	std::unique_ptr<OBJECT> Sprite::clone() noexcept
 	{
 		std::unique_ptr<Sprite> copy = std::make_unique<Sprite>(*this);
-		copy->_sprite = std::make_shared<sf::Sprite>(*(this->_sprite.get()));
-		copy->_texture = std::make_shared<sf::Texture>(*(this->_texture.get()));
+		copy->_sprite = this->_sprite;
+		copy->_texture = this->_texture;;
 
 		return copy;
 	}
@@ -56,32 +56,32 @@ namespace PROJECT::BASE::GRAPHIC
 		if(this->_right)
 			if(X > 0) X = 0;
 
-		this->_sprite->move(X, Y);
+		this->_sprite.move(X, Y);
 	}
 
 	PROJECT::BASE::DATA::Vector2F Sprite::get_position() const noexcept
 	{
-		return this->_sprite->getPosition();
+		return this->_sprite.getPosition();
 	}
 
 	PROJECT::BASE::DATA::RectangleF Sprite::get_global_bounds() const noexcept
 	{
-		return this->_sprite->getGlobalBounds();
+		return this->_sprite.getGlobalBounds();
 	}
 
 	bool Sprite::collision(const INTERACTION* const object) const noexcept
 	{
-		return this->_sprite->getGlobalBounds().intersects(object->get_global_bounds());
+		return this->_sprite.getGlobalBounds().intersects(object->get_global_bounds());
 	}
 
 	bool Sprite::collision(PROJECT::BASE::DATA::Vector2F vec) const noexcept
 	{
-		return this->_sprite->getGlobalBounds().contains(vec);
+		return this->_sprite.getGlobalBounds().contains(vec);
 	}
 
 	bool Sprite::collision(PROJECT::BASE::DATA::RectangleF rect) const noexcept
 	{
-		return this->_sprite->getGlobalBounds().intersects(rect);
+		return this->_sprite.getGlobalBounds().intersects(rect);
 	}
 
 	std::string Sprite::get_id() const noexcept
@@ -101,7 +101,7 @@ namespace PROJECT::BASE::GRAPHIC
 
 	void Sprite::set_texture_rect(PROJECT::BASE::DATA::RectangleI rect)
 	{
-		this->_sprite->setTextureRect(rect);
+		this->_sprite.setTextureRect(rect);
 	}
 
 	void Sprite::set_position(float X, float Y) noexcept
@@ -120,7 +120,7 @@ namespace PROJECT::BASE::GRAPHIC
 		if(this->_right)
 			if(X > current_position.y) X = current_position.x;
 		
-		this->_sprite->setPosition(X, Y);
+		this->_sprite.setPosition(X, Y);
 	}
 
 	void Sprite::visible(bool flag) noexcept
@@ -135,12 +135,12 @@ namespace PROJECT::BASE::GRAPHIC
 
 	void Sprite::set_scale(PROJECT::BASE::DATA::Vector2F scale) noexcept
 	{
-		this->_sprite->setScale(scale);
+		this->_sprite.setScale(scale);
 	}
 
 	PROJECT::BASE::DATA::Vector2F Sprite::get_scale() noexcept
 	{
-		return this->_sprite->getScale();
+		return this->_sprite.getScale();
 	}
 
 	void Sprite::block_side(PROJECT::MOVE::Side side, bool status) noexcept

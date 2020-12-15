@@ -42,7 +42,7 @@ namespace PROJECT::APPLICATION
 
     void Application::draw(const DRAWABLE* const object)
     {
-        sf::RenderWindow::draw(*(object->draw().object));
+        sf::RenderWindow::draw(object->draw().object);
     }
 
     void Application::display()
