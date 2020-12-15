@@ -720,7 +720,7 @@ int main()
 				loopContainerSize = loopCollisionObjectList.size();
 				for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 				{
-					auto&& value = loopCollisionObjectList.at(loopContainerIter);
+					auto&& value = loopCollisionObjectList[loopContainerIter];
 					person->block_side(value.first, true);
 					view->block_side(value.first, true);
 				}
@@ -1006,7 +1006,7 @@ int main()
 					loopContainerSize = loopChestCollisionList.size();
 					for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 					{
-						auto&& intersectsSide = loopChestCollisionList.at(loopContainerIter);
+						auto&& intersectsSide = loopChestCollisionList[loopContainerIter];
 						if(intersectsSide.first == personLastSide)
 						{
 							auto&& chest = std::move(intersectsSide.second);

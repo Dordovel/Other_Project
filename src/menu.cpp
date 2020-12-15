@@ -35,7 +35,7 @@ namespace PROJECT::MENU
 	{
 		if(this->_index < (this->_item.size() - 1))
 		{
-			PROJECT::BASE::DATA::RectangleF pointer_pos = this->_item.at(this->_index + 1);
+			PROJECT::BASE::DATA::RectangleF pointer_pos = this->_item[this->_index + 1];
 
 			this->_pointerRight.left = (pointer_pos.left + pointer_pos.width) + (this->_pointerRight.width * 2);
 			this->_pointerRight.top = this->_pointerRight.top + this->_heightStep;
@@ -51,7 +51,7 @@ namespace PROJECT::MENU
 	{	
 		if(this->_index > 0)
 		{
-			PROJECT::BASE::DATA::RectangleF pointer_pos = this->_item.at(this->_index - 1);
+			PROJECT::BASE::DATA::RectangleF pointer_pos = this->_item[this->_index - 1];
 
 			this->_pointerRight.left = (pointer_pos.left + pointer_pos.width) + (this->_pointerRight.width * 2);
 			this->_pointerRight.top = this->_pointerRight.top - this->_heightStep;

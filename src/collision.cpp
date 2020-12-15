@@ -122,42 +122,42 @@ std::vector<std::pair<PROJECT::MOVE::Side, std::string>>
 		if(this->_physics.check_intersection(lv, Unknown::rectangleRight))
 		{
 			collection = this->_physics.get_intersection_object_name(lv, Unknown::rectangleRight);
-			result.emplace_back(MOVE::Side::RIGHT, collection.at(0));
+			result.emplace_back(MOVE::Side::RIGHT, collection[0]);
 		}
 		if(this->_physics.check_intersection(lv, Unknown::rectangleLeft))
 		{
 			collection = this->_physics.get_intersection_object_name(lv, Unknown::rectangleLeft);
-			result.emplace_back(MOVE::Side::LEFT, collection.at(0));
+			result.emplace_back(MOVE::Side::LEFT, collection[0]);
 		}
 		if(this->_physics.check_intersection(lv, Unknown::rectangleUp))
 		{
 			collection = this->_physics.get_intersection_object_name(lv, Unknown::rectangleUp);
-			result.emplace_back(MOVE::Side::UP, collection.at(0));
+			result.emplace_back(MOVE::Side::UP, collection[0]);
 		}
 		if(this->_physics.check_intersection(lv, Unknown::rectangleDown))
 		{
 			collection = this->_physics.get_intersection_object_name(lv, Unknown::rectangleDown);
-			result.emplace_back(MOVE::Side::DOWN, collection.at(0));
+			result.emplace_back(MOVE::Side::DOWN, collection[0]);
 		}
 		if(this->_physics.check_intersection(lv, Unknown::rectangleRightUp))
 		{
 			collection = this->_physics.get_intersection_object_name(lv, Unknown::rectangleRightUp);
-			result.emplace_back(MOVE::Side::RIGHT, collection.at(0));
+			result.emplace_back(MOVE::Side::RIGHT, collection[0]);
 		}
 		if(this->_physics.check_intersection(lv, Unknown::rectangleLeftUp))
 		{
 			collection = this->_physics.get_intersection_object_name(lv, Unknown::rectangleLeftUp);
-			result.emplace_back(MOVE::Side::LEFT, collection.at(0));
+			result.emplace_back(MOVE::Side::LEFT, collection[0]);
 		}
 		if(this->_physics.check_intersection(lv, Unknown::rectangleRightDown))
 		{
 			collection = this->_physics.get_intersection_object_name(lv, Unknown::rectangleRightDown);
-			result.emplace_back(MOVE::Side::UP, collection.at(0));
+			result.emplace_back(MOVE::Side::UP, collection[0]);
 		}
 		if(this->_physics.check_intersection(lv, Unknown::rectangleLeftDown))
 		{
 			collection = this->_physics.get_intersection_object_name(lv, Unknown::rectangleLeftDown);
-			result.emplace_back(MOVE::Side::DOWN, collection.at(0));
+			result.emplace_back(MOVE::Side::DOWN, collection[0]);
 		}
 
 		return result;
@@ -222,25 +222,25 @@ std::vector<std::pair<PROJECT::MOVE::Side, std::string>>
 			if(this->_physics.check_intersection(lv, Unknown::rectangleRight))
             {
 				collection = this->_physics.get_intersection_object_name(lv, Unknown::rectangleRight);
-                result.emplace_back(MOVE::Side::RIGHT, collection.at(0));
+                result.emplace_back(MOVE::Side::RIGHT, collection[0]);
             }
 
 			if(this->_physics.check_intersection(lv, Unknown::rectangleLeft))
             {
 				collection = this->_physics.get_intersection_object_name(lv, Unknown::rectangleLeft);
-                result.emplace_back(MOVE::Side::LEFT, collection.at(0));
+                result.emplace_back(MOVE::Side::LEFT, collection[0]);
             }
 
 			if(this->_physics.check_intersection(lv, Unknown::rectangleUp))
             {
 				collection = this->_physics.get_intersection_object_name(lv, Unknown::rectangleUp);
-                result.emplace_back(MOVE::Side::UP, collection.at(0));
+                result.emplace_back(MOVE::Side::UP, collection[0]);
             }
 
 			if(this->_physics.check_intersection(lv, Unknown::rectangleDown))
             {
 				collection = this->_physics.get_intersection_object_name(lv, Unknown::rectangleDown);
-                result.emplace_back(MOVE::Side::DOWN, collection.at(0));
+                result.emplace_back(MOVE::Side::DOWN, collection[0]);
             }
         }
 

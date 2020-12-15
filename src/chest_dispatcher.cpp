@@ -16,7 +16,7 @@ namespace PROJECT::DISPATCHER
 
 	std::shared_ptr<PROJECT::CHEST::IChest> ChestDispatcher::object(int index) const noexcept
 	{
-		return this->_object.at(index);
+		return this->_object[index];
 	}
 
 	size_t ChestDispatcher::size() const noexcept

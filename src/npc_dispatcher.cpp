@@ -18,17 +18,17 @@ namespace PROJECT::DISPATCHER
 
 	std::shared_ptr<NPC::INpc> NpcDispatcher::object(int index) const noexcept
 	{
-		return this->_object.at(index);
+		return this->_object[index];
 	}
 
 	ANIMATION::Anim& NpcDispatcher::animation(int index) noexcept
 	{
-		return this->_objectAnimation.at(index);
+		return this->_objectAnimation[index];
 	}
 
 	MOVE::Side NpcDispatcher::side(int index, float time) noexcept
 	{
-		return this->_sideGenerator.at(index).generate(time);
+		return this->_sideGenerator[index].generate(time);
 	}
 
 	size_t NpcDispatcher::size() const noexcept

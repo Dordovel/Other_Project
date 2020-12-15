@@ -11,7 +11,7 @@ namespace PROJECT::ANIMATION
 
 	PROJECT::BASE::DATA::RectangleI Animation::get_frame(std::size_t index)
 	{
-		return this->_frames.at(index);
+		return this->_frames[index];
 	}
 
 	std::size_t Animation::get_frame_count() const
