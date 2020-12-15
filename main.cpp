@@ -310,7 +310,6 @@ int main()
 		personTest->set_max_health(5);
 		personTest->set_health(personTest->get_max_health());
 		personTest->set_damage(10);
-		personTest->set_id("TEST");
 
 		std::unique_ptr<NPC::Npc> personTest1 = nullptr;
 		personTest1 = change_person_type(NPC_MARTHA_GREEN, dataBase);
@@ -319,7 +318,6 @@ int main()
 		personTest1->set_max_health(5);
 		personTest1->set_health(personTest1->get_max_health());
 		personTest1->set_damage(10);
-		personTest1->set_id("TEST1");
 
 		person->add_animation_walk(MOVE::Side::RIGHT, dataBase.get_animation_walk(MOVE::Side::RIGHT));
 		person->add_animation_walk(MOVE::Side::LEFT, dataBase.get_animation_walk(MOVE::Side::LEFT));
@@ -372,7 +370,6 @@ int main()
 		personTest1->add_animation_idle(MOVE::Side::UP, dataBase.get_animation_idle(MOVE::Side::UP));
 
 		MOVE::Side personMoveSide = MOVE::Side::NONE;
-		MOVE::Side randMoveSide = MOVE::Side::NONE;
         MOVE::Side lastSide = MOVE::Side::NONE;
 
         bool showInventory = false;
@@ -972,7 +969,7 @@ int main()
 				{
 					auto&& chest = make_chest(dataBase);
 					chest->set_position(npc->get_position());
-					for(int a = 0; a < 20; ++a)
+					for(int a = 0; a < 40; ++a)
 					{
 						if((a % 2) == 0)
 						{
@@ -1008,7 +1005,7 @@ int main()
 
                     if(npc->get_state() != NPC::State::ATTACK)
 					{
-                        randMoveSide = npcDispatcher.side(loopContainerIter, time * DELAY);
+						MOVE::Side randMoveSide = npcDispatcher.side(loopContainerIter, time * DELAY);
 
                         mover->move(randMoveSide, npc.get(), time / DELAY, SPEED);
 
