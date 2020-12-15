@@ -19,6 +19,7 @@ namespace PROJECT::DATABASE
             std::map<PersonProfession , std::string> _rectList;
             std::string _pathToResourcesFile;
             std::map<PROJECT::MOVE::Side, std::array<PROJECT::BASE::DATA::RectangleI, 3>> _animationSide;
+            std::map<PROJECT::MOVE::Side, std::array<PROJECT::BASE::DATA::RectangleI, 3>> _animationIdle;
             std::map<PROJECT::MOVE::Side, std::array<PROJECT::BASE::DATA::RectangleI, 3>> _animationAttack;
 
         public:
@@ -26,6 +27,7 @@ namespace PROJECT::DATABASE
             DataBaseResult get_resources(PersonProfession person, PROJECT::MOVE::Side side) const noexcept override;
 			PROJECT::DATABASE::DataBaseResult get_resources(std::string_view file, PROJECT::BASE::DATA::RectangleI rect) const noexcept override;
             std::array<PROJECT::BASE::DATA::RectangleI, 3> get_animation_walk(PROJECT::MOVE::Side side) const noexcept override;
+            std::array<PROJECT::BASE::DATA::RectangleI, 3> get_animation_idle(PROJECT::MOVE::Side side) const noexcept override;
             std::array<PROJECT::BASE::DATA::RectangleI, 3> get_animation_attack(PROJECT::MOVE::Side side) const noexcept override;
             ~DataBase() = default;
     };

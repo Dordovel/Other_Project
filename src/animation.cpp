@@ -38,7 +38,11 @@ namespace PROJECT::ANIMATION
 
 	void Anim::set_animation(IAnimation* anim) noexcept 
 	{
-		this->_anim = anim;
+	    if(anim != this->_anim)
+        {
+            this->_currentFrame = 0;
+            this->_anim = anim;
+        }
 	}
 
 	void Anim::run(unsigned int delta) noexcept 
@@ -56,13 +60,9 @@ namespace PROJECT::ANIMATION
 				else
 				{
 					if (!this->_loop)
-					{
 						this->_stop = true;
-					}
 					else
-					{
 						this->_currentFrame = 0;
-					}
 				}
 
 				this->_anim->get_object()->set_texture_rect(this->_anim->get_frame(this->_currentFrame));
@@ -78,9 +78,7 @@ namespace PROJECT::ANIMATION
 	bool Anim::end() const noexcept
 	{
 		if(this->_anim != nullptr)
-		{
 			return this->_currentFrame != (this->_anim->get_frame_count() - 1);
-		}
 
 		return true;
 	}

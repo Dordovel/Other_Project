@@ -332,6 +332,11 @@ int main()
 		person->add_animation_attack(MOVE::Side::DOWN, dataBase.get_animation_attack(MOVE::Side::DOWN));
 		person->add_animation_attack(MOVE::Side::UP, dataBase.get_animation_attack(MOVE::Side::UP));
 
+		person->add_animation_idle(MOVE::Side::RIGHT, dataBase.get_animation_idle(MOVE::Side::RIGHT));
+		person->add_animation_idle(MOVE::Side::LEFT, dataBase.get_animation_idle(MOVE::Side::LEFT));
+		person->add_animation_idle(MOVE::Side::DOWN, dataBase.get_animation_idle(MOVE::Side::DOWN));
+		person->add_animation_idle(MOVE::Side::UP, dataBase.get_animation_idle(MOVE::Side::UP));
+
 
 		
 		personTest->add_animation_walk(MOVE::Side::RIGHT, dataBase.get_animation_walk(MOVE::Side::RIGHT));
@@ -343,6 +348,11 @@ int main()
 		personTest->add_animation_attack(MOVE::Side::LEFT, dataBase.get_animation_attack(MOVE::Side::LEFT));
 		personTest->add_animation_attack(MOVE::Side::DOWN, dataBase.get_animation_attack(MOVE::Side::DOWN));
 		personTest->add_animation_attack(MOVE::Side::UP, dataBase.get_animation_attack(MOVE::Side::UP));
+
+		personTest->add_animation_idle(MOVE::Side::RIGHT, dataBase.get_animation_idle(MOVE::Side::RIGHT));
+		personTest->add_animation_idle(MOVE::Side::LEFT, dataBase.get_animation_idle(MOVE::Side::LEFT));
+		personTest->add_animation_idle(MOVE::Side::DOWN, dataBase.get_animation_idle(MOVE::Side::DOWN));
+		personTest->add_animation_idle(MOVE::Side::UP, dataBase.get_animation_idle(MOVE::Side::UP));
 
 
 
@@ -356,9 +366,16 @@ int main()
 		personTest1->add_animation_attack(MOVE::Side::DOWN, dataBase.get_animation_attack(MOVE::Side::DOWN));
 		personTest1->add_animation_attack(MOVE::Side::UP, dataBase.get_animation_attack(MOVE::Side::UP));
 
+		personTest1->add_animation_idle(MOVE::Side::RIGHT, dataBase.get_animation_idle(MOVE::Side::RIGHT));
+		personTest1->add_animation_idle(MOVE::Side::LEFT, dataBase.get_animation_idle(MOVE::Side::LEFT));
+		personTest1->add_animation_idle(MOVE::Side::DOWN, dataBase.get_animation_idle(MOVE::Side::DOWN));
+		personTest1->add_animation_idle(MOVE::Side::UP, dataBase.get_animation_idle(MOVE::Side::UP));
+
 		MOVE::Side personMoveSide = MOVE::Side::NONE;
-		MOVE::Side randMoveSide = MOVE::Side::DOWN;
-		bool showInventory = false;
+		MOVE::Side randMoveSide = MOVE::Side::NONE;
+        MOVE::Side lastSide = MOVE::Side::NONE;
+
+        bool showInventory = false;
 		bool MOUSE_SINGLE_PRESSED = false;
 		bool MOUSE_SINGLE_PRESSED_1 = false;
 		bool MOUSE_PRESSED = false;
@@ -432,101 +449,136 @@ int main()
 				});
 
 
-		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::F, [&showInventory]()
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::F, [&showInventory,
+                                                                                         &person]()
 				{
 					if(!showInventory)
 						showInventory = true;
 					else
 						showInventory = false;
+
+					person->set_state(NPC::State::IDLE);
 				}, UNIT::CONTROL::EventHandlerType::EVENT_LOOP);
 
 
-		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::D, [&personMoveSide]()
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::D, [&personMoveSide,
+                                                                                             &person]()
 				{
 					personMoveSide = MOVE::Side::RIGHT;
+                    person->set_state(NPC::State::WALK);
 				}, UNIT::CONTROL::EventHandlerType::NONE);
 
 
-		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::A, [&personMoveSide]()
-				{
-					personMoveSide = MOVE::Side::LEFT;
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::A, [&personMoveSide,
+                                                                          &person]()
+                {
+                    personMoveSide = MOVE::Side::LEFT;
+                    person->set_state(NPC::State::WALK);
 				}, UNIT::CONTROL::EventHandlerType::NONE);
 
 
-		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::S, [&personMoveSide]()
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::S, [&personMoveSide,
+                                                                          &person]()
 				{
 					personMoveSide = MOVE::Side::DOWN;
+                    person->set_state(NPC::State::WALK);
 				}, UNIT::CONTROL::EventHandlerType::NONE);
 
 
-		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::W, [&personMoveSide]()
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::W, [&personMoveSide,
+                                                                          &person]()
 				{
 					personMoveSide = MOVE::Side::UP;
+                    person->set_state(NPC::State::WALK);
 				}, UNIT::CONTROL::EventHandlerType::NONE);
 
 
-		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Right, [&personMoveSide]()
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Right, [&personMoveSide,
+                                                                              &person]()
 				{
 					personMoveSide = MOVE::Side::RIGHT;
+                    person->set_state(NPC::State::WALK);
 				}, UNIT::CONTROL::EventHandlerType::NONE);
 
 
-		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Left, [&personMoveSide]()
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Left, [&personMoveSide,
+                                                                             &person]()
 				{
 					personMoveSide = MOVE::Side::LEFT;
+                    person->set_state(NPC::State::WALK);
 				}, UNIT::CONTROL::EventHandlerType::NONE);
 
 
-		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Down, [&personMoveSide]()
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Down, [&personMoveSide,
+                                                                             &person]()
 				{
 					personMoveSide = MOVE::Side::DOWN;
+                    person->set_state(NPC::State::WALK);
 				}, UNIT::CONTROL::EventHandlerType::NONE);
 
 
-		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Up, [&personMoveSide]()
+		keyboard.button_pressed(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Up, [&personMoveSide,
+                                                                           &person]()
 				{
 					personMoveSide = MOVE::Side::UP;
+                    person->set_state(NPC::State::WALK);
 				}, UNIT::CONTROL::EventHandlerType::NONE);
 
 
-		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::D, [&personMoveSide]()
+		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::D, [&personMoveSide,
+                                                                           &person]()
 				{
 					personMoveSide = MOVE::Side::NONE;
+                    person->set_state(NPC::State::IDLE);
 				});
 
-		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::A, [&personMoveSide]()
+		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::A, [&personMoveSide,
+                                                                           &person]()
 				{
 					personMoveSide = MOVE::Side::NONE;
+                    person->set_state(NPC::State::IDLE);
 				});
 
-		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::S, [&personMoveSide]()
+		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::S, [&personMoveSide,
+                                                                           &person]()
 				{
 					personMoveSide = MOVE::Side::NONE;
+                    person->set_state(NPC::State::IDLE);
 				});
 
-		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::W, [&personMoveSide]()
+		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::W, [&personMoveSide,
+                                                                           &person]()
 				{
 					personMoveSide = MOVE::Side::NONE;
+                    person->set_state(NPC::State::IDLE);
 				});
 
-		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Right, [&personMoveSide]()
+		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Right, [&personMoveSide,
+                                                                               &person]()
 				{
 					personMoveSide = MOVE::Side::NONE;
+                    person->set_state(NPC::State::IDLE);
 				});
 
-		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Left, [&personMoveSide]()
+		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Left, [&personMoveSide,
+                                                                              &person]()
 				{
 					personMoveSide = MOVE::Side::NONE;
+                    person->set_state(NPC::State::IDLE);
 				});
 
-		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Down, [&personMoveSide]()
+		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Down, [&personMoveSide,
+                                                                              &person]()
 				{
 					personMoveSide = MOVE::Side::NONE;
+                    person->set_state(NPC::State::IDLE);
 				});
 
-		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Up, [&personMoveSide]()
+		keyboard.button_released(UNIT::CONTROL::KEYBOARD::Keyboard_Key::Up, [&personMoveSide,
+                                                                            &person]()
 				{
 					personMoveSide = MOVE::Side::NONE;
+                    person->set_state(NPC::State::IDLE);
 				});
 
 		const int PROGRESSBARWidth = 115;
@@ -657,11 +709,13 @@ int main()
 
 //RUN ANIMATION
 
+            anim.stop(false);
 			anim.run(time * DELAY);
 
 			loopContainerSize = npcDispatcher.size();
 			for(loopContainerIter = 0; loopContainerIter < loopContainerSize; ++loopContainerIter)
 			{
+                npcDispatcher.animation(loopContainerIter).stop(false);
 				npcDispatcher.animation(loopContainerIter).run(time * DELAY);
 			}
 
@@ -798,7 +852,6 @@ int main()
 //CHECK NPC OBJECT INTERACTIOIN WITH PERSON
 
 					auto&& intersectsSide = collision.check_object_collision(person.get(), npc.get());
-					npc->set_state(NPC::State::IDLE);
 
 					person->block_side(intersectsSide.first, true);
 					view->block_side(intersectsSide.first, true);
@@ -810,6 +863,10 @@ int main()
 
 						loopNpcCollisionList.emplace_back(intersectsSide.first, std::move(npc));
 					}
+					else
+                    {
+					    npc->set_state(NPC::State::IDLE);
+                    }
 
 //END CHECK PERSON INTERACTIOIN WITH NPC OBJECT
 
@@ -830,29 +887,22 @@ int main()
 			//}
 //END CHECK PERSON INTERACTIOIN WITH QUEST NPC OBJECT
 
-			if(personMoveSide != MOVE::Side::NONE)
+			if(person->get_state() == NPC::State::WALK)
 			{
 				mover->move(personMoveSide, person.get(), time / DELAY , SPEED);
 				mover->move(personMoveSide, view.get(), time / DELAY , SPEED);
 
 				personLastSide = personMoveSide;
-				anim.set_animation(person->get_animation_walk(personMoveSide));
-				anim.stop(false);
 
-				person->set_state(NPC::State::WALK);
+				anim.set_animation(person->get_animation_walk(personMoveSide));
 			}
 			else if(person->get_state() == NPC::State::ATTACK)
 			{
 				anim.set_animation(person->get_animation_attack(personLastSide));
-				anim.stop(false);
 			}
-			else
+			else if(person->get_state() == NPC::State::IDLE)
 			{
-				if(anim.end())
-				{
-					anim.reset();
-					anim.stop(true);
-				}
+				anim.set_animation(person->get_animation_idle(personLastSide));
 			}
 
 
@@ -924,19 +974,19 @@ int main()
 					chest->set_position(npc->get_position());
 					for(int a = 0; a < 20; ++a)
 					{
-						if(a < 10)
+						if((a % 2) == 0)
 						{
 							chest->add_elements(create_test_inventory(std::to_string(a),
 																	PROGRESSBARHeight / 2, 
 																	PROGRESSBARHeight, 
-																	BASE::GRAPHIC::Color::Black));
+																	BASE::GRAPHIC::Color::Red));
 						}
 						else
 						{
 							chest->add_elements(create_test_inventory(std::to_string(a),
 																	PROGRESSBARHeight / 2, 
 																	PROGRESSBARHeight, 
-																	BASE::GRAPHIC::Color::Green));
+																	BASE::GRAPHIC::Color::Purple));
 						}
 					}
 
@@ -954,25 +1004,23 @@ int main()
 
 				if(npc->is_visible())
 				{
-					randMoveSide = npcDispatcher.side(loopContainerIter, time * DELAY);
+                    auto&& npcAnimation = npcDispatcher.animation(loopContainerIter);
 
-					mover->move(randMoveSide, npc.get(), time / DELAY, SPEED);
-
-					auto&& npcAnimation = npcDispatcher.animation(loopContainerIter);
-
-					if(npc->get_state() != NPC::State::ATTACK)
+                    if(npc->get_state() != NPC::State::ATTACK)
 					{
+                        randMoveSide = npcDispatcher.side(loopContainerIter, time * DELAY);
+
+                        mover->move(randMoveSide, npc.get(), time / DELAY, SPEED);
+
 						if(randMoveSide == MOVE::Side::NONE)
 						{
-							npc->set_state(NPC::State::IDLE);
-							npcAnimation.reset();
-							npcAnimation.stop(true);
+                            npcAnimation.set_animation(npc->get_animation_idle(lastSide));
 						}
 						else
 						{
+						    lastSide = randMoveSide;
 							npc->set_state(NPC::State::WALK);
-							npcAnimation.set_animation(npc->get_animation_walk(randMoveSide));
-							npcAnimation.stop(false);
+                            npcAnimation.set_animation(npc->get_animation_walk(randMoveSide));
 						}
 					}
 					else
@@ -981,12 +1029,10 @@ int main()
 						{
 							if(object.second == npc)
 							{
-								npcAnimation.set_animation(npc->get_animation_attack(
-														inversion_side(object.first)));
+                                lastSide = inversion_side(object.first);
+                                npcAnimation.set_animation(npc->get_animation_attack(lastSide));
 							}
 						}
-
-						npcAnimation.stop(false);
 					}
 
 //END SET RANDOM NPC MOVE SIDE AND ANIMATION

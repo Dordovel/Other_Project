@@ -9,6 +9,7 @@ namespace PROJECT::DATABASE
 		const int titleHeight = 32;
 		const int titleWidth = 32;
 		std::array<PROJECT::BASE::DATA::RectangleI, 3> walk = {};
+		std::array<PROJECT::BASE::DATA::RectangleI, 3> idle = {};
 		std::array<PROJECT::BASE::DATA::RectangleI, 3> attack = {};
 
 		walk[0] = {titleWidth, 0, titleWidth, titleHeight};
@@ -52,6 +53,27 @@ namespace PROJECT::DATABASE
 		attack[2] = {titleWidth * 4, titleHeight * 3, titleWidth, titleHeight};
 		this->_animationAttack.emplace(PROJECT::MOVE::Side::UP, attack);
 
+
+		idle[0] = {titleWidth, 0, titleWidth, titleHeight};
+		idle[1] = {titleWidth, 0, titleWidth, titleHeight};
+		idle[2] = {titleWidth, 0, titleWidth, titleHeight};
+		this->_animationIdle.emplace(PROJECT::MOVE::Side::DOWN, idle);
+
+		idle[0] = {titleWidth, titleHeight, titleWidth, titleHeight};
+		idle[1] = {titleWidth, titleHeight, titleWidth, titleHeight};
+		idle[2] = {titleWidth, titleHeight, titleWidth, titleHeight};
+		this->_animationIdle.emplace(PROJECT::MOVE::Side::RIGHT, idle);
+
+		idle[0] = {titleWidth, titleHeight * 2, titleWidth, titleHeight};
+		idle[1] = {titleWidth, titleHeight * 2, titleWidth, titleHeight};
+		idle[2] = {titleWidth, titleHeight * 2, titleWidth, titleHeight};
+		this->_animationIdle.emplace(PROJECT::MOVE::Side::LEFT, idle);
+
+		idle[0] = {titleWidth, titleHeight * 3, titleWidth, titleHeight};
+		idle[1] = {titleWidth, titleHeight * 3, titleWidth, titleHeight};
+		idle[2] = {titleWidth, titleHeight * 3, titleWidth, titleHeight};
+		this->_animationIdle.emplace(PROJECT::MOVE::Side::UP, idle);
+
 		this->_rectList.emplace(PersonProfession::JEREMY_BLONDE, "/hero/Jeremy/Jeremy_Blonde.png" );
 		this->_rectList.emplace(PersonProfession::MARTHA_BLONDE, "/hero/Martha/Martha_Blonde.png" );
 		this->_rectList.emplace(PersonProfession::JEREMY_GREEN, "/hero/Jeremy/Jeremy_Green.png" );
@@ -73,6 +95,11 @@ namespace PROJECT::DATABASE
 	std::array<PROJECT::BASE::DATA::RectangleI, 3> DataBase::get_animation_walk(PROJECT::MOVE::Side side) const noexcept
 	{
 		return this->_animationSide.at(side);
+	}
+
+	std::array<PROJECT::BASE::DATA::RectangleI, 3> DataBase::get_animation_idle(PROJECT::MOVE::Side side) const noexcept
+	{
+		return this->_animationIdle.at(side);
 	}
 
 	std::array<PROJECT::BASE::DATA::RectangleI, 3> DataBase::get_animation_attack(PROJECT::MOVE::Side side) const noexcept

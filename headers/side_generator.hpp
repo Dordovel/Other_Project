@@ -11,7 +11,7 @@ namespace PROJECT::NPC
 		private:
 			sf::Time _currentTime;
 			sf::Time _frameTime;
-			PROJECT::MOVE::Side _lastSide;
+			PROJECT::MOVE::Side _lastSide = PROJECT::MOVE::Side::NONE;
 			
 			PROJECT::MOVE::Side _generate_rand_side() noexcept;
 
