@@ -7,9 +7,9 @@ namespace PROJECT::COLLECTION
 {
 	struct StaticObjectCollection
 	{
-		static const std::string BORDER;
-		static const std::string TREE;
-		static const std::string NONE;
+		static inline const std::string BORDER = "BORDER";
+		static inline const std::string TREE = "TREE";
+		static inline const std::string NONE = "NONE";
 	};
 };
 #endif //SFMLPROJECT_REBUILD_STRUCT_STATIC_OBJECT_COLLECTION_HPP

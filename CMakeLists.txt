@@ -147,7 +147,6 @@ add_executable(SFMLProject_rebuild
         Game_Resources/map_loader/MapLoader/QuadTreeNode.cpp
         Game_Resources/map_loader/MapLoader/tmx2box2d.cpp 
  		${SOURCE_FILES}
-		${CMAKE_SOURCE_DIR}/struct/static_object_collection.cpp
         ${SOURCE_FILES_ALGORITHM}
         ${SOURCE_FILES_OBJECT}
         main.cpp)
